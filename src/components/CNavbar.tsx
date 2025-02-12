@@ -1,13 +1,16 @@
 "use client";
-
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { useColorScheme } from "@mui/material/styles";
 import MenuIcon from '@mui/icons-material/Menu';
 import DarkMode from '@mui/icons-material/DarkMode';
 import LightMode from '@mui/icons-material/LightMode';
-import { useState } from "react";
 
 export function CNavbar() {
-  const [darkMode, setDarkMode] = useState(false);
+  const { mode, setMode } = useColorScheme();
+
+  const toggleTheme = () => {
+    setMode(mode === "dark" ? "light" : "dark");
+  };
 
   return (
     <AppBar component="nav" color="secondary">
@@ -32,9 +35,9 @@ export function CNavbar() {
           edge="start"
           sx={{ color: "white", mr: 2 }}
           aria-label="menu"
-          onClick={() => setDarkMode(!darkMode)}
+          onClick={toggleTheme}
         >
-          {darkMode ? <DarkMode /> : <LightMode />}
+          {mode !== "dark" ? <DarkMode /> : <LightMode />}
         </IconButton>
       </Toolbar>
     </AppBar>
