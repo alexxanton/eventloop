@@ -28,10 +28,10 @@ export default function RootLayout({
       <body className={`${roboto.variable}`}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", height: "100vh" }}>
               <CssBaseline/>
               <CNavbar />
-              <Box component="main" sx={{ p: 3, border: '1px dashed grey' }}>
+              <Box component="main" sx={{ p: 3, width: "100%" }}>
                 <Toolbar/>
                 {children}
               </Box>
