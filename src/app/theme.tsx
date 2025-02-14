@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'var(--font-roboto)',
+    fontFamily: "var(--font-roboto)",
   },
   colorSchemes: {
     dark: true,
@@ -19,8 +19,8 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        '*': {
-          transition: 'all 0.3s ease',
+        "*": {
+          transition: "background-color 0.5s ease",
         },
       },
     },
