@@ -1,5 +1,4 @@
 "use client";
-import { CDateRangePicker } from "@/components/CDateRangePicker";
 import { Box } from "@mui/material";
 import { useState } from "react";
 
@@ -8,7 +7,6 @@ export default function Event() {
 
   return (
     <Box>
-      <CDateRangePicker value={value} onChange={(newValue) => {setValue(newValue)}} />
     </Box>
   );
 }

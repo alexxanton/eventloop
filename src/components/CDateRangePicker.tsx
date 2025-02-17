@@ -2,7 +2,7 @@ import { LocalizationProvider } from "@mui/lab";
 import { StaticDateRangePicker } from "@mui/lab";
 import { Box, TextField } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import React, { useState } from "react";
+import React from "react";
 
 type CProps = {
   value: [Date | null, Date | null];
@@ -23,10 +23,9 @@ export function CDateRangePicker({value, onChange}: CProps) {
             <TextField {...endProps} />
           </React.Fragment>
         )}
-      >
-      </StaticDateRangePicker>
-      <p>{value[0]?.toISOString()}</p>
-      <p>{value[1]?.toISOString()}</p>
+      />
+      <p>{value[0]?.toISOString().split("T")[0]}</p>
+      <p>{value[1]?.toISOString().split("T")[0]}</p>
     </LocalizationProvider>
   );
 }

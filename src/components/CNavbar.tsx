@@ -1,17 +1,15 @@
 "use client";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
-import { useColorScheme } from "@mui/material/styles";
+import { AppBar, Box, IconButton, Link, Toolbar } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import DarkMode from '@mui/icons-material/DarkMode';
 import LightMode from '@mui/icons-material/LightMode';
 
-export function CNavbar() {
-  const { mode, setMode } = useColorScheme();
+type CProps = {
+  theme: string;
+  toggleTheme: () => void;
+};
 
-  const toggleTheme = () => {
-    setMode(mode === "dark" ? "light" : "dark");
-  };
-
+export function CNavbar({theme, toggleTheme}: CProps) {
   return (
     <AppBar component="nav" color="secondary">
       <Toolbar>
@@ -23,13 +21,16 @@ export function CNavbar() {
         >
           <MenuIcon />
         </IconButton>
-        <Typography
+        <Link
+          href="/"
           variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, color: "white" }}
+          component="a"
+          underline="hover"
+          sx={{ color: "white" }}
         >
           EventLoop
-        </Typography>
+        </Link>
+        <Box sx={{ flexGrow: 1 }} />
         <IconButton
           size="large"
           edge="start"
@@ -37,7 +38,7 @@ export function CNavbar() {
           aria-label="menu"
           onClick={toggleTheme}
         >
-          {mode !== "dark" ? <DarkMode /> : <LightMode />}
+          {theme !== "dark" ? <DarkMode /> : <LightMode />}
         </IconButton>
       </Toolbar>
     </AppBar>
