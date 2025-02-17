@@ -10,6 +10,7 @@ const DataContext = createContext<DataTypes | null>(null);
 
 export function CDataProvider({children}: {children: React.ReactNode}) {
   const [theme, setTheme] = useState("light");
+  
   return (
     <DataContext.Provider value={{
       theme,

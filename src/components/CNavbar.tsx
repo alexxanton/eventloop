@@ -9,7 +9,7 @@ export function CNavbar() {
   const { theme, setTheme } = useData();
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "dark" : "light");
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
