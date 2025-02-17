@@ -3,13 +3,15 @@ import { AppBar, Box, IconButton, Link, Toolbar } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import DarkMode from '@mui/icons-material/DarkMode';
 import LightMode from '@mui/icons-material/LightMode';
+import { useData } from "./CDataProvider";
 
-type CProps = {
-  theme: string;
-  toggleTheme: () => void;
-};
+export function CNavbar() {
+  const { theme, setTheme } = useData();
 
-export function CNavbar({theme, toggleTheme}: CProps) {
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "dark" : "light");
+  };
+
   return (
     <AppBar component="nav" color="secondary">
       <Toolbar>

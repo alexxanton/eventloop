@@ -3,17 +3,14 @@ import { Box, CssBaseline, Toolbar } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useState } from "react";
 import { CNavbar } from "./CNavbar";
+import { useData } from "./CDataProvider";
 
 export function CLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [theme, setTheme] = useState("light");
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  const { theme } = useData();
 
   const darkTheme = createTheme({
     palette: {
@@ -61,7 +58,7 @@ export function CLayout({
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
       <Box sx={{ display: "flex", height: "100vh" }}>
         <CssBaseline/>
-        <CNavbar theme={theme} toggleTheme={toggleTheme} />
+        <CNavbar/>
         <Box component="main" sx={{ p: 3, width: "100%" }}>
           <Toolbar/>
           {children}
