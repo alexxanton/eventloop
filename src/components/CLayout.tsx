@@ -1,7 +1,7 @@
 "use client";
 import { Box, CssBaseline, Toolbar } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React, { useState } from "react";
+import React from "react";
 import { CNavbar } from "./CNavbar";
 import { useData } from "./CDataProvider";
 
