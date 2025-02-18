@@ -6,11 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
-  },
-  "resolutions": {
-  "@mui/material": "6.4.4",
-  "@mui/lab": "5.0.0-alpha.74"
+    "lint": "next lint",
+    "vercel-build": "npm ci"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
