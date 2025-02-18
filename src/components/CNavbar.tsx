@@ -1,15 +1,19 @@
 "use client";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
-import { useColorScheme } from "@mui/material/styles";
-import MenuIcon from '@mui/icons-material/Menu';
-import DarkMode from '@mui/icons-material/DarkMode';
-import LightMode from '@mui/icons-material/LightMode';
+import { AppBar, Box, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
+import { Menu, DarkMode, LightMode, House, Settings } from '@mui/icons-material';
+import { useData } from "./CDataProvider";
+import { useState } from "react";
 
 export function CNavbar() {
-  const { mode, setMode } = useColorScheme();
+  const { theme, setTheme } = useData();
+  const [open, setOpen] = useState(false);
 
   const toggleTheme = () => {
-    setMode(mode === "dark" ? "light" : "dark");
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const toggleSidebar = (open: boolean) => {
+    setOpen(open);
   };
 
   return (
@@ -20,16 +24,20 @@ export function CNavbar() {
           edge="start"
           sx={{ color: "white", mr: 2 }}
           aria-label="menu"
+          onClick={() => toggleSidebar(true)}
         >
-          <MenuIcon />
+          <Menu />
         </IconButton>
-        <Typography
+        <Link
+          href="/"
           variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, color: "white" }}
+          component="a"
+          underline="hover"
+          sx={{ color: "white" }}
         >
           EventLoop
-        </Typography>
+        </Link>
+        <Box sx={{ flexGrow: 1 }} />
         <IconButton
           size="large"
           edge="start"
@@ -37,9 +45,26 @@ export function CNavbar() {
           aria-label="menu"
           onClick={toggleTheme}
         >
-          {mode !== "dark" ? <DarkMode /> : <LightMode />}
+          {theme !== "dark" ? <DarkMode /> : <LightMode />}
         </IconButton>
       </Toolbar>
+      <Drawer open={open} onClose={() => setOpen(false)}>
+        <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleSidebar(false)}>
+          <List>
+            {["Home", "Settings", "New event", "Drafts"].map((text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <House /> : <Settings />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </Box>
+      </Drawer>
     </AppBar>
   );
 }

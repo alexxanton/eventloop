@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
+import { CLayout } from "@/components/CLayout";
 import theme from './theme';
-import { Box, CssBaseline, Toolbar } from "@mui/material";
-import { CNavbar } from "@/components/CNavbar";
+import { CDataProvider } from "@/components/CDataProvider";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -28,14 +28,11 @@ export default function RootLayout({
       <body className={`${roboto.variable}`}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <Box sx={{ display: "flex", height: "100vh" }}>
-              <CssBaseline/>
-              <CNavbar />
-              <Box component="main" sx={{ p: 3, width: "100%" }}>
-                <Toolbar/>
+            <CDataProvider>
+              <CLayout>
                 {children}
-              </Box>
-            </Box>
+              </CLayout>
+            </CDataProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
