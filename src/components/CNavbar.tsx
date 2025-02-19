@@ -10,7 +10,6 @@ export function CNavbar() {
 
   const toggleThemes = () => {
     toggleTheme();
-    useStore
   };
 
   const toggleSidebar = (open: boolean) => {
