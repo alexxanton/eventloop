@@ -39,7 +39,7 @@ export function CLayout({
     
   });
 
-  if (theme === "") return null;
+  // if (theme === "") return null;
 
   return (
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
