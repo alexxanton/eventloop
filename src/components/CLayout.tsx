@@ -1,7 +1,7 @@
 "use client";
 import { Box, CssBaseline, Toolbar } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CNavbar } from "./CNavbar";
 import { useStore } from "@/app/zustand";
 
@@ -13,6 +13,16 @@ export function CLayout({
   children: React.ReactNode;
 }>) {
   const { theme } = useStore();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  if (!isHydrated) {
+    return null;
+  }
+  
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
