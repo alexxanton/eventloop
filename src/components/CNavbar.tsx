@@ -1,15 +1,16 @@
 "use client";
 import { AppBar, Box, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { Menu, DarkMode, LightMode, House, Settings } from '@mui/icons-material';
-import { useData } from "./CDataProvider";
 import { useState } from "react";
+import { useStore } from "@/app/zustand";
 
 export function CNavbar() {
-  const { theme, setTheme } = useData();
+  const { theme, toggleTheme } = useStore();
   const [open, setOpen] = useState(false);
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+  const toggleThemes = () => {
+    toggleTheme();
+    useStore
   };
 
   const toggleSidebar = (open: boolean) => {
@@ -43,7 +44,7 @@ export function CNavbar() {
           edge="start"
           sx={{ color: "white", mr: 2 }}
           aria-label="menu"
-          onClick={toggleTheme}
+          onClick={toggleThemes}
         >
           {theme !== "dark" ? <DarkMode /> : <LightMode />}
         </IconButton>

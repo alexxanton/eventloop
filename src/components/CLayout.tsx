@@ -3,15 +3,16 @@ import { Box, CssBaseline, Toolbar } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import { CNavbar } from "./CNavbar";
-import { useData } from "./CDataProvider";
+import { useStore } from "@/app/zustand";
+
+
 
 export function CLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { theme } = useData();
-
+  const { theme, toggleTheme } = useStore();
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
@@ -22,15 +23,7 @@ export function CLayout({
         main: "#B892F2",
       },
     },
-    components: {
-      MuiCssBaseline: {
-        styleOverrides: {
-          "*": {
-            transition: "background-color 0.5s ease",
-          },
-        },
-      },
-    },
+    
   });
 
   const lightTheme = createTheme({
@@ -43,16 +36,10 @@ export function CLayout({
         main: "#B892F2",
       },
     },
-    components: {
-      MuiCssBaseline: {
-        styleOverrides: {
-          "*": {
-            transition: "background-color 0.5s ease",
-          },
-        },
-      },
-    },
+    
   });
+
+  if (theme === "") return null;
 
   return (
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>

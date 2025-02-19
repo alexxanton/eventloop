@@ -4,7 +4,6 @@ import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import { CLayout } from "@/components/CLayout";
 import theme from './theme';
-import { CDataProvider } from "@/components/CDataProvider";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -28,11 +27,9 @@ export default function RootLayout({
       <body className={`${roboto.variable}`}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <CDataProvider>
               <CLayout>
                 {children}
               </CLayout>
-            </CDataProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
