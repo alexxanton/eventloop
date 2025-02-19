@@ -12,7 +12,7 @@ export function CLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { theme, toggleTheme } = useStore();
+  const { theme } = useStore();
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
