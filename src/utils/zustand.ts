@@ -12,7 +12,7 @@ export const useStore = create<StoreState>()(
       theme: "",
       toggleTheme: () =>
         toggleTheme((state) => ({
-          theme: state.theme === "light" ? "dark" : "light",
+          theme: state.theme === "dark" ? "light" : "dark",
         })),
     }),
     {

@@ -3,15 +3,9 @@ import { Box, CssBaseline, Toolbar } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { CNavbar } from "./CNavbar";
-import { useStore } from "@/app/zustand";
+import { useStore } from "@/utils/zustand";
 
-
-
-export function CLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export function CLayout({children}: Readonly<{children: React.ReactNode}>) {
   const { theme } = useStore();
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -33,7 +27,6 @@ export function CLayout({
         main: "#B892F2",
       },
     },
-    
   });
 
   const lightTheme = createTheme({
@@ -46,10 +39,7 @@ export function CLayout({
         main: "#B892F2",
       },
     },
-    
   });
-
-  // if (theme === "") return null;
 
   return (
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>

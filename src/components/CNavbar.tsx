@@ -2,7 +2,7 @@
 import { AppBar, Box, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { Menu, DarkMode, LightMode, House, Settings } from '@mui/icons-material';
 import { useState } from "react";
-import { useStore } from "@/app/zustand";
+import { useStore } from "@/utils/zustand";
 
 export function CNavbar() {
   const { theme, toggleTheme } = useStore();
