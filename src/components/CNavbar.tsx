@@ -1,5 +1,5 @@
 "use client";
-import { AppBar, Box, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
+import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar } from "@mui/material";
 import { Menu, DarkMode, LightMode, House, Settings } from '@mui/icons-material';
 import { useState } from "react";
 import { useStore } from "@/utils/zustand";
@@ -7,10 +7,6 @@ import { useStore } from "@/utils/zustand";
 export function CNavbar() {
   const { theme, toggleTheme } = useStore();
   const [open, setOpen] = useState(false);
-
-  const toggleThemes = () => {
-    toggleTheme();
-  };
 
   const toggleSidebar = (open: boolean) => {
     setOpen(open);
@@ -43,28 +39,32 @@ export function CNavbar() {
           edge="start"
           sx={{ color: "white", mr: 2 }}
           aria-label="menu"
-          onClick={toggleThemes}
+          onClick={toggleTheme}
         >
           {theme !== "dark" ? <DarkMode /> : <LightMode />}
         </IconButton>
       </Toolbar>
-      <Drawer open={open} onClose={() => setOpen(false)}>
+      <SwipeableDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+      >
         <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleSidebar(false)}>
           <List>
-            {["Home", "Settings", "New event", "Drafts"].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <House /> : <Settings />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+        {["Home", "Settings", "New event", "Drafts"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <House /> : <Settings />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
           </List>
           <Divider />
         </Box>
-      </Drawer>
+      </SwipeableDrawer>
     </AppBar>
   );
 }
