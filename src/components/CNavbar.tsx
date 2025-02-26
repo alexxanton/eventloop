@@ -39,7 +39,7 @@ export function CNavbar() {
           <IconButton
             size="large"
             edge="start"
-            sx={{ color: "white", mr: 2 }}
+            sx={{ color: "white"}}
             aria-label="menu"
           >
             <AccountCircle />

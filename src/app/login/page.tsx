@@ -2,16 +2,18 @@
 import { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { createClient } from "@supabase/supabase-js";
+import { useStore } from "@/utils/zustand";
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 export default function AuthForm() {
+  const { setUserId } = useStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
 
-  const handleAuth = async (event) => {
+  const handleAuth = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
 
@@ -58,6 +60,11 @@ export default function AuthForm() {
           <Button fullWidth sx={{ mt: 1 }} onClick={() => setIsSignUp(!isSignUp)}>
             {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
           </Button>
+          {!isSignUp ? (
+            <Button fullWidth sx={{ mt: 1 }} onClick={() => setIsSignUp(!isSignUp)}>
+              Forgot password? Click here
+            </Button>
+          ) : null}
         </form>
       </Box>
     </Container>
