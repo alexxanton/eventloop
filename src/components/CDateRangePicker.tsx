@@ -34,8 +34,6 @@ export function CDateRangePicker({value, onChange}: CProps) {
       ) : (
         <StaticDateRangePicker {...props} displayStaticWrapperAs="desktop" />
       )}
-      <p>{value[0]?.toISOString().split("T")[0]}</p>
-      <p>{value[1]?.toISOString().split("T")[0]}</p>
     </LocalizationProvider>
   );
 }

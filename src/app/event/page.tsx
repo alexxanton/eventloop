@@ -1,5 +1,6 @@
 "use client";
 import { CDateRangePicker } from "@/components/CDateRangePicker";
+import CShadowBox from "@/components/containers/CShadowBox";
 import { Box } from "@mui/material";
 import { useState } from "react";
 
@@ -7,8 +8,10 @@ export default function Event() {
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
 
   return (
-    <Box padding={1} width="fit-content" borderRadius={2} boxShadow={5}>
+    <CShadowBox padding={1}>
       <CDateRangePicker value={value} onChange={(newValue) => {setValue(newValue)}} />
-    </Box>
+      <p>{value[0]?.toISOString()}</p>
+      <p>{value[1]?.toISOString()}</p>
+    </CShadowBox>
   );
 }

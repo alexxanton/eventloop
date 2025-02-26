@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { Box } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 
-export default function CShadowBox({children}: {children: React.ReactNode}) {
+export default function CShadowBox({children, ...rest}: {children: React.ReactNode} & BoxProps) {
   return (
     <Box sx={{
       borderRadius: 2,
       height: "fit-content",
       width: "fit-content",
-      boxShadow: 5,
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.51)",
       margin: "auto",
+      ...rest
     }}>
       {children}
     </Box>

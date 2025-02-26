@@ -1,9 +1,65 @@
 "use client";
-import { Box } from "@mui/material";
+import { useState } from "react";
+import { TextField, Button, Container, Typography, Box } from "@mui/material";
+import { createClient } from "@supabase/supabase-js";
 
-export default function Login() {
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
+export default function AuthForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  const handleAuth = async (event) => {
+    event.preventDefault();
+    setError(null);
+
+    const { error } = isSignUp
+      ? await supabase.auth.signUp({ email, password })
+      : await supabase.auth.signInWithPassword({ email, password });
+    
+    if (error) {
+      setError(error.message);
+    } else {
+      alert(isSignUp ? "Sign-up successful!" : "Login successful!");
+    }
+  };
+
   return (
-    <Box>
-    </Box>
+    <Container maxWidth="xs">
+      <Box sx={{ mt: 8, textAlign: "center" }}>
+        <Typography variant="h5" gutterBottom>
+          {isSignUp ? "Sign Up" : "Login"}
+        </Typography>
+        <form onSubmit={handleAuth}>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && <Typography color="error">{error}</Typography>}
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
+            {isSignUp ? "Sign Up" : "Login"}
+          </Button>
+          <Button fullWidth sx={{ mt: 1 }} onClick={() => setIsSignUp(!isSignUp)}>
+            {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
+          </Button>
+        </form>
+      </Box>
+    </Container>
   );
 }

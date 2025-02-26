@@ -1,11 +1,9 @@
 "use client";
 import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar } from "@mui/material";
-import { Menu, DarkMode, LightMode, House, Settings } from '@mui/icons-material';
+import { Menu, AccountCircle, House, Settings } from '@mui/icons-material';
 import { useState } from "react";
-import { useStore } from "@/utils/zustand";
 
 export function CNavbar() {
-  const { theme, toggleTheme } = useStore();
   const [open, setOpen] = useState(false);
 
   const toggleSidebar = (open: boolean) => {
@@ -34,15 +32,19 @@ export function CNavbar() {
           EventLoop
         </Link>
         <Box sx={{ flexGrow: 1 }} />
-        <IconButton
-          size="large"
-          edge="start"
-          sx={{ color: "white", mr: 2 }}
-          aria-label="menu"
-          onClick={toggleTheme}
+        <Link
+          href="/login"
+          component="a"
         >
-          {theme !== "dark" ? <DarkMode /> : <LightMode />}
-        </IconButton>
+          <IconButton
+            size="large"
+            edge="start"
+            sx={{ color: "white", mr: 2 }}
+            aria-label="menu"
+          >
+            <AccountCircle />
+          </IconButton>
+        </Link>
       </Toolbar>
       <SwipeableDrawer
         open={open}
