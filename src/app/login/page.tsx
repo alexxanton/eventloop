@@ -1,10 +1,8 @@
 "use client";
 import { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { createClient } from "@supabase/supabase-js";
 import { useStore } from "@/utils/zustand";
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+import { supabase } from "@/utils/supabase";
 
 export default function AuthForm() {
   const { setUserId } = useStore();
@@ -61,7 +59,7 @@ export default function AuthForm() {
             {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
           </Button>
           {!isSignUp ? (
-            <Button fullWidth sx={{ mt: 1 }} onClick={() => setIsSignUp(!isSignUp)}>
+            <Button fullWidth sx={{ mt: 1 }} onClick={() => {}}>
               Forgot password? Click here
             </Button>
           ) : null}

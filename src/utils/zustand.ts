@@ -6,7 +6,6 @@ interface StoreState {
   toggleTheme: () => void;
   userId: string;
   setUserId: (id: string) => void;
-
 }
 
 export const useStore = create<StoreState>()(
