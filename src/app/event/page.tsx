@@ -1,6 +1,6 @@
 "use client";
-import { CDateRangePicker } from "@/components/CDateRangePicker";
-import CShadowBox from "@/components/containers/CShadowBox";
+import { CDateRangePicker } from "@/components/calendars/CDateRangePicker";
+import { CShadowBox } from "@/components/containers/CShadowBox";
 import { Box } from "@mui/material";
 import { useState } from "react";
 

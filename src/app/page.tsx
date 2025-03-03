@@ -1,37 +1,28 @@
-"use client";
 import * as React from 'react';
-import { Drawer, Box, Container, Link, Button } from "@mui/material";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import CShadowBox from '@/components/containers/CShadowBox';
+import { Drawer, Box, Link, Button, Paper } from "@mui/material";
+import { CGroups } from '@/components/groups/CGroups';
+import { CCalendar } from '@/components/calendars/CCalendar';
 
-export default function Home() {
+export default  function Home() {
   return (
     <Box sx={{ display: "flex", flex: 1 }}>
       <Drawer
         sx={{
-          width: 200,
+          width: 300,
           flexShrink: 0,
           zIndex: 0,
           [`& .MuiDrawer-paper`]:{
             boxShadow: 5,
-            width: 200,
+            width: 300,
             boxSizing: "border-box"
           },
         }}
         variant="permanent"
         anchor="left"
       >
+        <CGroups />
       </Drawer>
-      <CShadowBox>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar />
-        </LocalizationProvider>
-      </CShadowBox>
-      <Link component="a" underline="none" href="event">
-        <Button>New Event</Button>
-      </Link>
+      <CCalendar/>
     </Box>
   );
 }

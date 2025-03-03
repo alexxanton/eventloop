@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, BoxProps } from "@mui/material";
 
-export default function CShadowBox({children, ...rest}: {children: React.ReactNode} & BoxProps) {
+export function CShadowBox({children, ...rest}: {children: React.ReactNode} & BoxProps) {
   return (
     <Box sx={{
       borderRadius: 2,
