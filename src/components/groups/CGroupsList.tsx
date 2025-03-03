@@ -1,16 +1,18 @@
 import { supabase } from "@/utils/supabase";
-import { Box, Button, List, Toolbar } from "@mui/material";
+import { List, Toolbar } from "@mui/material";
 import { CGroupButton } from "./CGroupButton";
+import { CNewGroupButton } from "./CNewGroupButton";
 
-export async function CGroups() {
+export async function CGroupsList() {
   const { data: groups } = await supabase.from("groups").select("*");
 
   return (
     <>
       <Toolbar />
+      <CNewGroupButton />
       <List disablePadding>
         {groups?.map((item, id) => {
-          return <CGroupButton props={item} key={id} />;
+          return <CGroupButton group={item} key={id} />;
         })}
       </List>
     </>

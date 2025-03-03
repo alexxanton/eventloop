@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Drawer, Box, Link, Button, Paper } from "@mui/material";
-import { CGroups } from '@/components/groups/CGroups';
+import { Drawer, Box } from "@mui/material";
+import { CGroupsList } from '@/components/groups/CGroupsList';
 import { CCalendar } from '@/components/calendars/CCalendar';
+import { CGroupChat } from '@/components/groups/CGroupChat';
 
-export default  function Home() {
+export default function Home() {
   return (
     <Box sx={{ display: "flex", flex: 1 }}>
       <Drawer
@@ -20,8 +21,9 @@ export default  function Home() {
         variant="permanent"
         anchor="left"
       >
-        <CGroups />
+        <CGroupsList />
       </Drawer>
+      <CGroupChat />
       <CCalendar/>
     </Box>
   );
