@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Drawer, Box } from "@mui/material";
 import { CGroupsList } from '@/components/groups/CGroupsList';
-import { CCalendar } from '@/components/calendars/CCalendar';
 import { CGroupChat } from '@/components/groups/CGroupChat';
 
 export default function Home() {
@@ -24,7 +23,6 @@ export default function Home() {
         <CGroupsList />
       </Drawer>
       <CGroupChat />
-      <CCalendar/>
     </Box>
   );
 }

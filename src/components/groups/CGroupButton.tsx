@@ -1,7 +1,6 @@
 "use client";
 import { useStore } from "@/utils/zustand";
-import { AccountCircle } from "@mui/icons-material";
-import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Avatar, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
 export function CGroupButton({group}: {group: any}) {
   const { currentGroup, setCurrentGroup } = useStore();
@@ -11,7 +10,7 @@ export function CGroupButton({group}: {group: any}) {
       <ListItem disablePadding>
         <ListItemButton sx={{ height: 70 }} onClick={() => setCurrentGroup(group.name)}>
           <ListItemIcon>
-            <AccountCircle />
+            <Avatar src="" />
           </ListItemIcon>
           <ListItemText sx={{ textWrap: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} primary={group.name} secondary={group.description} />
         </ListItemButton>
