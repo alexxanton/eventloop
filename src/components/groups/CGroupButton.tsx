@@ -2,7 +2,12 @@
 import { useStore } from "@/utils/zustand";
 import { Avatar, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
-export function CGroupButton({group}: {group: any}) {
+interface Group {
+  name: string;
+  description: string;
+}
+
+export function CGroupButton({group}: {group: Group}) {
   const { currentGroup, setCurrentGroup } = useStore();
 
   return (
