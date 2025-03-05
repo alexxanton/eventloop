@@ -46,7 +46,7 @@ export function CLayout({children}: Readonly<{children: React.ReactNode}>) {
       <Box sx={{ display: "flex", height: "100vh" }}>
         <CssBaseline/>
         <CNavbar/>
-        <Box component="main" sx={{ display: "flex", flexDirection: "column", p: 3, width: "100%" }}>
+        <Box component="main" sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
           <Toolbar/>
           {children}
         </Box>

@@ -5,7 +5,7 @@ import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase";
 
 export default function AuthForm() {
-  // const { setUserId } = useStore();
+  const { setUserId } = useStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +23,7 @@ export default function AuthForm() {
       setError(error.message);
     } else {
       alert(isSignUp ? "Sign-up successful!" : "Login successful!");
+      setUserId("");
     }
   };
 
