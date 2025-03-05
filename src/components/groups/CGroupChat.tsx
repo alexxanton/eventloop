@@ -1,13 +1,15 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { CCalendar } from '../calendars/CCalendar';
-import { Box, Paper, Typography, TextField, IconButton } from '@mui/material';
+import { CCalendar } from '@/components/calendars/CCalendar';
+import { Box, Paper, Typography, TextField, IconButton, useTheme, BottomNavigation } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useState } from 'react';
-import { purple } from '@/constants/purple';
+import { lightPurple, purple } from '@/utils/constants/purple';
+import { MUIStyles } from '@/utils/types/types';
 
 export function CGroupChat() {
   const { currentGroup } = useStore();
+  const theme = useTheme();
   const [messages, setMessages] = useState([
     { sender: "You", text: "Hey! How's it going?" },
     { sender: "Alice", text: "All good! What about you?" },
@@ -22,7 +24,7 @@ export function CGroupChat() {
   };
 
   if (!currentGroup) {
-    return <CCalendar />
+    return <CCalendar />;
   }
 
   return (
@@ -41,11 +43,10 @@ export function CGroupChat() {
               }}
             >
               <Paper
-                key={index}
                 sx={{
                   ...styles.messagePaper,
-                  bgcolor: msg.sender === "You" ? purple : "",
-                  borderRadius: `${msg.sender === "You" ? "8px 0px" : "0px 8px"} 8px 8px`,
+                  bgcolor: msg.sender === "You" ? (theme.palette.mode === "dark" ? purple : lightPurple) : "",
+                  borderRadius: `${msg.sender === "You" ? "10px 0px" : "0px 10px"} 10px 10px`,
                 }}
               >
                 <Typography variant="body1">{msg.text}</Typography>
@@ -53,6 +54,8 @@ export function CGroupChat() {
             </Box>
           ))}
         </Box>
+      </Box>
+      <BottomNavigation sx={styles.footer}>
         <Box sx={styles.inputBox}>
           <TextField
             fullWidth
@@ -69,46 +72,53 @@ export function CGroupChat() {
             <SendIcon />
           </IconButton>
         </Box>
-      </Box>
+      </BottomNavigation>
     </Box>
   );
 }
 
-const styles = {
+const styles: MUIStyles = {
   box: {
     width: "100%",
     display: "flex",
-    flexGrow: 1
+    flexDirection: "column",
   },
   innerBox: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    overflowY: "auto",
-
-    p: 2
+    overflow: "hidden",
+    p: 2,
   },
   typography: {
     pb: 1,
-    mb: 1
+    mb: 1,
   },
   messagesBox: {
     display: "flex",
     flexDirection: "column",
-    flex: 1,
+    flexGrow: 1,
     overflowY: "auto",
-    mb: 1
+    mb: 1,
   },
   messagePaper: {
     maxWidth: "fit-content",
     p: 1,
-    m: 1
+    m: 1,
+  },
+  footer: {
+    position: "sticky",
+    bottom: 0,
+    width: "100%",
+    bgcolor: "background.paper",
+    p: 1,
   },
   inputBox: {
     display: "flex",
-    gap: 1
+    gap: 1,
+    width: "100%",
   },
   textField: {
-    "& .MuiOutlinedInput-root": { borderRadius: "20px" }
-  }
-}
+    "& .MuiOutlinedInput-root": { borderRadius: "20px" },
+  },
+};

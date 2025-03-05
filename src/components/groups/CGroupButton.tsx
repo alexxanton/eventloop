@@ -1,4 +1,5 @@
 "use client";
+import { lightPurple } from "@/utils/constants/purple";
 import { useStore } from "@/utils/zustand";
 import { Avatar, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
@@ -15,7 +16,7 @@ export function CGroupButton({group}: {group: Group}) {
       <ListItemButton
         sx={{
           height: 70,
-          backgroundColor: group.name === currentGroup ? "rgba(40, 36, 36, 0.5)" : "transparent",
+          backgroundColor: group.name === currentGroup ? lightPurple + "50" : "transparent",
         }}
         onClick={() => setCurrentGroup(group.name)}
       >
