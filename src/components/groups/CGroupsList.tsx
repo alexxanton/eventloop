@@ -8,7 +8,6 @@ export async function CGroupsList() {
 
   return (
     <>
-      <Toolbar />
       <CNewGroupButton />
       <List disablePadding>
         {groups?.map((item, id) => {
