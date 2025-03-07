@@ -2,7 +2,7 @@
 import { useStore } from '@/utils/zustand';
 import { CCalendar } from '@/components/calendars/CCalendar';
 import { Box, Paper, Typography, TextField, IconButton, BottomNavigation } from '@mui/material';
-import { Send } from '@mui/icons-material/';
+import { Send } from '@mui/icons-material';
 import { useState } from 'react';
 import { purple } from '@/utils/constants/purple';
 import { MUIStyles } from '@/utils/types/types';

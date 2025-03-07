@@ -1,5 +1,5 @@
 import { supabase } from "@/utils/supabase";
-import { List, Toolbar } from "@mui/material";
+import { List } from "@mui/material";
 import { CGroupButton } from "./CGroupButton";
 import { CNewGroupButton } from "./CNewGroupButton";
 
