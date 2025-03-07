@@ -5,10 +5,12 @@ import { CGroupChat } from '@/components/groups/CGroupChat';
 
 export default function Home() {
   return (
-    <Box sx={{ display: "flex", flex: 1 }}>
-      <Paper>
-        <CGroupsList />
-      </Paper>
+    <Box sx={{ display: "flex", flex: 1, overflow: "auto" }}>
+      <Box sx={{ position: "sticky", top: 0 }}>
+        <Paper sx={{ height: "100%", overflow: "auto" }}>
+          <CGroupsList />
+        </Paper>
+      </Box>
       <CGroupChat />
     </Box>
   );

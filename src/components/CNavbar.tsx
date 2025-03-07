@@ -1,10 +1,11 @@
 "use client";
-import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useTheme } from "@mui/material";
+import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery, useTheme } from "@mui/material";
 import { Menu, AccountCircle, House, Settings } from '@mui/icons-material';
 import { useState } from "react";
 
 export function CNavbar() {
   const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery("(hover: hover) and (pointer: fine)");
   const theme = useTheme();
 
   const toggleSidebar = (open: boolean) => {
@@ -49,6 +50,7 @@ export function CNavbar() {
       </Toolbar>
       <SwipeableDrawer
         open={open}
+        disableSwipeToOpen={isDesktop}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
       >
