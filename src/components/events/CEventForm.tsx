@@ -1,34 +1,51 @@
 "use client";
-import { MuiStyles } from "@/utils/types/types";
+import { supabase } from "@/utils/supabase";
+import { FormEvent, MuiStyles } from "@/utils/types/types";
 import { CalendarToday } from "@mui/icons-material";
-import { Box, IconButton, Modal, Paper, TextField, Typography } from "@mui/material";
-import { MobileDatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
+import { Box, Button, TextField } from "@mui/material";
+import { MobileDatePicker, LocalizationProvider, MobileTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
+import { CModal } from "../containers/CModal";
+import { Dayjs } from "dayjs";
+import { purple } from "@/utils/constants/purple";
 
-export function CEventPanel () {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export function CEventForm () {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [location, setLocation] = useState("");
+  const [error, setError] = useState(false);
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    const newEvent = {
+      group_id: "",
+      name,
+      description,
+      start_date: startDate?.toDate(),
+      end_date: endDate?.toDate(),
+      location
+    };
+    console.log(newEvent);
+    
+    // const { error } = await supabase.from("events").insert("");
+  };
 
   return (
-    <>
-      <IconButton size="large" onClick={handleOpen}>
-        <CalendarToday />
-      </IconButton>
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
-        <Paper sx={styles.modal}>
-          <Typography component="h6" variant="h6">Create event</Typography>
-          <form>
+    <Box display="flex">
+      <CModal title="New event" icon={CalendarToday}>
+        <form onSubmit={handleSubmit}>
+          <Box sx={styles.formBox}>
             <TextField
               fullWidth
               margin="normal"
               label="Event name"
               type="text"
               variant="standard"
+              onChange={(e) => setName(e.target.value)}
             />
             <TextField
               fullWidth
@@ -36,50 +53,47 @@ export function CEventPanel () {
               minRows={2}
               maxRows={4}
               variant="filled"
-              sx={{
-                "& .MuiFilledInput-root" : {
-                }
-              }}
               label="Description (optional)"
+              color="secondary"
+              onChange={(e) => setDescription(e.target.value)}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Box>
                 <small>Start date and time</small>
                 <Box sx={styles.date}>
-                  <MobileDatePicker />
-                  <MobileTimePicker />
+                  <MobileDateTimePicker onChange={(value) => setStartDate(value)} />
                 </Box>
               </Box>
             </LocalizationProvider>
             <TextField
               fullWidth
               variant="standard"
-              placeholder="Location (optional)"
+              label="Location (optional)"
+              onChange={(e) => setLocation(e.target.value)}
             />
-          </form>
-        </Paper>
-      </Modal>
-    </>
+          </Box>
+          <Button sx={styles.button} type="submit">Create</Button>
+        </form>
+      </CModal>
+    </Box>
   );
 }
 
 const styles: MuiStyles = {
-  modal: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    borderRadius: 2,
-    boxShadow: 5,
-    p: 2,
+  formBox: {
     display: "flex",
     flexDirection: "column",
+    p: 2,
+    gap: 1,
   },
   date: {
     display: "flex",
     flexDirection: "row",
-    gap: 1
+    gap: 1,
   },
+  button: {
+    color: "white",
+    bgcolor: purple,
+    ":hover": "red"
+  }
 };

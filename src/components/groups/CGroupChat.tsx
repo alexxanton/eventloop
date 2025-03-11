@@ -2,11 +2,11 @@
 import { useStore } from '@/utils/zustand';
 import { CCalendar } from '@/components/calendars/CCalendar';
 import { Box, Paper, Typography, TextField, IconButton, BottomNavigation } from '@mui/material';
-import { Send, CalendarToday } from '@mui/icons-material';
+import { Close, Send, Settings } from '@mui/icons-material';
 import { useState } from 'react';
 import { purple } from '@/utils/constants/purple';
 import { MuiStyles } from '@/utils/types/types';
-import { CEventPanel } from '../events/CEventForm';
+import { CEventForm } from '../events/CEventForm';
 
 export function CGroupChat() {
   const { currentGroup } = useStore();
@@ -38,29 +38,41 @@ export function CGroupChat() {
               {currentGroup}
             </Typography>
           </Box>
-          <CEventPanel />
+          <IconButton>
+            <Close />
+          </IconButton>
+          <IconButton>
+            <Settings />
+          </IconButton>
+          <CEventForm />
         </Box>
         <Box sx={styles.messagesBox}>
-          {messages.map((msg, index) => (
-            <Box
-              key={index}
-              sx={{
-                alignSelf: msg.sender === "You" ? "flex-end" : "flex-start",
-                maxWidth: "60%",
-              }}
-            >
-              <Paper
+          {messages.map((msg, index, array) => {
+            const prev = index > 0 ? array[index - 1] : null;
+            
+            return (
+              <Box
+                key={index}
                 sx={{
-                  ...styles.messagePaper,
-                  bgcolor: msg.sender === "You" ? purple : "",
-                  color: msg.sender === "You" ? "white" : "",
-                  borderRadius: `${msg.sender === "You" ? "10px 0px" : "0px 10px"} 10px 10px`,
+                  alignSelf: msg.sender === "You" ? "flex-end" : "flex-start",
+                  maxWidth: "60%",
                 }}
               >
-                <Typography variant="body1">{msg.text}</Typography>
-              </Paper>
-            </Box>
-          ))}
+                <Paper
+                  sx={{
+                    ...styles.messagePaper,
+                    bgcolor: msg.sender === "You" ? purple : "",
+                    color: msg.sender === "You" ? "white" : "",
+                    mt: prev?.sender === msg.sender ? -0.5 : 1,
+                    borderRadius: `${msg.sender === "You" ? "10px 0px" : "0px 10px"} 10px 10px`,
+                  }}
+                >
+                  {prev?.sender !== msg.sender ? <small>{"@" + msg.sender}</small> : null}
+                  <Typography variant="body1">{msg.text}</Typography>
+                </Paper>
+              </Box>
+            );
+          })}
         </Box>
       </Box>
       <BottomNavigation sx={styles.footer}>

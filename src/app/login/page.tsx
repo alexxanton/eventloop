@@ -3,6 +3,7 @@ import { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase";
+import { FormEvent } from "@/utils/types/types";
 
 export default function AuthForm() {
   const { setUserId } = useStore();
@@ -11,7 +12,7 @@ export default function AuthForm() {
   const [error, setError] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
 
-  const handleAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAuth = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
 
