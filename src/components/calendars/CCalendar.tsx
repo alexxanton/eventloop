@@ -9,7 +9,7 @@ export function CCalendar({...rest}: DateCalendarProps<PickerValidDate>) {
     <CShadowBox>
       <Paper>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar {...rest} onChange={()=>{}}  />
+          <DateCalendar {...rest} onChange={()=>{}} />
         </LocalizationProvider>
       </Paper>
     </CShadowBox>

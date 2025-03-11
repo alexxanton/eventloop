@@ -2,10 +2,11 @@
 import { useStore } from '@/utils/zustand';
 import { CCalendar } from '@/components/calendars/CCalendar';
 import { Box, Paper, Typography, TextField, IconButton, BottomNavigation } from '@mui/material';
-import { Send } from '@mui/icons-material';
+import { Send, CalendarToday } from '@mui/icons-material';
 import { useState } from 'react';
 import { purple } from '@/utils/constants/purple';
-import { MUIStyles } from '@/utils/types/types';
+import { MuiStyles } from '@/utils/types/types';
+import { CEventPanel } from '../events/CEventForm';
 
 export function CGroupChat() {
   const { currentGroup } = useStore();
@@ -31,9 +32,14 @@ export function CGroupChat() {
   return (
     <Box sx={styles.box}>
       <Box sx={styles.innerBox}>
-        <Typography variant="h6" sx={styles.typography}>
-          {currentGroup}
-        </Typography>
+        <Box sx={styles.navbar}>
+          <Box sx={styles.typography}>
+            <Typography variant="h6">
+              {currentGroup}
+            </Typography>
+          </Box>
+          <CEventPanel />
+        </Box>
         <Box sx={styles.messagesBox}>
           {messages.map((msg, index) => (
             <Box
@@ -60,8 +66,10 @@ export function CGroupChat() {
       <BottomNavigation sx={styles.footer}>
         <Box sx={styles.inputBox}>
           <TextField
+            sx={styles.textField}
             fullWidth
             multiline
+            rows={input !== "" ? 0 : 1}
             variant="outlined"
             autoComplete="off"
             size="small"
@@ -74,7 +82,6 @@ export function CGroupChat() {
                 sendMessage();
               }
             }}
-            sx={styles.textField}
           />
         </Box>
         <IconButton sx={{ bgcolor: purple }} color="secondary" onClick={sendMessage}>
@@ -85,7 +92,7 @@ export function CGroupChat() {
   );
 }
 
-const styles: MUIStyles = {
+const styles: MuiStyles = {
   box: {
     width: "100%",
     display: "flex",
@@ -98,9 +105,14 @@ const styles: MUIStyles = {
     overflow: "hidden",
     p: 2,
   },
-  typography: {
-    pb: 1,
+  navbar: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     mb: 1,
+  },
+  typography: {
+    flexGrow: 1,
   },
   messagesBox: {
     display: "flex",
@@ -132,6 +144,13 @@ const styles: MUIStyles = {
     flex: 1,
   },
   textField: {
-    "& .MuiOutlinedInput-root": { borderRadius: "20px" },
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "20px"
+    },
+    "& .MuiInputBase-input::placeholder": {
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      textWrap: "nowrap"
+    },
   },
 };
