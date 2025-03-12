@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <Box sx={{ display: "flex", flex: 1, overflow: "auto" }}>
       <Box sx={{ position: "sticky", top: 0 }}>
-        <Paper sx={{ height: "100%", overflow: "auto" }}>
+        <Paper sx={{ width: 300, height: "100%", overflow: "auto" }}>
           <CGroupsList />
         </Paper>
       </Box>

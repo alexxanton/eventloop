@@ -96,7 +96,7 @@ export function CGroupChat() {
             }}
           />
         </Box>
-        <IconButton sx={{ bgcolor: purple }} color="secondary" onClick={sendMessage}>
+        <IconButton sx={{ bgcolor: purple, maxHeight: "fit-content" }} color="secondary" onClick={sendMessage}>
           <Send sx={{ transform: "rotate(-45deg)" }} />
         </IconButton>
       </BottomNavigation>
@@ -116,6 +116,8 @@ const styles: MuiStyles = {
     flexDirection: "column",
     overflow: "hidden",
     p: 2,
+    pt: 1,
+    pb: 1,
   },
   navbar: {
     display: "flex",

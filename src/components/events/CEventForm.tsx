@@ -3,7 +3,7 @@ import { supabase } from "@/utils/supabase";
 import { FormEvent, MuiStyles } from "@/utils/types/types";
 import { CalendarToday } from "@mui/icons-material";
 import { Box, Button, TextField } from "@mui/material";
-import { MobileDatePicker, LocalizationProvider, MobileTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider, MobileDateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import { CModal } from "../containers/CModal";
