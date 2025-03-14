@@ -1,22 +1,25 @@
-import { MuiStyles } from "@/utils/types/types";
-import { Box, Typography, TextField, MenuItem } from "@mui/material";
+import { AttachMoney } from "@mui/icons-material";
+import { Box, TextField, MenuItem, Theme } from "@mui/material";
+import { CFormSection } from "../CFormSection";
 
-export function CPricingSection({
-  price,
-  setPrice,
-  currency,
-  setCurrency,
-  currencies,
-}: {
+interface CProps {
   price: string;
   setPrice: (value: string) => void;
   currency: string;
   setCurrency: (value: string) => void;
-  currencies: { value: string; label: string }[];
-}) {
+  theme: Theme;
+}
+
+export function CPricingSection({ price, setPrice, currency, setCurrency, theme }: CProps) {
+  const currencies = [
+    { value: 'USD', label: '$' },
+    { value: 'EUR', label: '€' },
+    { value: 'BTC', label: '฿' },
+    { value: 'JPY', label: '¥' },
+  ];
+
   return (
-    <Box sx={styles.section}>
-      <Typography variant="h6" sx={styles.sectionTitle}>Pricing</Typography>
+    <CFormSection title="Pricing" SectionIcon={AttachMoney}>
       <Box display="flex" gap={1}>
         <TextField
           sx={{ width: "50%" }}
@@ -24,6 +27,7 @@ export function CPricingSection({
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+          color={theme.palette.mode === "dark" ? "secondary" : "primary"}
         />
         <TextField
           select
@@ -31,6 +35,7 @@ export function CPricingSection({
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
           sx={{ width: "50%" }}
+          color={theme.palette.mode === "dark" ? "secondary" : "primary"}
         >
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -39,18 +44,6 @@ export function CPricingSection({
           ))}
         </TextField>
       </Box>
-    </Box>
+    </CFormSection>
   );
 }
-
-const styles: MuiStyles = {
-  section: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 2,
-  },
-  sectionTitle: {
-    mb: 1,
-    fontWeight: "bold",
-  },
-};

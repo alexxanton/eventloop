@@ -1,19 +1,16 @@
 import { purple } from "@/utils/constants/purple";
 import { MuiStyles } from "@/utils/types/types";
 import { Close } from "@mui/icons-material";
-import { Box, IconButton, Modal, Paper, SvgIconTypeMap, Typography, Zoom } from "@mui/material";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { Box, IconButton, Modal, Paper, Typography, Zoom } from "@mui/material";
 import React, { useState } from "react";
 
 type CProps = {
   children: React.ReactElement;
   title: string;
-  icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-    muiName: string;
-  };
+  Icon: React.ElementType;
 };
 
-export function CModal({ children, title, icon }: CProps) {
+export function CModal({ children, title, Icon }: CProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -21,7 +18,7 @@ export function CModal({ children, title, icon }: CProps) {
   return (
     <>
       <IconButton size="large" onClick={handleOpen}>
-        {React.createElement(icon)}
+        <Icon />
       </IconButton>
       <Modal
         open={open}

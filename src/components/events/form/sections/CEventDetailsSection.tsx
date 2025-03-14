@@ -1,38 +1,45 @@
 import { MuiStyles } from "@/utils/types/types";
-import { Box, Typography, TextField, MenuItem } from "@mui/material";
+import { Notes } from "@mui/icons-material";
+import { Box, TextField, MenuItem, Theme } from "@mui/material";
+import { CFormSection } from "../CFormSection";
 
-export function CEventDetailsSection({
-  name,
-  setName,
-  description,
-  setDescription,
-  category,
-  setCategory,
-  categories,
-  location,
-  setLocation
-}: {
+interface CProps {
   name: string;
   setName: (value: string) => void;
   description: string;
   setDescription: (value: string) => void;
   category: string;
   setCategory: (value: string) => void;
-  categories: string[];
   location: string;
   setLocation: (value: string) => void;
-}) {
+  theme: Theme;
+}
+
+export function CEventDetailsSection({ name, setName, description, setDescription, category, setCategory, location, setLocation, theme }: CProps) {
+  const categories = [
+    "Social & Entertainment",
+    "Business & Networking",
+    "Educational",
+    "Sports & Fitness",
+    "Community & Cultural",
+    "Arts & Performance",
+    "Tech & Innovation",
+    "Food & Drink",
+    "Outdoor & Adventure",
+    "Virtual & Hybrid",
+  ];
+
   return (
-    <Box sx={styles.section}>
-      <Typography variant="h6" sx={styles.sectionTitle}>Event Details</Typography>
+    <CFormSection title="Event Details" SectionIcon={Notes}>
       <TextField
         fullWidth
+        required
         label="Event name"
         type="text"
         variant="standard"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        required
+        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
       />
       <TextField
         sx={{ my: 1 }}
@@ -42,16 +49,17 @@ export function CEventDetailsSection({
         maxRows={4}
         variant="filled"
         label="Description (optional)"
-        color="secondary"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
       />
       <TextField
         select
+        fullWidth
         label="Category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        fullWidth
+        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
       >
         <MenuItem value="">
           <em>None</em>
@@ -63,13 +71,15 @@ export function CEventDetailsSection({
         ))}
       </TextField>
       <TextField
+        sx={{ mt: 1 }}
         fullWidth
         variant="standard"
         label="Location (optional)"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
+        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
       />
-    </Box>
+    </CFormSection>
   );
 }
 
@@ -77,10 +87,5 @@ const styles: MuiStyles = {
   section: {
     display: "flex",
     flexDirection: "column",
-    gap: 2,
-  },
-  sectionTitle: {
-    mb: 1,
-    fontWeight: "bold",
   },
 };

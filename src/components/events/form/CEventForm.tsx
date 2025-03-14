@@ -2,15 +2,14 @@
 import { supabase } from "@/utils/supabase";
 import { FormEvent, MuiStyles } from "@/utils/types/types";
 import { CalendarToday } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { CModal } from "../../containers/CModal";
 import { Dayjs } from "dayjs";
-// import { purple } from "@/utils/constants/purple";
-import { CAdditionalInfoSection } from "./CAdditionalInfoSection";
-import { CEventDetailsSection } from "./CEventDetailsSection";
-import { CPricingSection } from "./CPricingSection";
-import { CDateTimeSection } from "./CDateTimeSection";
+import { CAdditionalInfoSection } from "./sections/CAdditionalInfoSection";
+import { CEventDetailsSection } from "./sections/CEventDetailsSection";
+import { CPricingSection } from "./sections/CPricingSection";
+import { CDateTimeSection } from "./sections/CDateTimeSection";
 
 export function CEventForm() {
   const [name, setName] = useState("");
@@ -25,39 +24,7 @@ export function CEventForm() {
   const [maxCapacity, setMaxCapacity] = useState<number | null>(null);
   const [ageLimit, setAgeLimit] = useState<number | null>(null);
   const [dressCode, setDressCode] = useState("");
-
-  const currencies = [
-    { value: 'USD', label: '$' },
-    { value: 'EUR', label: '€' },
-    { value: 'BTC', label: '฿' },
-    { value: 'JPY', label: '¥' },
-  ];
-
-  const categories = [
-    "Social & Entertainment",
-    "Business & Networking",
-    "Educational",
-    "Sports & Fitness",
-    "Community & Cultural",
-    "Arts & Performance",
-    "Tech & Innovation",
-    "Food & Drink",
-    "Outdoor & Adventure",
-    "Virtual & Hybrid",
-  ];
-
-  const dressCodes = [
-    "Casual",
-    "Smart Casual",
-    "Business Casual",
-    "Business Formal",
-    "Cocktail Attire",
-    "Semi-Formal",
-    "Formal",
-    "Black Tie",
-    "White Tie",
-    "Themed Attire",
-  ];
+  const theme = useTheme();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -95,7 +62,7 @@ export function CEventForm() {
 
   return (
     <Box display="flex">
-      <CModal title="New event" icon={CalendarToday}>
+      <CModal title="Create new event" Icon={CalendarToday}>
         <form onSubmit={handleSubmit}>
           <Box sx={styles.formBox}>
             <CEventDetailsSection
@@ -105,22 +72,23 @@ export function CEventForm() {
               setDescription={setDescription}
               category={category}
               setCategory={setCategory}
-              categories={categories}
               location={location}
               setLocation={setLocation}
+              theme={theme}
             />
             <CDateTimeSection
               startDate={startDate}
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
+              theme={theme}
             />
             <CPricingSection
               price={price}
               setPrice={setPrice}
               currency={currency}
               setCurrency={setCurrency}
-              currencies={currencies}
+              theme={theme}
             />
             <CAdditionalInfoSection
               dressCode={dressCode}
@@ -129,7 +97,7 @@ export function CEventForm() {
               setMaxCapacity={setMaxCapacity}
               ageLimit={ageLimit}
               setAgeLimit={setAgeLimit}
-              dressCodes={dressCodes}
+              theme={theme}
             />
             {error && (
               <Typography color="error" sx={{ mt: 2 }}>

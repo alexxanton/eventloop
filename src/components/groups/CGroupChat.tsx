@@ -1,6 +1,6 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { Box, Typography, TextField, IconButton, Paper } from '@mui/material';
+import { Box, Typography, TextField, IconButton, Paper, keyframes } from '@mui/material';
 import { Close, Send, Settings } from '@mui/icons-material';
 import { useState } from 'react';
 import { purple } from '@/utils/constants/purple';
@@ -16,6 +16,13 @@ export function CGroupChat() {
     { sender: "Alice", text: "All good! What about you?" },
   ]);
   const [input, setInput] = useState("");
+
+  const bounce = keyframes`
+  0%, 100% { transform: rotate(-45deg) translate(0, 0); }
+  25% { transform: rotate(-45deg) translate(7px, -5px); }
+  50% { transform: rotate(-45deg) translate(0, 0); }
+  75% { transform: rotate(-45deg) translate(7px, -5px); }
+`;
 
   const sendMessage = () => {
     console.log(input);
@@ -59,7 +66,7 @@ export function CGroupChat() {
         </Box>
         <Box sx={styles.messagesBox}>
           {messages.map((msg, index, array) => {
-            return <CMessageBubble msg={msg} index={index} array={array} />
+            return <CMessageBubble msg={msg} index={index} array={array} key={index} />
           })}
         </Box>
       </Box>
@@ -85,7 +92,17 @@ export function CGroupChat() {
               }}
             />
           </Box>
-          <IconButton sx={{ bgcolor: purple, maxHeight: "fit-content" }} color="secondary" onClick={sendMessage}>
+          <IconButton
+            sx={{
+              bgcolor: purple,
+              maxHeight: "fit-content",
+              "&:hover svg": {
+                animation: `${bounce} 0.5s ease-in-out`,
+              },
+            }}
+            color="secondary"
+            onClick={sendMessage}
+          >
             <Send sx={{ transform: "rotate(-45deg)" }} />
           </IconButton>
         </Box>
