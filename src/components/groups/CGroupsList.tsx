@@ -17,8 +17,6 @@ export function CGroupsList() {
 
   useEffect(() => {
     getGroups();
-    console.log("e");
-    
   }, []);
 
   return (

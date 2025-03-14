@@ -1,12 +1,12 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { CCalendar } from '@/components/calendars/CCalendar';
-import { Box, Paper, Typography, TextField, IconButton, BottomNavigation } from '@mui/material';
+import { Box, Typography, TextField, IconButton, Paper } from '@mui/material';
 import { Close, Send, Settings } from '@mui/icons-material';
 import { useState } from 'react';
 import { purple } from '@/utils/constants/purple';
 import { MuiStyles } from '@/utils/types/types';
-import { CEventForm } from '../events/CEventForm';
+import { CEventForm } from '../events/form/CEventForm';
+import { CMessageBubble } from './CMessageBubble';
 
 export function CGroupChat() {
   const { currentGroup } = useStore();
@@ -26,7 +26,18 @@ export function CGroupChat() {
   };
 
   if (!currentGroup) {
-    return <CCalendar />;
+    return (
+      <Box>
+        <Paper>
+          <form>
+            <TextField
+              label="Group name"
+              variant="standard"
+            />
+          </form>
+        </Paper>
+      </Box>
+    );
   }
 
   return (
@@ -48,58 +59,37 @@ export function CGroupChat() {
         </Box>
         <Box sx={styles.messagesBox}>
           {messages.map((msg, index, array) => {
-            const prev = index > 0 ? array[index - 1] : null;
-            
-            return (
-              <Box
-                key={index}
-                sx={{
-                  alignSelf: msg.sender === "You" ? "flex-end" : "flex-start",
-                  maxWidth: "60%",
-                }}
-              >
-                <Paper
-                  sx={{
-                    ...styles.messagePaper,
-                    bgcolor: msg.sender === "You" ? purple : "",
-                    color: msg.sender === "You" ? "white" : "",
-                    mt: prev?.sender === msg.sender ? -0.5 : 1,
-                    borderRadius: `${msg.sender === "You" ? "10px 0px" : "0px 10px"} 10px 10px`,
-                  }}
-                >
-                  {prev?.sender !== msg.sender ? <small>{"@" + msg.sender}</small> : null}
-                  <Typography variant="body1">{msg.text}</Typography>
-                </Paper>
-              </Box>
-            );
+            return <CMessageBubble msg={msg} index={index} array={array} />
           })}
         </Box>
       </Box>
-      <BottomNavigation sx={styles.footer}>
-        <Box sx={styles.inputBox}>
-          <TextField
-            sx={styles.textField}
-            fullWidth
-            multiline
-            rows={input !== "" ? 0 : 1}
-            variant="outlined"
-            autoComplete="off"
-            size="small"
-            value={input}
-            placeholder=" Type a message"
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-          />
+      <footer>
+        <Box sx={styles.footer}>
+          <Box sx={styles.inputBox}>
+            <TextField
+              sx={styles.textField}
+              fullWidth
+              multiline
+              rows={input !== "" ? 0 : 1}
+              variant="outlined"
+              autoComplete="off"
+              size="small"
+              value={input}
+              placeholder=" Type a message"
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+            />
+          </Box>
+          <IconButton sx={{ bgcolor: purple, maxHeight: "fit-content" }} color="secondary" onClick={sendMessage}>
+            <Send sx={{ transform: "rotate(-45deg)" }} />
+          </IconButton>
         </Box>
-        <IconButton sx={{ bgcolor: purple, maxHeight: "fit-content" }} color="secondary" onClick={sendMessage}>
-          <Send sx={{ transform: "rotate(-45deg)" }} />
-        </IconButton>
-      </BottomNavigation>
+      </footer>
     </Box>
   );
 }
@@ -136,16 +126,12 @@ const styles: MuiStyles = {
     mb: 1,
     wordBreak: "break-word"
   },
-  messagePaper: {
-    maxWidth: "fit-content",
-    p: 1,
-    m: 1,
-  },
   footer: {
-    position: "sticky",
-    bottom: 0,
+    // position: "sticky",
+    // bottom: 0,
     width: "100%",
     bgcolor: "background.paper",
+    display: "flex",
     p: 1,
     mt: -2,
     height: "fit-content",
