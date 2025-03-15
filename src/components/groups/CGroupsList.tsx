@@ -5,8 +5,13 @@ import { CGroupButton } from "./CGroupButton";
 import { CNewGroupButton } from "./CNewGroupButton";
 import { useEffect, useState } from "react";
 
+export type GroupType = {
+  name: string;
+  description: string;
+};
+
 export function CGroupsList() {
-  const [groupsList, setGroupsList] = useState<any[]>([]);
+  const [groupsList, setGroupsList] = useState<GroupType[]>([]);
 
   const getGroups = async () => {
     const { data: groups } = await supabase.from("groups").select("*");
@@ -22,8 +27,8 @@ export function CGroupsList() {
   return (
     <List disablePadding>
       <CNewGroupButton />
-      {groupsList.map((item, id) => {
-        return <CGroupButton group={item} key={id} />;
+      {groupsList.map((group, id) => {
+        return <CGroupButton group={group} key={id} />;
       })}
     </List>
   );

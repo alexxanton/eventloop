@@ -1,6 +1,6 @@
 import { MuiStyles } from "@/utils/types/types";
 import { Notes } from "@mui/icons-material";
-import { Box, TextField, MenuItem, Theme } from "@mui/material";
+import { TextField, MenuItem, Theme } from "@mui/material";
 import { CFormSection } from "../CFormSection";
 
 interface CProps {
@@ -82,10 +82,3 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
     </CFormSection>
   );
 }
-
-const styles: MuiStyles = {
-  section: {
-    display: "flex",
-    flexDirection: "column",
-  },
-};

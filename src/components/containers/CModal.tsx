@@ -1,4 +1,3 @@
-import { purple } from "@/utils/constants/purple";
 import { MuiStyles } from "@/utils/types/types";
 import { Close } from "@mui/icons-material";
 import { Box, IconButton, Modal, Paper, Typography, Zoom } from "@mui/material";
@@ -62,7 +61,7 @@ const styles: MuiStyles = {
     px: 2,
     py: 1,
     display: "flex",
-    bgcolor: purple,
+    bgcolor: "primary.main",
     alignItems: "center"
   },
   title: {

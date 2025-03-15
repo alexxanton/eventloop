@@ -2,10 +2,15 @@ import { purple } from "@/utils/constants/purple";
 import { MuiStyles } from "@/utils/types/types";
 import { Box, Paper, Typography } from "@mui/material";
 
+export type MessageType = {
+  sender: string;
+  text: string;
+};
+
 type CProps = {
-  msg: any;
+  msg: MessageType;
   index: number;
-  array: any[];
+  array: MessageType[];
 };
 
 export function CMessageBubble({msg, index, array}: CProps) {
