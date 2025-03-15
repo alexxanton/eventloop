@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EventLoop
 
-## Getting Started
+EventLoop is a group chat-based application designed to make event planning easy and collaborative. It combines the features of group chatting with event planning, allowing users to create events, join groups, and search for events within a community-driven platform.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Group Chat**: Communicate with your group members in real-time to plan and organize events seamlessly.
+- **Event Creation**: Create events within a group, specifying details like date, time, location, and description.
+- **Join Groups**: Become part of a community by joining groups that align with your interests or event preferences.
+- **Event Search**: Discover events created by other groups and explore opportunities to participate.
+- **Community-Focused**: Events are tied to groups, ensuring that planning is a collaborative effort and fostering a sense of community.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How It Works
 
-## Learn More
+1. **Create or Join a Group**: Start by creating a new group or joining an existing one.
+2. **Plan an Event**: Once in a group, you can create an event and invite group members to participate.
+3. **Chat and Collaborate**: Use the group chat feature to discuss event details, share updates, and coordinate with members.
+4. **Explore Events**: Search for events created by other groups and join them if interested.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Why EventLoop?
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+EventLoop is designed to bring people together. By tying events to groups, it encourages collaboration and community building. Whether you're planning a small gathering or a large event, EventLoop ensures that everyone is on the same page.
 
-## Deploy on Vercel
+---
+  
+## Technologies Used
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Frontend**: Next.js, MUI (Material-UI)
+- **Backend**: Supabase (Authentication, Database, and Real-Time Features)
+   

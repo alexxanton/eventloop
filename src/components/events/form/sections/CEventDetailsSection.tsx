@@ -1,4 +1,3 @@
-import { MuiStyles } from "@/utils/types/types";
 import { Notes } from "@mui/icons-material";
 import { TextField, MenuItem, Theme } from "@mui/material";
 import { CFormSection } from "../CFormSection";
@@ -71,7 +70,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         ))}
       </TextField>
       <TextField
-        sx={{ mt: 1 }}
+        sx={{ mt: -1 }}
         fullWidth
         variant="standard"
         label="Location (optional)"

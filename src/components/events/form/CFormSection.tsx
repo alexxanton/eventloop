@@ -29,6 +29,7 @@ const styles: MuiStyles = {
     display: "flex",
     flexDirection: "column",
     gap: 2,
+    mb: 1,
   },
   sectionTitle: {
     mb: 1,
