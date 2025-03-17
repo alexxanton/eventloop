@@ -1,8 +1,8 @@
 "use client";
 import { supabase } from "@/utils/supabase";
 import { FormEvent, MuiStyles } from "@/utils/types/types";
-import { CalendarToday } from "@mui/icons-material";
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Check, CalendarToday } from "@mui/icons-material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import { CModal } from "../../containers/CModal";
 import { Dayjs } from "dayjs";
@@ -10,6 +10,7 @@ import { CAdditionalInfoSection } from "./sections/CAdditionalInfoSection";
 import { CEventDetailsSection } from "./sections/CEventDetailsSection";
 import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
+import { isDarkModeOn } from "@/utils/isDarkModeOn";
 
 export function CEventForm() {
   const [name, setName] = useState("");
@@ -24,7 +25,6 @@ export function CEventForm() {
   const [maxCapacity, setMaxCapacity] = useState<number | null>(null);
   const [ageLimit, setAgeLimit] = useState<number | null>(null);
   const [dressCode, setDressCode] = useState("");
-  const theme = useTheme();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -74,21 +74,18 @@ export function CEventForm() {
               setCategory={setCategory}
               location={location}
               setLocation={setLocation}
-              theme={theme}
             />
             <CDateTimeSection
               startDate={startDate}
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
-              theme={theme}
             />
             <CPricingSection
               price={price}
               setPrice={setPrice}
               currency={currency}
               setCurrency={setCurrency}
-              theme={theme}
             />
             <CAdditionalInfoSection
               dressCode={dressCode}
@@ -97,16 +94,17 @@ export function CEventForm() {
               setMaxCapacity={setMaxCapacity}
               ageLimit={ageLimit}
               setAgeLimit={setAgeLimit}
-              theme={theme}
             />
             {error && (
               <Typography color="error" sx={{ mt: 2 }}>
                 {error}
               </Typography>
             )}
-            <Button variant="contained" sx={styles.button} type="submit">
-              Create
-            </Button>
+          </Box>
+          <Box sx={styles.footer} bgcolor={isDarkModeOn() ? "#383434" : "secondary.main"}>
+            <IconButton size="large" sx={styles.button} type="submit">
+              <Check />
+            </IconButton>
           </Box>
         </form>
       </CModal>
@@ -121,8 +119,22 @@ const styles: MuiStyles = {
     p: 2,
     gap: 3,
     overflowY: "auto",
+    height: "70vh",
+    pb: 3
+  },
+  footer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    flex: 1,
+    p: 2,
+    height: 40
   },
   button: {
-    mt: 3,
+    bgcolor: "primary.main",
+    color: "white",
+    position: "relative",
+    top: -40,
+    right: 20,
+    height: "fit-content"
   },
 };

@@ -1,3 +1,4 @@
+import { isDarkModeOn } from "@/utils/isDarkModeOn";
 import { MuiStyles } from "@/utils/types/types";
 import { Close } from "@mui/icons-material";
 import { Box, IconButton, Modal, Paper, Typography, Zoom } from "@mui/material";
@@ -33,20 +34,20 @@ export function CModal({ children, title, Icon }: CProps) {
       >
         <Zoom in={open}>
           <Paper sx={styles.box}>
-            <Box sx={styles.header}>
+            <Box sx={styles.header} bgcolor={isDarkModeOn() ? "#383434" : "secondary.main"}>
               <Typography
                 sx={styles.title}
-                component="h6"
-                variant="h6"
+                component="h5"
+                variant="h5"
                 color="#f8f4fc"
               >
                 {title}
               </Typography>
-              <IconButton onClick={handleClose}>
+              <IconButton sx={{ color: "white" }} onClick={handleClose}>
                 <Close />
               </IconButton>
             </Box>
-            <Box sx={{ overflowY: "auto" }}>
+            <Box sx={{ overflowY: "hidden" }}>
               {children}
             </Box>
           </Paper>
@@ -61,20 +62,19 @@ const styles: MuiStyles = {
     px: 2,
     py: 1,
     display: "flex",
-    bgcolor: "primary.main",
-    alignItems: "center"
+    alignItems: "center",
+    color: "white",
   },
   title: {
     flexGrow: 1,
   },
   box: {
     width: 400,
-    bgcolor: "background.paper",
     borderRadius: 2,
     boxShadow: 5,
     display: "flex",
     flexDirection: "column",
     maxHeight: "90vh",
-    overflow: "auto",
+    overflowY: "auto",
   },
 };

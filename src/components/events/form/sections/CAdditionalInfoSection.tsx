@@ -1,7 +1,8 @@
 import { MuiStyles } from "@/utils/types/types";
 import { Info } from "@mui/icons-material";
-import { Box, TextField, MenuItem, Theme } from "@mui/material";
+import { Box, TextField, MenuItem } from "@mui/material";
 import { CFormSection } from "../CFormSection";
+import { isDarkModeOn } from "@/utils/isDarkModeOn";
 
 interface CProps {
   dressCode: string;
@@ -10,10 +11,9 @@ interface CProps {
   setMaxCapacity: (value: number | null) => void;
   ageLimit: number | null;
   setAgeLimit: (value: number | null) => void;
-  theme: Theme;
 }
 
-export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, setMaxCapacity, ageLimit, setAgeLimit, theme }: CProps) {
+export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, setMaxCapacity, ageLimit, setAgeLimit }: CProps) {
   const dressCodes = [
     "Casual",
     "Smart Casual",
@@ -35,7 +35,7 @@ export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, s
         label="Dress code"
         value={dressCode}
         onChange={(e) => setDressCode(e.target.value)}
-        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+        color={isDarkModeOn() ? "secondary" : "primary"}
       >
         <MenuItem value="">
           <em>None</em>
@@ -53,7 +53,7 @@ export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, s
           type="number"
           value={maxCapacity || ""}
           onChange={(e) => setMaxCapacity(parseInt(e.target.value))}
-          color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+          color={isDarkModeOn() ? "secondary" : "primary"}
         />
         <TextField
           fullWidth
@@ -61,7 +61,7 @@ export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, s
           type="number"
           value={ageLimit || ""}
           onChange={(e) => setAgeLimit(parseInt(e.target.value))}
-          color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+          color={isDarkModeOn() ? "secondary" : "primary"}
         />
       </Box>
     </CFormSection>

@@ -1,6 +1,7 @@
 import { Notes } from "@mui/icons-material";
-import { TextField, MenuItem, Theme } from "@mui/material";
+import { TextField, MenuItem } from "@mui/material";
 import { CFormSection } from "../CFormSection";
+import { isDarkModeOn } from "@/utils/isDarkModeOn";
 
 interface CProps {
   name: string;
@@ -11,10 +12,9 @@ interface CProps {
   setCategory: (value: string) => void;
   location: string;
   setLocation: (value: string) => void;
-  theme: Theme;
 }
 
-export function CEventDetailsSection({ name, setName, description, setDescription, category, setCategory, location, setLocation, theme }: CProps) {
+export function CEventDetailsSection({ name, setName, description, setDescription, category, setCategory, location, setLocation }: CProps) {
   const categories = [
     "Social & Entertainment",
     "Business & Networking",
@@ -38,7 +38,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         variant="standard"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+        color={isDarkModeOn() ? "secondary" : "primary"}
       />
       <TextField
         sx={{ my: 1 }}
@@ -50,7 +50,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         label="Description (optional)"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+        color={isDarkModeOn() ? "secondary" : "primary"}
       />
       <TextField
         select
@@ -58,7 +58,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         label="Category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+        color={isDarkModeOn() ? "secondary" : "primary"}
       >
         <MenuItem value="">
           <em>None</em>
@@ -76,7 +76,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         label="Location (optional)"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
-        color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+        color={isDarkModeOn() ? "secondary" : "primary"}
       />
     </CFormSection>
   );

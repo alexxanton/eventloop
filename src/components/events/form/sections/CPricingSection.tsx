@@ -1,16 +1,16 @@
 import { AttachMoney } from "@mui/icons-material";
-import { Box, TextField, MenuItem, Theme } from "@mui/material";
+import { Box, TextField, MenuItem } from "@mui/material";
 import { CFormSection } from "../CFormSection";
+import { isDarkModeOn } from "@/utils/isDarkModeOn";
 
 interface CProps {
   price: string;
   setPrice: (value: string) => void;
   currency: string;
   setCurrency: (value: string) => void;
-  theme: Theme;
 }
 
-export function CPricingSection({ price, setPrice, currency, setCurrency, theme }: CProps) {
+export function CPricingSection({ price, setPrice, currency, setCurrency }: CProps) {
   const currencies = [
     { value: 'USD', label: '$' },
     { value: 'EUR', label: '€' },
@@ -27,7 +27,7 @@ export function CPricingSection({ price, setPrice, currency, setCurrency, theme 
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+          color={isDarkModeOn() ? "secondary" : "primary"}
         />
         <TextField
           select
@@ -35,7 +35,7 @@ export function CPricingSection({ price, setPrice, currency, setCurrency, theme 
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
           sx={{ width: "50%" }}
-          color={theme.palette.mode === "dark" ? "secondary" : "primary"}
+          color={isDarkModeOn() ? "secondary" : "primary"}
         >
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>

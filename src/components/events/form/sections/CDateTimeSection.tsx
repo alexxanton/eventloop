@@ -1,26 +1,26 @@
 import { MuiStyles } from "@/utils/types/types";
 import { AccessTime } from "@mui/icons-material";
-import { Box, Theme, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { LocalizationProvider, MobileDatePicker, MobileDatePickerSlotProps, MobileTimePicker, MobileTimePickerSlotProps, TimeView } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import { CFormSection } from "../CFormSection";
+import { isDarkModeOn } from "@/utils/isDarkModeOn";
 
 interface CProps {
   startDate: Dayjs | null;
   setStartDate: (value: Dayjs | null) => void;
   endDate: Dayjs | null;
   setEndDate: (value: Dayjs | null) => void;
-  theme: Theme;
 }
 
-export function CDateTimeSection({ startDate, setStartDate, endDate, setEndDate, theme }: CProps) {
+export function CDateTimeSection({ startDate, setStartDate, endDate, setEndDate }: CProps) {
   const colorProps = {
-    textField: { color: theme.palette.mode === "dark" ? "secondary" : "primary" },
+    textField: { color: isDarkModeOn() ? "secondary" : "primary" },
     dialog: {
       sx: {
         "& .MuiDialogActions-root button": {
-          color: `${theme.palette.mode === "dark" ? "secondary" : "primary"}.main`,
+          color: `${isDarkModeOn() ? "secondary" : "primary"}.main`,
         },
       },
     },

@@ -1,12 +1,12 @@
 "use client";
-import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery, useTheme } from "@mui/material";
+import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery } from "@mui/material";
 import { Menu, AccountCircle, House, Settings } from '@mui/icons-material';
 import { useState } from "react";
+import { isDarkModeOn } from "@/utils/isDarkModeOn";
 
 export function CNavbar() {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(hover: hover) and (pointer: fine)");
-  const theme = useTheme();
 
   const toggleSidebar = (open: boolean) => {
     setOpen(open);
@@ -57,7 +57,7 @@ export function CNavbar() {
         <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleSidebar(false)}>
           <List>
             {["Home", "Settings", "New event", "Drafts"].map((text, index) => (
-              <Link component="a" href="settings" key={text} sx={{ color: theme.palette.mode === "dark" ? "white" : "black" }} underline="none">
+              <Link component="a" href="settings" key={text} sx={{ color: isDarkModeOn() ? "white" : "black" }} underline="none">
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
