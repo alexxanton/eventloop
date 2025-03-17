@@ -2,7 +2,7 @@ import { MuiStyles } from "@/utils/types/types";
 import { Info } from "@mui/icons-material";
 import { Box, TextField, MenuItem } from "@mui/material";
 import { CFormSection } from "../CFormSection";
-import { isDarkModeOn } from "@/utils/isDarkModeOn";
+import { useDarkMode } from "@/utils/useDarkMode";
 
 interface CProps {
   dressCode: string;
@@ -14,6 +14,8 @@ interface CProps {
 }
 
 export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, setMaxCapacity, ageLimit, setAgeLimit }: CProps) {
+  const isDarkMode = useDarkMode();
+  
   const dressCodes = [
     "Casual",
     "Smart Casual",
@@ -35,7 +37,7 @@ export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, s
         label="Dress code"
         value={dressCode}
         onChange={(e) => setDressCode(e.target.value)}
-        color={isDarkModeOn() ? "secondary" : "primary"}
+        color={isDarkMode ? "secondary" : "primary"}
       >
         <MenuItem value="">
           <em>None</em>
@@ -53,7 +55,7 @@ export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, s
           type="number"
           value={maxCapacity || ""}
           onChange={(e) => setMaxCapacity(parseInt(e.target.value))}
-          color={isDarkModeOn() ? "secondary" : "primary"}
+          color={isDarkMode ? "secondary" : "primary"}
         />
         <TextField
           fullWidth
@@ -61,7 +63,7 @@ export function CAdditionalInfoSection({ dressCode, setDressCode, maxCapacity, s
           type="number"
           value={ageLimit || ""}
           onChange={(e) => setAgeLimit(parseInt(e.target.value))}
-          color={isDarkModeOn() ? "secondary" : "primary"}
+          color={isDarkMode ? "secondary" : "primary"}
         />
       </Box>
     </CFormSection>

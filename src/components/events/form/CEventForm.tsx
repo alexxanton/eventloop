@@ -10,7 +10,7 @@ import { CAdditionalInfoSection } from "./sections/CAdditionalInfoSection";
 import { CEventDetailsSection } from "./sections/CEventDetailsSection";
 import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
-import { isDarkModeOn } from "@/utils/isDarkModeOn";
+import { useDarkMode } from "@/utils/useDarkMode";
 
 export function CEventForm() {
   const [name, setName] = useState("");
@@ -25,6 +25,7 @@ export function CEventForm() {
   const [maxCapacity, setMaxCapacity] = useState<number | null>(null);
   const [ageLimit, setAgeLimit] = useState<number | null>(null);
   const [dressCode, setDressCode] = useState("");
+  const isDarkMode = useDarkMode();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -101,7 +102,7 @@ export function CEventForm() {
               </Typography>
             )}
           </Box>
-          <Box sx={styles.footer} bgcolor={isDarkModeOn() ? "#383434" : "secondary.main"}>
+          <Box sx={styles.footer} bgcolor={isDarkMode ? "#383434" : "secondary.main"}>
             <IconButton size="large" sx={styles.button} type="submit">
               <Check />
             </IconButton>

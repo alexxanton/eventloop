@@ -1,4 +1,4 @@
-import { isDarkModeOn } from "@/utils/isDarkModeOn";
+import { useDarkMode } from "@/utils/useDarkMode";
 import { MuiStyles } from "@/utils/types/types";
 import { Close } from "@mui/icons-material";
 import { Box, IconButton, Modal, Paper, Typography, Zoom } from "@mui/material";
@@ -14,6 +14,7 @@ export function CModal({ children, title, Icon }: CProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const isDarkMode = useDarkMode();
 
   return (
     <>
@@ -34,7 +35,7 @@ export function CModal({ children, title, Icon }: CProps) {
       >
         <Zoom in={open}>
           <Paper sx={styles.box}>
-            <Box sx={styles.header} bgcolor={isDarkModeOn() ? "#383434" : "secondary.main"}>
+            <Box sx={styles.header} bgcolor={isDarkMode ? "#383434" : "secondary.main"}>
               <Typography
                 sx={styles.title}
                 component="h5"

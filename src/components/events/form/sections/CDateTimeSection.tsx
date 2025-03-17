@@ -5,7 +5,7 @@ import { LocalizationProvider, MobileDatePicker, MobileDatePickerSlotProps, Mobi
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import { CFormSection } from "../CFormSection";
-import { isDarkModeOn } from "@/utils/isDarkModeOn";
+import { useDarkMode } from "@/utils/useDarkMode";
 
 interface CProps {
   startDate: Dayjs | null;
@@ -15,12 +15,14 @@ interface CProps {
 }
 
 export function CDateTimeSection({ startDate, setStartDate, endDate, setEndDate }: CProps) {
+  const isDarkMode = useDarkMode();
+  
   const colorProps = {
-    textField: { color: isDarkModeOn() ? "secondary" : "primary" },
+    textField: { color: isDarkMode ? "secondary" : "primary" },
     dialog: {
       sx: {
         "& .MuiDialogActions-root button": {
-          color: `${isDarkModeOn() ? "secondary" : "primary"}.main`,
+          color: `${isDarkMode ? "secondary" : "primary"}.main`,
         },
       },
     },

@@ -1,7 +1,7 @@
 import { Notes } from "@mui/icons-material";
 import { TextField, MenuItem } from "@mui/material";
 import { CFormSection } from "../CFormSection";
-import { isDarkModeOn } from "@/utils/isDarkModeOn";
+import { useDarkMode } from "@/utils/useDarkMode";
 
 interface CProps {
   name: string;
@@ -15,6 +15,8 @@ interface CProps {
 }
 
 export function CEventDetailsSection({ name, setName, description, setDescription, category, setCategory, location, setLocation }: CProps) {
+  const isDarkMode = useDarkMode();
+  
   const categories = [
     "Social & Entertainment",
     "Business & Networking",
@@ -38,7 +40,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         variant="standard"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        color={isDarkModeOn() ? "secondary" : "primary"}
+        color={isDarkMode ? "secondary" : "primary"}
       />
       <TextField
         sx={{ my: 1 }}
@@ -50,7 +52,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         label="Description (optional)"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        color={isDarkModeOn() ? "secondary" : "primary"}
+        color={isDarkMode ? "secondary" : "primary"}
       />
       <TextField
         select
@@ -58,7 +60,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         label="Category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        color={isDarkModeOn() ? "secondary" : "primary"}
+        color={isDarkMode ? "secondary" : "primary"}
       >
         <MenuItem value="">
           <em>None</em>
@@ -76,7 +78,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
         label="Location (optional)"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
-        color={isDarkModeOn() ? "secondary" : "primary"}
+        color={isDarkMode ? "secondary" : "primary"}
       />
     </CFormSection>
   );
