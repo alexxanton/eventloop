@@ -1,7 +1,7 @@
 import { Notes } from "@mui/icons-material";
 import { TextField, MenuItem } from "@mui/material";
 import { CFormSection } from "../CFormSection";
-import { useDarkMode } from "@/utils/useDarkMode";
+import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
 interface CProps {
   name: string;

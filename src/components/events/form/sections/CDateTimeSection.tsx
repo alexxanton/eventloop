@@ -5,7 +5,7 @@ import { LocalizationProvider, MobileDatePicker, MobileDatePickerSlotProps, Mobi
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import { CFormSection } from "../CFormSection";
-import { useDarkMode } from "@/utils/useDarkMode";
+import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
 interface CProps {
   startDate: Dayjs | null;

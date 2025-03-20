@@ -2,7 +2,7 @@
 import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery } from "@mui/material";
 import { Menu, AccountCircle, House, Settings } from '@mui/icons-material';
 import { useState } from "react";
-import { useDarkMode } from "@/utils/useDarkMode";
+import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
 export function CNavbar() {
   const [open, setOpen] = useState(false);

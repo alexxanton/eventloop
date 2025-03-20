@@ -1,4 +1,4 @@
-import { useDarkMode } from "@/utils/useDarkMode";
+import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import { MuiStyles } from "@/utils/types/types";
 import { Close } from "@mui/icons-material";
 import { Box, IconButton, Modal, Paper, Typography, Zoom } from "@mui/material";

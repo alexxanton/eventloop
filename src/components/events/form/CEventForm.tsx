@@ -10,7 +10,7 @@ import { CAdditionalInfoSection } from "./sections/CAdditionalInfoSection";
 import { CEventDetailsSection } from "./sections/CEventDetailsSection";
 import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
-import { useDarkMode } from "@/utils/useDarkMode";
+import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
 export function CEventForm() {
   const [name, setName] = useState("");

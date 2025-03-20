@@ -2,7 +2,7 @@ import { MuiStyles } from "@/utils/types/types";
 import { Info } from "@mui/icons-material";
 import { Box, TextField, MenuItem } from "@mui/material";
 import { CFormSection } from "../CFormSection";
-import { useDarkMode } from "@/utils/useDarkMode";
+import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
 interface CProps {
   dressCode: string;
