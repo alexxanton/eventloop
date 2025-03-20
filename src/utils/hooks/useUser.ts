@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase";
+import { User } from "@supabase/supabase-js";
 
 export const useUser = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -13,7 +14,7 @@ export const useUser = () => {
     fetchUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
+      setUser(session?.user);
     });
 
     return () => {
