@@ -6,7 +6,6 @@ import { MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
-import { purple } from "@/utils/constants/purple";
 import { useUser } from "@/utils/hooks/useUser";
 
 export function CGroupChat() {
@@ -98,7 +97,7 @@ export function CGroupChat() {
           </Box>
           <IconButton
             sx={{
-              bgcolor: purple,
+              bgcolor: "primary.main",
               maxHeight: "fit-content",
               "&:hover svg": {
                 animation: `${bounce} 0.5s ease-in-out`,
