@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { Container, TextField, Chip, Paper, Typography, Box, Avatar, Button, useTheme } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import { Container, TextField, Chip, Paper, Typography, Box, Avatar, Button, useTheme, Grid, useMediaQuery, ClickAwayListener } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -34,54 +34,164 @@ const events = [
   }
 ];
 
-export default function Page () {
+export default function Page() {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [showMobileResults, setShowMobileResults] = useState(false);
+  const searchContainerRef = useRef(null);
 
   const categories = ["All", "Environment", "Business", "Wellness", "Social", "Tech"];
 
+  const filteredEvents = events.filter(event => {
+    const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const calendarStyles = {
+    "& .fc-button": {
+      borderRadius: "20px !important",
+      backgroundColor: `${theme.palette.primary.main} !important`,
+      border: "none !important",
+      "&:hover": {
+        backgroundColor: `${theme.palette.primary.dark} !important`
+      }
+    },
+    "& .fc-button-active": {
+      backgroundColor: `${theme.palette.primary.dark} !important`
+    }
+  };
+
+  useEffect(() => {
+    if (isMobile && showMobileResults) {
+      const handleClickOutside = (event) => {
+        if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+          setShowMobileResults(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [showMobileResults, isMobile]);
+
+  const handleSearchFocus = () => {
+    if (isMobile) {
+      setShowMobileResults(true);
+    }
+  };
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ textAlign: "center", mb: 6 }}>
-        <Typography variant="h3" fontWeight="bold" gutterBottom>
-          Discover Amazing Events
-        </Typography>
-        <Typography variant="h6" color="text.secondary">
-          Find and join events that match your interests
-        </Typography>
-      </Box>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4} order={{ xs: 1, md: 2 }}>
+          <ClickAwayListener onClickAway={() => setShowMobileResults(false)}>
+            <Box ref={searchContainerRef} sx={{ position: "relative" }}>
+              <Box sx={{ 
+                display: { xs: "block", md: "none" }, 
+                mb: 3,
+                position: "relative",
+                zIndex: 1200
+              }}>
+                <Typography variant="h6" gutterBottom>
+                  Search Events
+                </Typography>
+                <Paper sx={{ p: 2, borderRadius: 3 }}>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Search events..."
+                      InputProps={{
+                        startAdornment: <FilterList sx={{ mr: 1, color: "action.active" }} />,
+                      }}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onFocus={handleSearchFocus}
+                      onClick={handleSearchFocus}
+                    />
+                    <Box sx={{ display: "flex", gap: 1, overflowX: "auto", pb: 1 }}>
+                      {categories.map((category) => (
+                        <Chip
+                          key={category}
+                          label={category}
+                          onClick={() => setSelectedCategory(category)}
+                          variant={selectedCategory === category ? "filled" : "outlined"}
+                          color="primary"
+                          size="small"
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                </Paper>
 
-      <Paper sx={{ p: 3, mb: 4, borderRadius: 4 }}>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Search events..."
-            InputProps={{
-              startAdornment: <FilterList sx={{ mr: 1, color: "action.active" }} />
-            }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          
-          <Box sx={{ display: "flex", gap: 1, overflowX: "auto", flexShrink: 0 }}>
-            {categories.map((category) => (
-              <Chip
-                key={category}
-                label={category}
-                onClick={() => setSelectedCategory(category)}
-                variant={selectedCategory === category ? "filled" : "outlined"}
-                color="primary"
-              />
-            ))}
-          </Box>
-        </Box>
-      </Paper>
+                {isMobile && showMobileResults && filteredEvents.length > 0 && (
+                  <Paper sx={{ 
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    right: 0,
+                    mt: 1,
+                    maxHeight: "60vh",
+                    overflowY: "auto",
+                    boxShadow: 3,
+                    zIndex: 1300
+                  }}>
+                    <Box sx={{ p: 2 }}>
+                      {filteredEvents.map((event, index) => (
+                        <EventCard key={index} event={event} theme={theme} />
+                      ))}
+                    </Box>
+                  </Paper>
+                )}
+              </Box>
 
-      <Box>
-        <Box>
-          <Paper sx={{ p: 3, borderRadius: 4, height: "100%" }}>
+              <Box sx={{ display: { xs: "none", md: "block" } }}>
+                <Typography variant="h6" gutterBottom>
+                  Upcoming Events
+                </Typography>
+                <Paper sx={{ p: 2, mb: 2, borderRadius: 3 }}>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Search events..."
+                      InputProps={{
+                        startAdornment: <FilterList sx={{ mr: 1, color: "action.active" }} />,
+                      }}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", pb: 1 }}>
+                      {categories.map((category) => (
+                        <Chip
+                          key={category}
+                          label={category}
+                          onClick={() => setSelectedCategory(category)}
+                          variant={selectedCategory === category ? "filled" : "outlined"}
+                          color="primary"
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                </Paper>
+                {filteredEvents.map((event, index) => (
+                  <EventCard key={index} event={event} theme={theme} />
+                ))}
+              </Box>
+            </Box>
+          </ClickAwayListener>
+        </Grid>
+
+        <Grid item xs={12} md={8} order={{ xs: 2, md: 1 }}>
+          <Paper sx={{ 
+            p: { xs: 1, md: 3 }, 
+            borderRadius: 4,
+            ...calendarStyles,
+            position: "relative",
+            zIndex: 1100
+          }}>
             <FullCalendar
               plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
               initialView="dayGridMonth"
@@ -102,48 +212,42 @@ export default function Page () {
                   </Typography>
                 </Box>
               )}
-              height={600}
+              height={isMobile ? "auto" : 600}
             />
           </Paper>
-        </Box>
-
-        <Box>
-          <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
-            Upcoming Events
-          </Typography>
-          
-          {events.map((event, index) => (
-            <Paper key={index} sx={{ p: 3, mb: 3, borderRadius: 3 }}>
-              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                <Avatar sx={{ bgcolor: theme.palette[event.color].main }}>
-                  <Event />
-                </Avatar>
-                <Box>
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    {event.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {event.date} • {event.location}
-                  </Typography>
-                  <Chip
-                    label={event.category}
-                    size="small"
-                    sx={{ mt: 1, bgcolor: theme.palette[event.color].light }}
-                  />
-                </Box>
-              </Box>
-              <Button
-                fullWidth
-                variant="outlined"
-                sx={{ mt: 2 }}
-                startIcon={<DateRange />}
-              >
-                Join Now
-              </Button>
-            </Paper>
-          ))}
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
+
+const EventCard = ({ event, theme }) => (
+  <Paper sx={{ p: 2, mb: 2, borderRadius: 3 }}>
+    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+      <Avatar sx={{ bgcolor: theme.palette[event.color].main }}>
+        <Event />
+      </Avatar>
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography variant="subtitle1" fontWeight="bold">
+          {event.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {event.date} • {event.location}
+        </Typography>
+        <Chip
+          label={event.category}
+          size="small"
+          sx={{ mt: 1, bgcolor: theme.palette[event.color].light }}
+        />
+      </Box>
+    </Box>
+    <Button
+      fullWidth
+      variant="outlined"
+      sx={{ mt: 2 }}
+      startIcon={<DateRange />}
+    >
+      Join Now
+    </Button>
+  </Paper>
+);
