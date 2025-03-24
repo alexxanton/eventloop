@@ -1,6 +1,7 @@
 "use client";
 import { lightPurple } from "@/utils/constants/purple";
 import { useStore } from "@/utils/zustand";
+import { Groups } from "@mui/icons-material";
 import { Avatar, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
 interface Group {
@@ -21,7 +22,9 @@ export function CGroupButton({group}: {group: Group}) {
         onClick={() => setCurrentGroup(group.name)}
       >
         <ListItemIcon>
-          <Avatar src="" />
+          <Avatar>
+            <Groups />
+          </Avatar>
         </ListItemIcon>
         <ListItemText
           sx={{

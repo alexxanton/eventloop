@@ -1,12 +1,6 @@
-import { MuiStyles } from "@/utils/types/types";
+import { MessageType, MuiStyles } from "@/utils/types/types";
 import { Box, Paper, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-
-export type MessageType = {
-  user_id: string;
-  message: string;
-  sent_at: string;
-};
 
 type CProps = {
   msg: MessageType;

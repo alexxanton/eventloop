@@ -6,35 +6,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import { DateRange, Event, Search } from "@mui/icons-material";
+import { EventType } from "@/utils/types/types";
 
-const event = [
-  {
-    title: "Beach Cleanup Party",
-    date: "2025-03-15",
-    category: "Environment",
-    color: "primary",
-    location: "Santa Monica Beach",
-    organizer: "Eco Warriors"
-  },
-  {
-    title: "Startup Networking Mixer",
-    date: "2025-03-20",
-    category: "Business",
-    color: "secondary",
-    location: "Downtown Co-Work Space",
-    organizer: "Tech Connect"
-  },
-  {
-    title: "Yoga in the Park",
-    date: "2025-03-10",
-    category: "Wellness",
-    color: "error",
-    location: "Central Park Pavilion",
-    organizer: "Mindful Living"
-  }
-];
-
-export function CEventCalendar({events}: {events: any[]}) {
+export function CEventCalendar({events}: {events: EventType[] | null}) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [searchQuery, setSearchQuery] = useState("");
@@ -152,7 +126,7 @@ export function CEventCalendar({events}: {events: any[]}) {
                 <Typography variant="h6" gutterBottom>
                   Upcoming Events
                 </Typography>
-                <Paper sx={{ p: 2, mb: 2, borderRadius: 3, position: "sticky", top: 0 }}>
+                <Paper sx={{ p: 2, mb: 2, borderRadius: 3, position: "sticky", top: 0, zIndex: 1000 }}>
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <TextField
                       fullWidth
@@ -164,17 +138,7 @@ export function CEventCalendar({events}: {events: any[]}) {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", pb: 1 }}>
-                      {categories.map((category) => (
-                        <Chip
-                          key={category}
-                          label={category}
-                          onClick={() => setSelectedCategory(category)}
-                          variant={selectedCategory === category ? "filled" : "outlined"}
-                          color="primary"
-                        />
-                      ))}
-                    </Box>
+                    
                   </Box>
                 </Paper>
                 {filteredEvents.map((event, index) => (
@@ -203,7 +167,7 @@ export function CEventCalendar({events}: {events: any[]}) {
               }}
               events={events.map(event => ({
                 title: event.name,
-                start: event.start_date.split("T")[0],
+                start: `${event.start_date}`.split("T")[0],
                 // color: theme.palette[event.color].main
               }))}
               eventContent={(eventInfo) => (

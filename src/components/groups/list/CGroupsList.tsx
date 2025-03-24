@@ -1,11 +1,7 @@
 import { List } from "@mui/material";
 import { CGroupButton } from "./CGroupButton";
 import { CNewGroupButton } from "./CNewGroupButton";
-
-export type GroupType = {
-  name: string;
-  description: string;
-};
+import { GroupType } from "@/utils/types/types";
 
 export function CGroupsList({groups}: {groups: GroupType[] | null}) {
   return (

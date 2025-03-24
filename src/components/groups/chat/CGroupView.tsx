@@ -1,16 +1,10 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { Box, Typography, TextField, IconButton, Paper, keyframes } from '@mui/material';
-import { Close, Send, Settings } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
-import { purple } from '@/utils/constants/purple';
-import { MuiStyles } from '@/utils/types/types';
-import { CEventForm } from '../../events/form/CEventForm';
-import { CMessageBubble, MessageType } from './CMessageBubble';
-import { supabase } from '@/utils/supabase';
-import { CGroupsList, GroupType } from '../list/CGroupsList';
+import { Box, Paper } from '@mui/material';
+import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CGroupForm } from './CGroupForm';
+import { GroupType } from '@/utils/types/types';
 
 type CProps = {
   groups: GroupType[] | null;
