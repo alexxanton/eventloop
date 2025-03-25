@@ -57,6 +57,7 @@ export function CEventDetailsSection({ name, setName, description, setDescriptio
       <TextField
         select
         fullWidth
+        required
         label="Category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}

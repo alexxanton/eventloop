@@ -15,6 +15,7 @@ export type GroupType = {
 };
 
 export type EventType = {
+    id: number;
     name: string;
     description: string;
     category: string;

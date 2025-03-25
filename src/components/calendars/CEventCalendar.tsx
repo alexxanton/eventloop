@@ -7,6 +7,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import { DateRange, Event, Search } from "@mui/icons-material";
 import { EventType } from "@/utils/types/types";
+import Link from "next/link";
 
 export function CEventCalendar({events}: {events: EventType[] | null}) {
   const theme = useTheme();
@@ -58,7 +59,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4, overflowY: "hidden" }}>
+    <Container maxWidth="xl" sx={{ py: 4, overflowY: isMobile ? "visible" : "hidden" }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} order={{ xs: 1, md: 2 }}>
           <ClickAwayListener onClickAway={() => setShowMobileResults(false)}>
@@ -168,13 +169,16 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
               events={events.map(event => ({
                 title: event.name,
                 start: `${event.start_date}`.split("T")[0],
+                id: event.id,
                 // color: theme.palette[event.color].main
               }))}
               eventContent={(eventInfo) => (
                 <Box sx={{ p: 0.5 }}>
-                  <Typography variant="body2" sx={{ color: "white" }}>
-                    {eventInfo.event.title}
-                  </Typography>
+                  <Link href={`/event/${eventInfo.event.id}`}>
+                    <Typography variant="body2" sx={{ color: "white" }}>
+                      {eventInfo.event.title}
+                    </Typography>
+                  </Link>
                 </Box>
               )}
               height={isMobile ? "auto" : 600}

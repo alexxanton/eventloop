@@ -71,7 +71,7 @@ export function CGroupForm() {
     //     </form>
     //   </Paper>
     // </Box>
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+    <Box>
       <Box sx={{
         bgcolor: "primary.main",
         color: "primary.contrastText",
