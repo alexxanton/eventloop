@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { Container, TextField, Chip, Paper, Typography, Box, Avatar, Button, useTheme, Grid, useMediaQuery, ClickAwayListener } from "@mui/material";
+import { useState, useRef } from "react";
+import { Container, TextField, Chip, Paper, Typography, Box, Avatar, Button, useTheme, Grid, useMediaQuery, ClickAwayListener, Theme } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -19,7 +19,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
 
   const categories = ["All", "Environment", "Business", "Wellness", "Social", "Tech"];
 
-  const filteredEvents = events.filter(event => {
+  const filteredEvents = events?.filter(event => {
     const matchesSearch = event.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -40,17 +40,17 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
     }
   };
 
-  useEffect(() => {
-    if (isMobile && showMobileResults) {
-      const handleClickOutside = (event) => {
-        if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
-          setShowMobileResults(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, [showMobileResults, isMobile]);
+  // useEffect(() => {
+  //   if (isMobile && showMobileResults) {
+  //     const handleClickOutside = (event) => {
+  //       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+  //         setShowMobileResults(false);
+  //       }
+  //     };
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //     return () => document.removeEventListener("mousedown", handleClickOutside);
+  //   }
+  // }, [showMobileResults, isMobile]);
 
   const handleSearchFocus = () => {
     if (isMobile) {
@@ -102,7 +102,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                   </Box>
                 </Paper>
 
-                {isMobile && showMobileResults && filteredEvents.length > 0 && (
+                {isMobile && showMobileResults && filteredEvents && filteredEvents.length > 0 && (
                   <Paper sx={{ 
                     position: "absolute",
                     top: "100%",
@@ -142,7 +142,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                     
                   </Box>
                 </Paper>
-                {filteredEvents.map((event, index) => (
+                {filteredEvents?.map((event, index) => (
                   <EventCard key={index} event={event} theme={theme} />
                 ))}
               </Box>
@@ -166,16 +166,27 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
               }}
-              events={events.map(event => ({
+              events={events?.map(event => ({
                 title: event.name,
                 start: `${event.start_date}`.split("T")[0],
-                id: event.id,
+                end: `${event.end_date}`.split("T")[0],
+                id: event.id.toString(),
                 // color: theme.palette[event.color].main
               }))}
               eventContent={(eventInfo) => (
-                <Box sx={{ p: 0.5 }}>
-                  <Link href={`/event/${eventInfo.event.id}`}>
-                    <Typography variant="body2" sx={{ color: "white" }}>
+                <Box sx={{ p: 0.5, overflow: "hidden" }}>
+                  <Link 
+                    href={`/event/${eventInfo.event.id}`} 
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                      color: "white", 
+                      textDecoration: "none", 
+                      "&:hover": { textDecoration: "underline" } 
+                      }}
+                    >
                       {eventInfo.event.title}
                     </Typography>
                   </Link>
@@ -190,7 +201,8 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
   );
 };
 
-const EventCard = ({ event, theme }) => (
+// const EventCard = ({event, theme}: {event: EventType, theme: Theme}) => (
+const EventCard = ({event, theme}: {event: EventType, theme: Theme}) => (
   <Paper sx={{ p: 2, mb: 2, borderRadius: 3 }}>
     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
       <Avatar /*sx={{ bgcolor: theme.palette[event.color].main }}*/>
@@ -201,12 +213,12 @@ const EventCard = ({ event, theme }) => (
           {event.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {event.start_date} • {event.location}
+          {new Date(event.start_date).toUTCString()} • {event.location}
         </Typography>
         <Chip
           label={event.category}
           size="small"
-          // sx={{ mt: 1, bgcolor: theme.palette[event.color].light }}
+          sx={{ mt: 1, bgcolor: theme.palette.action.active }}
         />
       </Box>
     </Box>
