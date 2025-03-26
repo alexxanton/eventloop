@@ -24,6 +24,7 @@ export function CEvent({event}: {event: EventType | null}) {
       month: "long",
       day: "numeric",
       hour: "numeric",
+      year: "numeric",
       minute: "2-digit"
     });
   };
@@ -89,7 +90,7 @@ export function CEvent({event}: {event: EventType | null}) {
             <CalendarToday color="primary" />
             <Box>
               <Typography variant="body1">
-                {formatDate(event.start_date)} - {formatDate(event.end_date)}
+                {formatDate(event.start_date)}{event.end_date && ` - ${formatDate(event.end_date)}`}
               </Typography>
             </Box>
           </Box>
