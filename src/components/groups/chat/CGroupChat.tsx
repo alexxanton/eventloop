@@ -8,7 +8,7 @@ import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
 
-export function CGroupChat() {
+export function CGroupChat({openEvents}: {openEvents: () => void}) {
   const { currentGroup, setCurrentGroup } = useStore();
   // const theme = useTheme();
   const [input, setInput] = useState("");
@@ -62,7 +62,7 @@ export function CGroupChat() {
           <IconButton onClick={() => setCurrentGroup("")}>
             <Close />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={openEvents}>
             <Settings />
           </IconButton>
           <CEventForm />

@@ -8,7 +8,7 @@ export function CNewGroupButton() {
   const { setCurrentGroup } = useStore();
 
   return (
-    <ListItem sx={{ borderBottom: "1px solid", borderBottomColor: grey[400] }} disablePadding>
+    <ListItem sx={{ position: "sticky", top: 0, borderBottom: "1px solid", borderBottomColor: grey[400] }} disablePadding>
       <ListItemButton onClick={() => setCurrentGroup("")}>
         <ListItemIcon>
           <Add />

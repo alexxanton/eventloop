@@ -58,7 +58,7 @@ export function CNavbar() {
         <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleSidebar(false)}>
           <List>
             {["Home", "Settings", "New event", "Drafts"].map((text, index) => (
-              <Link component="a" href="settings" key={text} sx={{ color: isDarkMode ? "white" : "black" }} underline="none">
+              <Link component="a" href="/settings" key={text} sx={{ color: isDarkMode ? "white" : "black" }} underline="none">
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>

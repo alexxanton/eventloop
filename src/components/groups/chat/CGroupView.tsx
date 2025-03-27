@@ -9,7 +9,6 @@ import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
-import { grey } from '@mui/material/colors';
 
 type CProps = {
   groups: GroupType[] | null;
@@ -18,6 +17,7 @@ type CProps = {
 export function CGroupView({groups}: CProps) {
   const { currentGroup } = useStore();
   const [events, setEvents] = useState<EventType[]>([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const getEvents = async () => {
@@ -46,29 +46,27 @@ export function CGroupView({groups}: CProps) {
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
-      {currentGroup ? <CGroupChat /> : <CGroupForm />}
+      {currentGroup ? <CGroupChat openEvents={() => setOpen(!open)} /> : <CGroupForm />}
       <Box sx={{ position: "sticky", top: 0 }}>
         <Paper
           square
           elevation={1}
           sx={{
-            width: "fit-content",
+            width: open && currentGroup ? 300 : 0,
+            transition: "width 0.3s ease-in-out",
             height: "100%",
             overflow: "auto",
             boxShadow: "-10px 0px 10px -5px rgba(0,0,0,0.3)",
           }}
         >
-          <Box sx={{
+          <Paper square sx={{
             position: "sticky",
             top: 0,
-            bgcolor: "background.paper",
-            borderBottom: "1px solid",
-            borderBottomColor: grey[400]
           }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar onChange={()=>{}} />
             </LocalizationProvider>
-          </Box>
+          </Paper>
           <Box>
             {events.map((e, index) => {
               return <Box key={index} mb={20}>{e.name}</Box>
