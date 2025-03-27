@@ -8,3 +8,4 @@ export function CTickets({tickets}: {tickets: EventType[] | null}) {
   );
 }
 //i'm a sentence
+//i'm the second sentence
