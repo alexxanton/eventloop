@@ -3,7 +3,7 @@ import { useStore } from '@/utils/zustand';
 import { Box, Paper } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
-import { CGroupForm } from './CGroupForm';
+import { CMainScreen } from './CMainScreen';
 import { EventType, GroupType } from '@/utils/types/types';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -46,7 +46,7 @@ export function CGroupView({groups}: CProps) {
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
-      {currentGroup ? <CGroupChat openEvents={() => setOpen(!open)} /> : <CGroupForm />}
+      {currentGroup ? <CGroupChat openEvents={() => setOpen(!open)} /> : <CMainScreen />}
       <Box sx={{ position: "sticky", top: 0 }}>
         <Paper
           square

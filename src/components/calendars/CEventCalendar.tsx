@@ -164,12 +164,10 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
               headerToolbar={{
                 left: "prev,next today",
                 center: "title",
-                right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
               }}
               events={events?.map(event => ({
                 title: event.name,
                 start: `${event.start_date}`.split("T")[0],
-                end: `${event.end_date}`.split("T")[0],
                 id: event.id.toString(),
                 // color: theme.palette[event.color].main
               }))}
