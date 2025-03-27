@@ -7,3 +7,4 @@ export function CTickets({tickets}: {tickets: EventType[] | null}) {
     <Box></Box>
   );
 }
+//i'm a sentence
