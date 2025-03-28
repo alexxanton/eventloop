@@ -16,35 +16,44 @@ export function CNewGroupButton() {
   const userId = useUser()?.id;
 
   const createGroup = async (event: FormEvent) => {
-      event.preventDefault();
-  
-      const group = {
-        name,
-        description,
-        is_public: true
-      };
-      
-      const { data } = await supabase.from("groups").insert([group]).select();
-  
-      if (data) {
-        const groupId = data[0].id;
-        const owner = {
-          group_id: groupId,
-          user_id: userId,
-          role: "owner",
-        };
-    
-        const { error } = await supabase.from("group_members").insert([owner]);
-  
-        if (error) {
-          alert(error.message)
-        }
-      }
+    event.preventDefault();
+
+    const group = {
+      name,
+      description,
+      is_public: true
     };
+    
+    const { data } = await supabase.from("groups").insert([group]).select();
+
+    if (data) {
+      const groupId = data[0].id;
+      const owner = {
+        group_id: groupId,
+        user_id: userId,
+        role: "owner",
+      };
+  
+      const { error } = await supabase.from("group_members").insert([owner]);
+
+      if (error) {
+        alert(error.message)
+      }
+    }
+  };
+
+  const CreateButton = () => (
+    <>
+      <ListItemIcon>
+        <Add />
+      </ListItemIcon>
+      <ListItemText primary="Create new group" sx={{ textWrap: "nowrap" }} />
+    </>
+  );
 
   return (
-    <>
-      <CModal title="Create New Group" Icon={Add}>
+    <ListItem sx={{ position: "sticky", top: 0, borderBottom: "1px solid", borderBottomColor: grey[400] }} disablePadding>
+      <CModal title="Create New Group" buttonType="list" ButtonContent={CreateButton}>
         <Box sx={styles.box}>
           <Paper elevation={3} sx={{ p: 2, width: 250 }}>
             <Typography variant="h6" gutterBottom>
@@ -79,15 +88,8 @@ export function CNewGroupButton() {
           </Paper>
         </Box>
       </CModal>
-    <ListItem sx={{ position: "sticky", top: 0, borderBottom: "1px solid", borderBottomColor: grey[400] }} disablePadding>
-      <ListItemButton onClick={() => setCurrentGroup("")}>
-        <ListItemIcon>
-          <Add />
-        </ListItemIcon>
-        <ListItemText primary="Create new group" sx={{ textWrap: "nowrap" }} />
-      </ListItemButton>
-    </ListItem>
-    </>
+      
+      </ListItem>
   );
 }
 
