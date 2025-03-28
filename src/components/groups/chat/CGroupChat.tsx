@@ -24,13 +24,32 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
 
   useEffect(() => {
     const getMessages = async () => {
-      const { data: msgs } = await supabase.from("messages").select("*").eq("group_id", 1);
-      if (msgs) {
-        setMessages([...messages, ...msgs]);
+      const { data } = await supabase.from("messages").select("*").eq("group_id", 1);
+      if (data) {
+        setMessages([...messages, ...data]);
       }
     };
     getMessages();
   }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("messages")
+      .on(
+        "postgres_changes", {
+          event: "INSERT",
+          schema: "public",
+          table: "messages"
+        },
+        (payload) => {
+          const newMessage = payload.new as MessageType;
+          setMessages([...messages, newMessage]);
+        }
+      )
+      .subscribe();
+
+    return () => {supabase.removeChannel(channel)}
+  }, [messages, setMessages]);
     
   const sendMessage = async () => {
     if (input.trim() !== "") {

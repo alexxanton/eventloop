@@ -5,8 +5,9 @@ import { supabase } from "@/utils/supabase";
 import { FormEvent, MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { Add } from "@mui/icons-material";
-import { Box, Button, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, ListItem, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function CNewGroupButton() {
@@ -14,6 +15,7 @@ export function CNewGroupButton() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const userId = useUser()?.id;
+  const router = useRouter();
 
   const createGroup = async (event: FormEvent) => {
     event.preventDefault();
@@ -39,6 +41,8 @@ export function CNewGroupButton() {
       if (error) {
         alert(error.message)
       }
+
+      router.refresh();
     }
   };
 
@@ -53,39 +57,35 @@ export function CNewGroupButton() {
 
   return (
     <ListItem sx={{ position: "sticky", top: 0, borderBottom: "1px solid", borderBottomColor: grey[400] }} disablePadding>
-      <CModal title="Create New Group" buttonType="list" ButtonContent={CreateButton}>
+      <CModal title="Create new group" buttonType="list" ButtonContent={CreateButton}>
         <Box sx={styles.box}>
-          <Paper elevation={3} sx={{ p: 2, width: 250 }}>
-            <Typography variant="h6" gutterBottom>
-              Create a New Group
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Enter the name of the new group and start collaborating!
-            </Typography>
-            <form onSubmit={createGroup}>
-              <TextField
-                fullWidth
-                required
-                label="Group name"
-                variant="outlined"
-                sx={{ mb: 2 }}
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-              />
-              <TextField
-                fullWidth
-                multiline
-                label="Description"
-                variant="filled"
-                sx={{ mb: 2 }}
-                onChange={(e) => setDescription(e.target.value)}
-                value={description}
-              />
-              <Button onClick={()=>alert("a")} type="submit" fullWidth variant="contained">
-                Create
-              </Button>
-            </form>
-          </Paper>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Enter the name of the new group and start collaborating!
+          </Typography>
+          <form onSubmit={createGroup}>
+            <TextField
+              fullWidth
+              required
+              label="Group name"
+              variant="outlined"
+              sx={{ mb: 2 }}
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+            />
+            <TextField
+              fullWidth
+              multiline
+              maxRows={4}
+              label="Description"
+              variant="filled"
+              sx={{ mb: 2 }}
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+            />
+            <Button type="submit" fullWidth variant="contained">
+              Create
+            </Button>
+          </form>
         </Box>
       </CModal>
       
@@ -97,8 +97,9 @@ const styles: MuiStyles = {
   box: {
     p: 3,
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
   }
 };
