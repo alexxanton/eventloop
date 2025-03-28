@@ -63,7 +63,7 @@ export function CEventForm() {
 
   return (
     <Box display="flex">
-      <CModal title="Create new event" Icon={CalendarToday}>
+      <CModal title="Create new event" buttonType="icon" ButtonContent={CalendarToday}>
         <form onSubmit={handleSubmit}>
           <Box sx={styles.formBox}>
             <CEventDetailsSection
