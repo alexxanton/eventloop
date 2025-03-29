@@ -1,6 +1,5 @@
 import { MessageType, MuiStyles } from "@/utils/types/types";
-import { Box, Paper, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { Avatar, Box, Paper, Typography } from "@mui/material";
 
 type CProps = {
   msg: MessageType;
@@ -30,6 +29,12 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
         maxWidth: "60%",
       }}
     >
+      <Avatar
+        sx={{
+          visibility: isFirstInGroup && !isCurrentUser ? "visible" : "hidden",
+          mt: 1
+        }}
+      />
       <Box
         component="span"
         sx={{
@@ -37,9 +42,10 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
           borderLeft: isCurrentUser ? "10px solid transparent" : "none",
           borderRight: !isCurrentUser ? "10px solid transparent" : "none",
           borderTop: "10px solid",
-          borderTopColor: isCurrentUser ? "primary.main" : grey[900],
+          borderTopColor: isCurrentUser ? "primary.main" : "white",
           transform: isCurrentUser ? "rotate(-90deg)" : "rotate(90deg)",
-          visibility: isFirstInGroup ? "visible" : "hidden"
+          visibility: isFirstInGroup ? "visible" : "hidden",
+          filter: "drop-shadow(-6px 2px 8px rgba(0, 0, 0, 0.3))",
         }}
       />
       <Paper
@@ -49,9 +55,10 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
           color: isCurrentUser ? "white" : "",
           mt: !isFirstInGroup ? -0.7 : 1,
           borderRadius: borderRadius,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
         }}
       >
-        {isFirstInGroup ? !isCurrentUser && <small>{"@" + msg.user_id}</small> : null}
+        {isFirstInGroup && !isCurrentUser && <small>{"@" + msg.user_id}</small>}
         <Box display="flex" gap={1}>
           <Typography variant="body1">{msg.message}</Typography>
           <Typography component="small" variant="caption">
@@ -71,6 +78,7 @@ const styles: MuiStyles = {
     maxWidth: "fit-content",
     p: 1,
     my: 1,
+    // zIndex: 1000
   },
   tail: {
     width: 0,
