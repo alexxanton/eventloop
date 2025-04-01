@@ -24,11 +24,16 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
 
   useEffect(() => {
     const getMessages = async () => {
-      const { data } = await supabase.from("messages").select("*").eq("group_id", 1);
+      const { data } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("group_id", 1);
+
       if (data) {
         setMessages([...messages, ...data]);
       }
     };
+
     getMessages();
   }, []);
 
@@ -43,7 +48,7 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
         },
         (payload) => {
           const newMessage = payload.new as MessageType;
-          setMessages([...messages, newMessage]);
+          setMessages((prevMessages) => [...prevMessages, newMessage]);
         }
       )
       .subscribe();
@@ -144,9 +149,9 @@ const styles: MuiStyles = {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
-    p: 2,
-    pt: 1,
-    pb: 1,
+    pl: 2,
+    py: 1,
+    pr: 0
   },
   navbar: {
     display: "flex",
@@ -163,7 +168,7 @@ const styles: MuiStyles = {
     flexGrow: 1,
     overflowY: "auto",
     mb: 1,
-    wordBreak: "break-word"
+    wordBreak: "break-word",
   },
   footer: {
     // position: "sticky",
