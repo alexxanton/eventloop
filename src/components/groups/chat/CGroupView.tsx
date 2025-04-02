@@ -1,6 +1,6 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { Box, Paper } from '@mui/material';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CMainScreen } from './CMainScreen';
@@ -9,6 +9,8 @@ import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
+import { Edit } from '@mui/icons-material';
+import { CModal } from '@/components/containers/CModal';
 
 type CProps = {
   groups: GroupType[] | null;
@@ -21,9 +23,10 @@ export function CGroupView({groups}: CProps) {
 
   useEffect(() => {
     const getEvents = async () => {
-      const { data } = await supabase.from("events").select("*");
-      if (data) {
-        setEvents([...events, ...data]);
+      const { data: events } = await supabase.from("events").select("*");
+      const { data: members } = await supabase.from("groups_members").select("*");
+      if (events) {
+        setEvents(events);
       }
     };
     getEvents();
@@ -62,18 +65,65 @@ export function CGroupView({groups}: CProps) {
           <Paper square sx={{
             position: "sticky",
             top: 0,
+            zIndex: 1000
           }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar onChange={()=>{}} />
+              <DateCalendar
+                sx={{ width: 250, height: 230,
+                  // "& .MuiDayCalendar-weekContainer": {
+                  //   gap: "1px",
+                  // },
+                  "& .MuiPickersDay-root": {
+                    width: 25,
+                    height: 25,
+                  },
+                  "& .MuiDayCalendar-header": {
+                    justifyContent: "center",
+                    "& .MuiTypography-root": {
+                      width: 25,
+                      height: 10,
+                      fontSize: "0.55rem",
+                    },
+                  },
+                }}
+                onChange={()=>{}}
+              />
             </LocalizationProvider>
           </Paper>
-          <Box>
-            {events.map((e, index) => {
-              return <Box key={index} mb={20}>{e.name}</Box>
-            })}
-          </Box>
+          {events.map((e, index) => {
+            return (
+              <Box key={index}>
+                <EventCard event={e} />
+              </Box>
+            );
+          })}
         </Paper>
       </Box>
     </Box>
   );
 }
+
+const EventCard = ({event}: {event: EventType}) => (
+  <Box sx={{ px: 2, pt: 1, mb: 0, borderBottom: "1px solid black" }}>
+    <Box sx={{ display: "flex", gap: 2 }}>
+      
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography variant="subtitle1" fontWeight="bold">
+          {event.name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {new Date(event.start_date).toLocaleString().split(",")[0]} • {event.location}
+        </Typography>
+      </Box>
+      <Box>
+        <CModal title="Edit event" buttonType="icon" ButtonContent={Edit}>
+          <></>
+        </CModal>
+      </Box>
+    </Box>
+    <Box sx={{ display: "flex", gap: 1}}>
+      <Button>Join</Button>
+      <Button>View</Button>
+    </Box>
+  </Box>
+);

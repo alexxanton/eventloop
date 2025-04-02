@@ -29,7 +29,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
         ...styles.box,
         flexDirection: isCurrentUser ? "row-reverse" : "row",
         alignSelf: isCurrentUser ? "flex-end" : "flex-start",
-        maxWidth: "60%",
+        maxWidth: "70%",
       }}
     >
       <Avatar

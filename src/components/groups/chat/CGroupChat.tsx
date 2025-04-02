@@ -5,7 +5,7 @@ import { CMessageBubble } from "./CMessageBubble";
 import { MessageType, MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
 
 export function CGroupChat({openEvents}: {openEvents: () => void}) {
@@ -14,6 +14,7 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
   const userId = useUser()?.id;
+  const scrollToBottomRef = useRef<HTMLDivElement>(null);
 
   const bounce = keyframes`
     0%, 100% { transform: rotate(-45deg) translate(0); }
@@ -21,6 +22,12 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
     50% { transform: rotate(-45deg) translate(0); }
     75% { transform: rotate(-45deg) translate(7px); }
   `;
+
+  useEffect(() => {
+    if (scrollToBottomRef.current) {
+      scrollToBottomRef.current.scrollTop = scrollToBottomRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -91,7 +98,7 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
           </IconButton>
           <CEventForm />
         </Box>
-        <Box sx={styles.messagesBox}>
+        <Box sx={styles.messagesBox} ref={scrollToBottomRef}>
           {messages?.map((msg, index, array) => {
             return <CMessageBubble msg={msg} index={index} array={array} userId={userId} key={index} />
           })}

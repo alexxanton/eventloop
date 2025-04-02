@@ -1,72 +1,33 @@
 "use client";
-import { useState } from "react";
-import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { useStore } from "@/utils/zustand";
+import { CAccount } from "@/components/account/CAccount";
+import { CLogin } from "@/components/account/CLogin";
 import { supabase } from "@/utils/supabase";
-import { FormEvent } from "@/utils/types/types";
+import { Container, Box, CircularProgress } from "@mui/material";
+import { useState, useEffect } from "react";
 
-export default function AuthForm() {
-  const { setUserId } = useStore();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isSignUp, setIsSignUp] = useState(false);
+export default function AccountPage() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
 
-  const handleAuth = async (event: FormEvent) => {
-    event.preventDefault();
-    setError(null);
+    fetchSession();
+  }, []);
 
-    const { error } = isSignUp
-      ? await supabase.auth.signUp({ email, password })
-      : await supabase.auth.signInWithPassword({ email, password });
-    
-    if (error) {
-      setError(error.message);
-    } else {
-      alert(isSignUp ? "Sign-up successful!" : "Login successful!");
-      setUserId("");
-    }
-  };
+  if (loading) {
+    return (
+      <Container maxWidth="sm">
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
 
-  return (
-    <Container maxWidth="xs">
-      <Box sx={{ mt: 8, textAlign: "center" }}>
-        <Typography variant="h5" gutterBottom>
-          {isSignUp ? "Sign Up" : "Login"}
-        </Typography>
-        <form onSubmit={handleAuth}>
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <Typography color="error">{error}</Typography>}
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
-            {isSignUp ? "Sign Up" : "Login"}
-          </Button>
-          <Button fullWidth sx={{ mt: 1 }} onClick={() => setIsSignUp(!isSignUp)}>
-            {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
-          </Button>
-          {!isSignUp ? (
-            <Button fullWidth sx={{ mt: 1 }} onClick={() => {}}>
-              Forgot password? Click here
-            </Button>
-          ) : null}
-        </form>
-      </Box>
-    </Container>
-  );
+  return user ? <CAccount user_={user} /> : <CLogin />;
 }
