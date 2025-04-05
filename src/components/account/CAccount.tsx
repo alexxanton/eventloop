@@ -24,11 +24,14 @@ export function CAccount({user_}: {user_: User}) {
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const filePath = `avatars/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
       if (uploadError) throw uploadError;
 
@@ -81,7 +84,7 @@ export function CAccount({user_}: {user_: User}) {
         </label>
 
         <Typography variant="h5">
-          Welcome, {user.email}
+          Welcome, {user.email.split("@")[0]}!
         </Typography>
 
         {/* <Button

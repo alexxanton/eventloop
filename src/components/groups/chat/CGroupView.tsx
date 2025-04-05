@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
 import { Edit } from '@mui/icons-material';
 import { CModal } from '@/components/containers/CModal';
+import { CEventEditForm } from '@/components/events/form/CEventEditForm';
 
 type CProps = {
   groups: GroupType[] | null;
@@ -116,9 +117,7 @@ const EventCard = ({event}: {event: EventType}) => (
         </Typography>
       </Box>
       <Box>
-        <CModal title="Edit event" buttonType="icon" ButtonContent={Edit}>
-          <></>
-        </CModal>
+        <CEventEditForm event={event} />
       </Box>
     </Box>
     <Box sx={{ display: "flex", gap: 1}}>

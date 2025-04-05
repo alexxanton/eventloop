@@ -1,8 +1,16 @@
 "use client";
 import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery } from "@mui/material";
-import { Menu, AccountCircle, House, Settings } from '@mui/icons-material';
+import { Menu, AccountCircle, House, Settings, Event, ConfirmationNumber  } from '@mui/icons-material';
 import { useState } from "react";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
+import React from "react";
+
+const sections = [
+  {name: "Home", link: "/", icon: House},
+  {name: "Settings", link: "/login", icon: Settings},
+  {name: "Search Events", link: "/event", icon: Event},
+  {name: "Tickets", link: "/tickets", icon: ConfirmationNumber },
+];
 
 export function CNavbar() {
   const [open, setOpen] = useState(false);
@@ -57,14 +65,14 @@ export function CNavbar() {
       >
         <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleSidebar(false)}>
           <List>
-            {["Home", "Settings", "New event", "Drafts"].map((text, index) => (
-              <Link component="a" href="/settings" key={text} sx={{ color: isDarkMode ? "white" : "black" }} underline="none">
+            {sections.map((section, index) => (
+              <Link component="a" href={section.link} key={section.name} sx={{ color: isDarkMode ? "white" : "black" }} underline="none">
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
-                      {index % 2 === 0 ? <House /> : <Settings />}
+                      {React.createElement(section.icon)}
                     </ListItemIcon>
-                    <ListItemText primary={text} />
+                    <ListItemText primary={section.name} />
                   </ListItemButton>
                 </ListItem>
               </Link>
