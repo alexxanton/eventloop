@@ -62,8 +62,8 @@ export function CEventEditForm({event}: {event: EventType}) {
   };
 
   return (
-    <Box display="flex">
-      <CModal title="Edit event" buttonType="icon" ButtonContent={Edit}>
+    <CModal title="Edit event" buttonType="icon" ButtonContent={Edit}>
+      <Box display="flex">
         <form onSubmit={handleSubmit}>
           <Box sx={styles.formBox}>
             <CEventDetailsSection
@@ -108,8 +108,8 @@ export function CEventEditForm({event}: {event: EventType}) {
             </IconButton>
           </Box>
         </form>
-      </CModal>
-    </Box>
+      </Box>
+    </CModal>
   );
 }
 

@@ -1,18 +1,19 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box, Button, IconButton, Paper, Typography } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CMainScreen } from './CMainScreen';
-import { EventType, GroupType } from '@/utils/types/types';
+import { EventType, GroupType, MembersType } from '@/utils/types/types';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
-import { Edit } from '@mui/icons-material';
-import { CModal } from '@/components/containers/CModal';
+import { RemoveRedEye } from '@mui/icons-material';
 import { CEventEditForm } from '@/components/events/form/CEventEditForm';
 import Link from 'next/link';
+import { useUser } from '@/utils/hooks/useUser';
+import { CEventCard } from './CEventCard';
 
 type CProps = {
   groups: GroupType[] | null;
@@ -21,18 +22,36 @@ type CProps = {
 export function CGroupView({groups}: CProps) {
   const { currentGroup } = useStore();
   const [events, setEvents] = useState<EventType[]>([]);
+  const [members, setMembers] = useState<MembersType[]>([]);
   const [open, setOpen] = useState(false);
+  const [currentUserRole, setCurrentUserRole] = useState<string>("");
+  const userId = useUser()?.id;
 
   useEffect(() => {
-    const getEvents = async () => {
-      const { data: events } = await supabase.from("events").select("*");
-      const { data: members } = await supabase.from("groups_members").select("*");
-      if (events) {
+    const getGroupData = async () => {
+      if (!userId) return;
+
+      const { data: events } = await supabase
+        .from("events")
+        .select("*")
+        // .eq("group_id", currentGroup?.id);
+
+      const { data: members } = await supabase
+        .from("group_members")
+        .select("*")
+        .eq("group_id", currentGroup?.id);
+        
+      if (events && members) {
         setEvents(events);
+        setMembers(members);
+        const userRole = members.find(member => member.user_id === userId)?.role;
+        setCurrentUserRole(userRole);
       }
     };
-    getEvents();
-  }, []);
+    getGroupData();
+  }, [userId]);
+
+  if (!userId) return null;
 
   return (
     <Box sx={{ display: "flex", flex: 1, overflow: "auto" }}>
@@ -95,7 +114,7 @@ export function CGroupView({groups}: CProps) {
           {events.map((e, index) => {
             return (
               <Box key={index}>
-                <EventCard event={e} />
+                <CEventCard event={e} userRole={currentUserRole} />
               </Box>
             );
           })}
@@ -104,28 +123,3 @@ export function CGroupView({groups}: CProps) {
     </Box>
   );
 }
-
-const EventCard = ({event}: {event: EventType}) => (
-  <Box sx={{ px: 2, pt: 1, mb: 0, borderBottom: "1px solid black" }}>
-    <Box sx={{ display: "flex", gap: 2 }}>
-      
-      <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="subtitle1" fontWeight="bold">
-          {event.name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {new Date(event.start_date).toLocaleString().split(",")[0]} • {event.location}
-        </Typography>
-      </Box>
-      <Box>
-        <CEventEditForm event={event} />
-      </Box>
-    </Box>
-    <Box sx={{ display: "flex", gap: 1}}>
-      <Link href={`/event/${event.id}`}>
-        <Button>Join</Button>
-      </Link>
-      <Button>View</Button>
-    </Box>
-  </Box>
-);

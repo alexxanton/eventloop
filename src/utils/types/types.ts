@@ -28,3 +28,9 @@ export type EventType = {
     max_capacity: number;
     age_limit: number;
 };
+
+export type MembersType = {
+    user_id: string;
+    group_id: number;
+    role: string;
+};
