@@ -9,7 +9,8 @@ export type MessageType = {
     sent_at: string;
 };
 
-export type GroupType = {
+export type GroupType = null | {
+    id: number;
     name: string;
     description: string;
 };

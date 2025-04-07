@@ -31,18 +31,18 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
 
   useEffect(() => {
     const getMessages = async () => {
-      const { data } = await supabase
+      const { data: messages } = await supabase
         .from("messages")
         .select("*")
-        .eq("group_id", 1);
+        .eq("group_id", currentGroup?.id);
 
-      if (data) {
-        setMessages([...messages, ...data]);
+      if (messages) {
+        setMessages(messages);
       }
     };
 
     getMessages();
-  }, []);
+  }, [currentGroup?.id]);
 
   useEffect(() => {
     const channel = supabase
@@ -55,7 +55,9 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
         },
         (payload) => {
           const newMessage = payload.new as MessageType;
-          setMessages((prevMessages) => [...prevMessages, newMessage]);
+          if (newMessage.user_id !== userId) {
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+          }
         }
       )
       .subscribe();
@@ -67,10 +69,12 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
     if (input.trim() !== "") {
       const message = {
         user_id: userId,
-        group_id: 1,
+        group_id: currentGroup?.id,
         message: input,
         sent_at: new Date().toISOString()
       };
+
+      setMessages((prevMessages) => [...prevMessages, message]);
 
       setInput("");
       const { error } = await supabase.from("messages").insert([message]);
@@ -87,10 +91,10 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
         <Box sx={styles.navbar}>
           <Box sx={styles.typography}>
             <Typography variant="h6">
-              {currentGroup}
+              {currentGroup?.name}
             </Typography>
           </Box>
-          <IconButton onClick={() => setCurrentGroup("")}>
+          <IconButton onClick={() => setCurrentGroup(null)}>
             <Close />
           </IconButton>
           <IconButton onClick={openEvents}>

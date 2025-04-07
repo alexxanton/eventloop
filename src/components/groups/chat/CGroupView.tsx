@@ -12,6 +12,7 @@ import { supabase } from '@/utils/supabase';
 import { Edit } from '@mui/icons-material';
 import { CModal } from '@/components/containers/CModal';
 import { CEventEditForm } from '@/components/events/form/CEventEditForm';
+import Link from 'next/link';
 
 type CProps = {
   groups: GroupType[] | null;
@@ -121,7 +122,9 @@ const EventCard = ({event}: {event: EventType}) => (
       </Box>
     </Box>
     <Box sx={{ display: "flex", gap: 1}}>
-      <Button>Join</Button>
+      <Link href={`/event/${event.id}`}>
+        <Button>Join</Button>
+      </Link>
       <Button>View</Button>
     </Box>
   </Box>

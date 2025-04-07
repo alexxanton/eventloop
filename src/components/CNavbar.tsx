@@ -1,5 +1,5 @@
 "use client";
-import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery } from "@mui/material";
+import { AppBar, Avatar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery } from "@mui/material";
 import { Menu, AccountCircle, House, Settings, Event, ConfirmationNumber  } from '@mui/icons-material';
 import { useState } from "react";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
@@ -48,12 +48,11 @@ export function CNavbar() {
           component="a"
         >
           <IconButton
-            size="large"
             edge="start"
             sx={{ color: "white"}}
             aria-label="menu"
           >
-            <AccountCircle />
+            <Avatar />
           </IconButton>
         </Link>
       </Toolbar>
