@@ -1,26 +1,35 @@
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import { MuiStyles } from "@/utils/types/types";
 import { Close } from "@mui/icons-material";
-import { Box, IconButton, Modal, Paper, Typography, Zoom } from "@mui/material";
+import { Box, Button, IconButton, ListItemButton, Modal, Paper, Typography, Zoom } from "@mui/material";
 import React, { useState } from "react";
 
 type CProps = {
   children: React.ReactElement;
   title: string;
-  Icon: React.ElementType;
+  buttonType: "normal" | "icon" | "list";
+  ButtonContent: React.ElementType;
 };
 
-export function CModal({ children, title, Icon }: CProps) {
+export function CModal({ children, title, buttonType, ButtonContent }: CProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const isDarkMode = useDarkMode();
 
+  const buttonMap = {
+    "normal": Button,
+    "icon": IconButton,
+    "list": ListItemButton,
+  };
+
+  const ButtonType: React.ElementType = buttonMap[buttonType];
+
   return (
     <>
-      <IconButton size="large" onClick={handleOpen}>
-        <Icon />
-      </IconButton>
+      <ButtonType onClick={handleOpen}>
+        <ButtonContent />
+      </ButtonType>
       <Modal
         open={open}
         onClose={handleClose}
