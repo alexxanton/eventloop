@@ -27,3 +27,13 @@ export type EventType = {
     max_capacity: number;
     age_limit: number;
 };
+
+export type TicketType = {
+    id: number;
+    user_id: string;
+    event_id: number;
+    ticket_number: string;
+    purchased_at: string;
+    validated: string;
+    event: EventType;
+};

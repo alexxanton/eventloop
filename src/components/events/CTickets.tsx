@@ -1,8 +1,8 @@
 "use client";
-import { EventType } from "@/utils/types/types";
+import { TicketType } from "@/utils/types/types";
 import { Box } from "@mui/material";
 
-export function CTickets({tickets}: {tickets: EventType[] | null}) {
+export function CTickets({tickets}: {tickets: TicketType[]}) {
   if (!tickets || tickets.length === 0) {
     return (
       <Box sx={{ p: 2, textAlign: 'center' }}>
