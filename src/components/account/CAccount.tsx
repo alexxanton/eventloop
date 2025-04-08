@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
 // import { useRouter } from "next/router";
-import { Container, Avatar, Button, Typography, CircularProgress, Box } from "@mui/material";
+import { Container, Avatar, Button, Typography, CircularProgress, Box, IconButton } from "@mui/material";
 import { supabase } from "@/utils/supabase";
 import { User } from "@supabase/supabase-js";
+import { useStore } from "@/utils/zustand";
+import { DarkMode, LightMode } from "@mui/icons-material";
 
 export function CAccount({user_}: {user_: User}) {
+  const { theme, toggleTheme } = useStore();
   // const router = useRouter();
   const [user, setUser] = useState<any>(user_);
   const [uploading, setUploading] = useState(false);
@@ -86,6 +89,17 @@ export function CAccount({user_}: {user_: User}) {
         <Typography variant="h5">
           Welcome, {user.email.split("@")[0]}!
         </Typography>
+        <Box>
+          <IconButton
+            size="large"
+            edge="start"
+            sx={{ color: "white", mr: 2 }}
+            aria-label="menu"
+            onClick={toggleTheme}
+          >
+            {theme !== "dark" ? <DarkMode sx={{color: "#181414"}} /> : <LightMode />}
+          </IconButton>
+        </Box>
 
         {/* <Button
           variant="contained"

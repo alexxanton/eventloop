@@ -1,38 +1,63 @@
 import { CEventEditForm } from "@/components/events/form/CEventEditForm";
 import { EventType } from "@/utils/types/types";
 import { RemoveRedEye } from "@mui/icons-material";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton, Paper } from "@mui/material";
 import Link from "next/link";
 
+const getEventColor = (eventType: string) => {
+  const colors: Record<string, string> = {
+    conference: "#FF5733",
+    meetup: "#33FF57",
+    workshop: "#3357FF",
+    default: "#888",
+  };
+  return colors[eventType] || colors.default;
+};
+
 export const CEventCard = ({ event, userRole }: { event: EventType; userRole: string }) => {
-  console.log(userRole)
   return (
-    <Box sx={{ px: 2, pt: 1, mb: 0 }}>
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography
-            variant="subtitle1"
-            fontWeight="bold"
-            sx={{
-              textWrap: "nowrap",
-            }}
-          >
-            {event.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {new Date(event.start_date).toLocaleString().split(",")[0]} • {event.location}
-          </Typography>
+    <Paper 
+      sx={{ 
+        display: "flex", 
+        overflow: "hidden", 
+        mb: 1,
+      }}
+    >
+      {/* Colored vertical bar - fully integrated with Paper */}
+      <Box
+        sx={{
+          width: 6,
+          backgroundColor: getEventColor(event.type),
+          flexShrink: 0,
+        }}
+      />
+
+      {/* Main Content */}
+      <Box sx={{ flexGrow: 1, px: 2, display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="subtitle1" fontWeight="bold" noWrap>
+              {event.name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {new Date(event.start_date).toLocaleString().split(",")[0]} • {event.location}
+            </Typography>
+          </Box>
+          <Box>{userRole === "owner" ? <CEventEditForm event={event} /> : null}</Box>
         </Box>
-        <Box>{userRole === "owner" ? <CEventEditForm event={event} /> : null}</Box>
+
+        {/* Icons (kept exactly as you had) */}
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Link href={`/event/${event.id}`}>
+            <IconButton>
+              <RemoveRedEye />
+            </IconButton>
+          </Link>
+          <IconButton>
+            <RemoveRedEye />
+          </IconButton>
+        </Box>
       </Box>
-      <Link href={`/event/${event.id}`}>
-        <IconButton>
-          <RemoveRedEye />
-        </IconButton>
-      </Link>
-      <IconButton>
-        <RemoveRedEye />
-      </IconButton>
-    </Box>
+    </Paper>
   );
 };

@@ -49,7 +49,7 @@ export function CGroupView({groups}: CProps) {
       }
     };
     getGroupData();
-  }, [userId]);
+  }, [userId, currentGroup?.id]);
 
   if (!userId) return null;
 
