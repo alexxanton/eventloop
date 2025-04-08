@@ -1,6 +1,6 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { Box, Button, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CMainScreen } from './CMainScreen';
@@ -9,9 +9,6 @@ import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
-import { RemoveRedEye } from '@mui/icons-material';
-import { CEventEditForm } from '@/components/events/form/CEventEditForm';
-import Link from 'next/link';
 import { useUser } from '@/utils/hooks/useUser';
 import { CEventCard } from './CEventCard';
 
@@ -86,7 +83,9 @@ export function CGroupView({groups}: CProps) {
           <Paper square sx={{
             position: "sticky",
             top: 0,
-            zIndex: 1000
+            zIndex: 1000,
+            mb: 0.5,
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
           }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar

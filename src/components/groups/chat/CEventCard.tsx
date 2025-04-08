@@ -1,6 +1,6 @@
 import { CEventEditForm } from "@/components/events/form/CEventEditForm";
 import { EventType } from "@/utils/types/types";
-import { RemoveRedEye } from "@mui/icons-material";
+import { List, CalendarToday } from "@mui/icons-material";
 import { Box, Typography, IconButton, Paper } from "@mui/material";
 import Link from "next/link";
 
@@ -20,15 +20,15 @@ export const CEventCard = ({ event, userRole }: { event: EventType; userRole: st
       sx={{ 
         display: "flex", 
         overflow: "hidden", 
-        mb: 1,
+        mb: 0.5,
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
       }}
     >
       {/* Colored vertical bar - fully integrated with Paper */}
       <Box
         sx={{
           width: 6,
-          backgroundColor: getEventColor(event.type),
-          flexShrink: 0,
+          backgroundColor: getEventColor(event.category),
         }}
       />
 
@@ -50,11 +50,11 @@ export const CEventCard = ({ event, userRole }: { event: EventType; userRole: st
         <Box sx={{ display: "flex", gap: 1 }}>
           <Link href={`/event/${event.id}`}>
             <IconButton>
-              <RemoveRedEye />
+              <CalendarToday />
             </IconButton>
           </Link>
           <IconButton>
-            <RemoveRedEye />
+            <List />
           </IconButton>
         </Box>
       </Box>
