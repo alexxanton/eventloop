@@ -7,7 +7,8 @@ export default async function Page() {
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    // process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         async get(name) {
@@ -22,6 +23,8 @@ export default async function Page() {
   );
 
   const { data: { user } } = await supabase.auth.getUser();
+  console.log(user);
+  
 
   if (!user) {
     return <div>You need to be logged in.</div>;
