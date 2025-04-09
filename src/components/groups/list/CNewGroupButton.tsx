@@ -53,15 +53,6 @@ export function CNewGroupButton() {
     </>
   );
 
-  const CreateButton = () => (
-    <>
-      <ListItemIcon>
-        <Add />
-      </ListItemIcon>
-      <ListItemText primary="Create new group" sx={{ textWrap: "nowrap" }} />
-    </>
-  );
-
   return (
     <ListItem sx={{ position: "sticky", top: 0, borderBottom: "1px solid", borderBottomColor: grey[400] }} disablePadding>
       <CModal title="Create new group" buttonType="list" ButtonContent={CreateButton}>
