@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function CNewGroupButton() {
-  const { setCurrentGroup } = useStore();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const userId = useUser()?.id;

@@ -4,15 +4,15 @@ import { List, CalendarToday } from "@mui/icons-material";
 import { Box, Typography, IconButton, Paper } from "@mui/material";
 import Link from "next/link";
 
-const getEventColor = (eventType: string) => {
-  const colors: Record<string, string> = {
-    conference: "#FF5733",
-    meetup: "#33FF57",
-    workshop: "#3357FF",
-    default: "#888",
-  };
-  return colors[eventType] || colors.default;
-};
+// const getEventColor = (eventType: string) => {
+//   const colors: Record<string, string> = {
+//     conference: "#FF5733",
+//     meetup: "#33FF57",
+//     workshop: "#3357FF",
+//     default: "#888",
+//   };
+//   return colors[eventType] || colors.default;
+// };
 
 export const CEventCard = ({ event, userRole }: { event: EventType; userRole: string }) => {
   return (

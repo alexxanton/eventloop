@@ -1,6 +1,6 @@
 "use client"
 import { Container, Paper, Typography, Box, Button, Chip, IconButton, useTheme, useMediaQuery } from "@mui/material";
-import { Event, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Checkroom, ArrowBack, Share } from "@mui/icons-material";
+import { Event, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Checkroom, Share } from "@mui/icons-material";
 import { EventType } from "@/utils/types/types";
 import { supabase } from "@/utils/supabase";
 import { useUser } from "@/utils/hooks/useUser";

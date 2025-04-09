@@ -2,13 +2,14 @@ import { CEventForm } from "@/components/events/form/CEventForm";
 import { Close, Settings, Send } from "@mui/icons-material";
 import { Box, Typography, IconButton, TextField, keyframes } from "@mui/material";
 import { CMessageBubble } from "./CMessageBubble";
-import { MessageType, MuiStyles } from "@/utils/types/types";
+import { MembersType, MessageType, MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
+import { CGroupSettings } from "../CGroupSettings";
 
-export function CGroupChat({openEvents}: {openEvents: () => void}) {
+export function CGroupChat({members, openEvents}: {members: MembersType[], openEvents: () => void}) {
   const { currentGroup, setCurrentGroup } = useStore();
   // const theme = useTheme();
   const [input, setInput] = useState("");
@@ -100,6 +101,7 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
           <IconButton onClick={openEvents}>
             <Settings />
           </IconButton>
+          <CGroupSettings members={members} />
           <CEventForm />
         </Box>
         <Box sx={styles.messagesBox} ref={scrollToBottomRef}>

@@ -1,6 +1,6 @@
 "use client";
 import { AppBar, Avatar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery } from "@mui/material";
-import { Menu, AccountCircle, House, Settings, Event, ConfirmationNumber  } from '@mui/icons-material';
+import { Menu, House, Settings, Event, ConfirmationNumber  } from '@mui/icons-material';
 import { useState } from "react";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import React from "react";
@@ -65,7 +65,7 @@ export function CNavbar() {
         <Box sx={{ width: 250 }} role="presentation" onClick={() => toggleSidebar(false)}>
           <List>
             {sections.map((section, index) => (
-              <Link component="a" href={section.link} key={section.name} sx={{ color: isDarkMode ? "white" : "black" }} underline="none">
+              <Link component="a" href={section.link} key={index} sx={{ color: isDarkMode ? "white" : "black" }} underline="none">
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>

@@ -1,23 +1,23 @@
 "use client";
 import { useState } from "react";
 // import { useRouter } from "next/router";
-import { Container, Avatar, Button, Typography, CircularProgress, Box, IconButton } from "@mui/material";
+import { Container, Avatar, Typography, CircularProgress, Box, IconButton } from "@mui/material";
 import { supabase } from "@/utils/supabase";
 import { User } from "@supabase/supabase-js";
 import { useStore } from "@/utils/zustand";
 import { DarkMode, LightMode } from "@mui/icons-material";
 
-export function CAccount({user_}: {user_: User}) {
+export function CAccount({loggedUser}: {loggedUser: User}) {
   const { theme, toggleTheme } = useStore();
   // const router = useRouter();
-  const [user, setUser] = useState<any>(user_);
+  const [user, setUser] = useState<User>(loggedUser);
   const [uploading, setUploading] = useState(false);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    // router.push("/login");
-    // bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text
-  };
+  // const handleLogout = async () => {
+  //   await supabase.auth.signOut();
+  //   // router.push("/login");
+  //   // bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text
+  // };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -87,7 +87,7 @@ export function CAccount({user_}: {user_: User}) {
         </label>
 
         <Typography variant="h5">
-          Welcome, {user.email.split("@")[0]}!
+          Welcome, {user.email?.split("@")[0]}!
         </Typography>
         <Box>
           <IconButton

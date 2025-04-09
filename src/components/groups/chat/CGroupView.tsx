@@ -67,7 +67,7 @@ export function CGroupView({groups}: CProps) {
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
-      {currentGroup ? <CGroupChat openEvents={() => setOpen(!open)} /> : <CMainScreen />}
+      {currentGroup ? <CGroupChat members={members} openEvents={() => setOpen(!open)} /> : <CMainScreen />}
       <Box sx={{ position: "sticky", top: 0 }}>
         <Paper
           square
