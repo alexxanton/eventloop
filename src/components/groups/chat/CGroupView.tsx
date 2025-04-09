@@ -47,8 +47,6 @@ export function CGroupView({groups}: CProps) {
     getGroupData();
   }, [userId, currentGroup?.id]);
 
-  if (!userId) return null;
-
   return (
     <Box sx={{ display: "flex", flex: 1, overflow: "auto" }}>
       <Box sx={{ position: "sticky", top: 0 }}>
