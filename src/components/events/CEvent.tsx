@@ -1,10 +1,14 @@
 "use client"
 import { Container, Paper, Typography, Box, Button, Chip, IconButton, useTheme, useMediaQuery } from "@mui/material";
-import { Event, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Checkroom, ArrowBack, Share } from "@mui/icons-material";
+import { Event, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Checkroom, Share } from "@mui/icons-material";
 import { EventType } from "@/utils/types/types";
+import { supabase } from "@/utils/supabase";
+import { useUser } from "@/utils/hooks/useUser";
+import { createHash } from "crypto";
 
 export function CEvent({event}: {event: EventType | null}) {
   const theme = useTheme();
+  const userId = useUser()?.id;
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   // const [event] = useState({
   //   name: "Midnight Jazz & Wine Night",
@@ -18,6 +22,25 @@ export function CEvent({event}: {event: EventType | null}) {
   //   max_capacity: 150,
   //   age_limit: 21
   // });
+
+  const handleJoinEvent = async () => {
+    const ticketNumber = createHash("sha256")
+      .update(`${userId}-${event?.id}`)
+      .digest("hex")
+      .substring(0, 16);
+
+    const ticket = {
+      user_id: userId,
+      event_id: event?.id,
+      ticket_number: ticketNumber,
+    };
+    
+    const { error } = await supabase.from("tickets").insert([ticket]);
+
+    if (error) {
+      alert(error.details);
+    }
+  };
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -38,9 +61,6 @@ export function CEvent({event}: {event: EventType | null}) {
     <Container maxWidth="md" sx={{ py: 4, position: "relative" }}>
       {/* Header Section */}
       <Box sx={{ display: "flex", alignItems: "center", mb: 4, gap: 2 }}>
-        <IconButton sx={{ color: "primary.main" }}>
-          <ArrowBack />
-        </IconButton>
         <Typography variant="h3" fontWeight="bold" sx={{ flex: 1 }}>
           {event.name}
         </Typography>
@@ -156,6 +176,7 @@ export function CEvent({event}: {event: EventType | null}) {
           variant="contained"
           size="large"
           startIcon={<Event />}
+          onClick={handleJoinEvent}
           sx={{
             py: 2.5,
             borderRadius: 4,

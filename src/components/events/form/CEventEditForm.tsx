@@ -1,7 +1,7 @@
 "use client";
 import { supabase } from "@/utils/supabase";
-import { FormEvent, MuiStyles } from "@/utils/types/types";
-import { Check, CalendarToday } from "@mui/icons-material";
+import { EventType, FormEvent, MuiStyles } from "@/utils/types/types";
+import { Check, Edit } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import { CModal } from "../../containers/CModal";
@@ -12,19 +12,19 @@ import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
-export function CEventForm() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+export function CEventEditForm({event}: {event: EventType}) {
+  const [name, setName] = useState(event.name);
+  const [description, setDescription] = useState(event.description);
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
-  const [location, setLocation] = useState("");
-  const [price, setPrice] = useState("");
-  const [currency, setCurrency] = useState("EUR");
-  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState(event.location);
+  const [price, setPrice] = useState(event.price?.toString());
+  const [currency, setCurrency] = useState("");
+  const [category, setCategory] = useState(event.category);
   const [error, setError] = useState("");
   const [maxCapacity, setMaxCapacity] = useState<number | null>(null);
   const [ageLimit, setAgeLimit] = useState<number | null>(null);
-  const [dressCode, setDressCode] = useState("");
+  const [dressCode, setDressCode] = useState(event.dress_code);
   const isDarkMode = useDarkMode();
 
   const handleSubmit = async (event: FormEvent) => {
@@ -52,7 +52,7 @@ export function CEventForm() {
     console.log(newEvent);
 
     try {
-      const { error } = await supabase.from("events").insert([newEvent]);
+      const { error } = await supabase.from("events").update([newEvent]);
       if (error) throw error;
       setError("");
     } catch (err) {
@@ -61,14 +61,9 @@ export function CEventForm() {
     }
   };
 
-  const EventButton = () => (
-    // onClick={handleOpen}
-      <CalendarToday />
-  );
-
   return (
-    <Box display="flex">
-      <CModal title="Create new event" buttonType="icon" ButtonContent={CalendarToday}>
+    <CModal title="Edit event" buttonType="icon" ButtonContent={Edit}>
+      <Box display="flex">
         <form onSubmit={handleSubmit}>
           <Box sx={styles.formBox}>
             <CEventDetailsSection
@@ -113,8 +108,8 @@ export function CEventForm() {
             </IconButton>
           </Box>
         </form>
-      </CModal>
-    </Box>
+      </Box>
+    </CModal>
   );
 }
 

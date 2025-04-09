@@ -2,18 +2,20 @@ import { CEventForm } from "@/components/events/form/CEventForm";
 import { Close, Settings, Send } from "@mui/icons-material";
 import { Box, Typography, IconButton, TextField, keyframes } from "@mui/material";
 import { CMessageBubble } from "./CMessageBubble";
-import { MessageType, MuiStyles } from "@/utils/types/types";
+import { MembersType, MessageType, MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
+import { CGroupSettings } from "../CGroupSettings";
 
-export function CGroupChat({openEvents}: {openEvents: () => void}) {
-  const { currentGroup, setCurrentGroup } = useStore();
+export function CGroupChat({members}: {members: MembersType[]}) {
+  const { currentGroup, setCurrentGroup, toggleOpenEvents } = useStore();
   // const theme = useTheme();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
   const userId = useUser()?.id;
+  const scrollToBottomRef = useRef<HTMLDivElement>(null);
 
   const bounce = keyframes`
     0%, 100% { transform: rotate(-45deg) translate(0); }
@@ -23,23 +25,57 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
   `;
 
   useEffect(() => {
+    if (scrollToBottomRef.current) {
+      scrollToBottomRef.current.scrollTop = scrollToBottomRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
     const getMessages = async () => {
-      const { data: msgs } = await supabase.from("messages").select("*").eq("group_id", 1);
-      if (msgs) {
-        setMessages([...messages, ...msgs]);
+      const { data: messages } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("group_id", currentGroup?.id);
+
+      if (messages) {
+        setMessages(messages);
       }
     };
+
     getMessages();
-  }, []);
+  }, [currentGroup?.id]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("messages")
+      .on(
+        "postgres_changes", {
+          event: "INSERT",
+          schema: "public",
+          table: "messages"
+        },
+        (payload) => {
+          const newMessage = payload.new as MessageType;
+          if (newMessage.user_id !== userId) {
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {supabase.removeChannel(channel)}
+  }, [messages, setMessages]);
     
   const sendMessage = async () => {
     if (input.trim() !== "") {
-      const message = {
-        user_id: userId,
-        group_id: 1,
+      const message: MessageType = {
+        user_id: userId || "",
+        group_id: currentGroup?.id || 0,
         message: input,
         sent_at: new Date().toISOString()
       };
+
+      setMessages((prevMessages) => [...prevMessages, message]);
 
       setInput("");
       const { error } = await supabase.from("messages").insert([message]);
@@ -56,20 +92,21 @@ export function CGroupChat({openEvents}: {openEvents: () => void}) {
         <Box sx={styles.navbar}>
           <Box sx={styles.typography}>
             <Typography variant="h6">
-              {currentGroup}
+              {currentGroup?.name}
             </Typography>
           </Box>
-          <IconButton onClick={() => setCurrentGroup("")}>
+          <IconButton onClick={() => setCurrentGroup(null)}>
             <Close />
           </IconButton>
-          <IconButton onClick={openEvents}>
+          <IconButton onClick={toggleOpenEvents}>
             <Settings />
           </IconButton>
+          <CGroupSettings members={members} />
           <CEventForm />
         </Box>
-        <Box sx={styles.messagesBox}>
+        <Box sx={styles.messagesBox} ref={scrollToBottomRef}>
           {messages?.map((msg, index, array) => {
-            return <CMessageBubble msg={msg} index={index} array={array} userId={userId} key={index} />
+            return <CMessageBubble msg={msg} index={index} array={array} userId={userId || ""} key={index} />
           })}
         </Box>
       </Box>
@@ -125,9 +162,9 @@ const styles: MuiStyles = {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
-    p: 2,
-    pt: 1,
-    pb: 1,
+    pl: 2,
+    py: 1,
+    pr: 0
   },
   navbar: {
     display: "flex",
@@ -144,7 +181,7 @@ const styles: MuiStyles = {
     flexGrow: 1,
     overflowY: "auto",
     mb: 1,
-    wordBreak: "break-word"
+    wordBreak: "break-word",
   },
   footer: {
     // position: "sticky",

@@ -5,11 +5,13 @@ export type FormEvent = React.FormEvent<HTMLFormElement>;
 
 export type MessageType = {
     user_id: string;
+    group_id: number;
     message: string;
     sent_at: string;
 };
 
-export type GroupType = {
+export type GroupType = null | {
+    id: number;
     name: string;
     description: string;
 };
@@ -36,4 +38,10 @@ export type TicketType = {
     purchased_at: string;
     validated: string;
     event: EventType;
+};
+
+export type MembersType = {
+    user_id: string;
+    group_id: number;
+    role: string;
 };

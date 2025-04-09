@@ -1,5 +1,6 @@
 import { Groups, AccountCircle, Event } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import Link from "next/link";
 
 export function CMainScreen() {  
   return (
@@ -38,7 +39,6 @@ export function CMainScreen() {
                   <path d="M95.9129 360.889L95.9129 474.673L194.452 417.781L95.9129 360.889Z" fill="#B892F2"/>
                   <circle cx="288.5" cy="300.5" r="87.5" fill="#B892F2"/>
                 </svg>
-
               </Box>
             </Box>
             <Box sx={{ flex: 1 }}>
@@ -59,16 +59,18 @@ export function CMainScreen() {
                 >
                   Create Group
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  size="large"
-                  startIcon={<Event />}
-                  // onClick={handleActionClick}
-                  sx={{ px: 4, py: 1.5 }}
-                >
-                  Join Event
-                </Button>
+                <Link href="/events">
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="large"
+                    startIcon={<Event />}
+                    // onClick={handleActionClick}
+                    sx={{ px: 4, py: 1.5, color: "white" }}
+                  >
+                    Join Event
+                  </Button>
+                </Link>
               </Box>
             </Box>
           </Box>
