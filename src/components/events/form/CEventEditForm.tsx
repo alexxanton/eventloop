@@ -18,8 +18,8 @@ export function CEventEditForm({event}: {event: EventType}) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [location, setLocation] = useState(event.location);
-  const [price, setPrice] = useState(event.price);
-  // const [currency, setCurrency] = useState(event.currency);
+  const [price, setPrice] = useState(event.price.toString());
+  const [currency, setCurrency] = useState("");
   const [category, setCategory] = useState(event.category);
   const [error, setError] = useState("");
   const [maxCapacity, setMaxCapacity] = useState<number | null>(null);
@@ -85,8 +85,8 @@ export function CEventEditForm({event}: {event: EventType}) {
             <CPricingSection
               price={price}
               setPrice={setPrice}
-              // currency={currency}
-              // setCurrency={setCurrency}
+              currency={currency}
+              setCurrency={setCurrency}
             />
             <CAdditionalInfoSection
               dressCode={dressCode}
