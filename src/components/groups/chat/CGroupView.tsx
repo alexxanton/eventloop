@@ -17,10 +17,9 @@ type CProps = {
 };
 
 export function CGroupView({groups}: CProps) {
-  const { currentGroup } = useStore();
+  const { currentGroup, openEvents } = useStore();
   const [events, setEvents] = useState<EventType[]>([]);
   const [members, setMembers] = useState<MembersType[]>([]);
-  const [open, setOpen] = useState(false);
   const [currentUserRole, setCurrentUserRole] = useState<string>("");
   const userId = useUser()?.id;
 
@@ -67,13 +66,13 @@ export function CGroupView({groups}: CProps) {
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
-      {currentGroup ? <CGroupChat members={members} openEvents={() => setOpen(!open)} /> : <CMainScreen />}
+      {currentGroup ? <CGroupChat members={members} /> : <CMainScreen />}
       <Box sx={{ position: "sticky", top: 0 }}>
         <Paper
           square
           elevation={1}
           sx={{
-            width: open && currentGroup ? 300 : 0,
+            width: openEvents && currentGroup ? 300 : 0,
             transition: "width 0.3s ease-in-out",
             height: "100%",
             overflow: "auto",

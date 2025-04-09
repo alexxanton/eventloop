@@ -5,6 +5,7 @@ export type FormEvent = React.FormEvent<HTMLFormElement>;
 
 export type MessageType = {
     user_id: string;
+    group_id: number;
     message: string;
     sent_at: string;
 };

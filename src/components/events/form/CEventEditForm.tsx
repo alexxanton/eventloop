@@ -18,7 +18,7 @@ export function CEventEditForm({event}: {event: EventType}) {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [location, setLocation] = useState(event.location);
-  const [price, setPrice] = useState(event.price.toString());
+  const [price, setPrice] = useState(event.price?.toString());
   const [currency, setCurrency] = useState("");
   const [category, setCategory] = useState(event.category);
   const [error, setError] = useState("");

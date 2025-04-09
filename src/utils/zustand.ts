@@ -9,6 +9,8 @@ interface StoreState {
   setUserId: (id: string) => void;
   currentGroup: GroupType;
   setCurrentGroup: (group: GroupType) => void;
+  openEvents: boolean;
+  toggleOpenEvents: () => void;
 }
 
 export const useStore = create<StoreState>()(
@@ -17,12 +19,17 @@ export const useStore = create<StoreState>()(
       theme: "",
       userId: "",
       currentGroup: null,
+      openEvents: false,
       toggleTheme: () =>
         set((state) => ({
           theme: state.theme === "dark" ? "light" : "dark",
         })),
       setUserId: (id: string) => set((state) => ({ ...state, userId: id })),
       setCurrentGroup: (group: GroupType) => set((state) => ({ ...state, currentGroup: group })),
+      toggleOpenEvents: () =>
+        set((state) => ({
+          openEvents: !state.openEvents,
+        })),
     }),
     {
       name: "theme-storage",

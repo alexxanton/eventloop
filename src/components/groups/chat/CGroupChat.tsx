@@ -9,8 +9,8 @@ import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
 import { CGroupSettings } from "../CGroupSettings";
 
-export function CGroupChat({members, openEvents}: {members: MembersType[], openEvents: () => void}) {
-  const { currentGroup, setCurrentGroup } = useStore();
+export function CGroupChat({members}: {members: MembersType[]}) {
+  const { currentGroup, setCurrentGroup, toggleOpenEvents } = useStore();
   // const theme = useTheme();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -68,9 +68,9 @@ export function CGroupChat({members, openEvents}: {members: MembersType[], openE
     
   const sendMessage = async () => {
     if (input.trim() !== "") {
-      const message = {
-        user_id: userId,
-        group_id: currentGroup?.id,
+      const message: MessageType = {
+        user_id: userId || "",
+        group_id: currentGroup?.id || 0,
         message: input,
         sent_at: new Date().toISOString()
       };
@@ -98,7 +98,7 @@ export function CGroupChat({members, openEvents}: {members: MembersType[], openE
           <IconButton onClick={() => setCurrentGroup(null)}>
             <Close />
           </IconButton>
-          <IconButton onClick={openEvents}>
+          <IconButton onClick={toggleOpenEvents}>
             <Settings />
           </IconButton>
           <CGroupSettings members={members} />
@@ -106,7 +106,7 @@ export function CGroupChat({members, openEvents}: {members: MembersType[], openE
         </Box>
         <Box sx={styles.messagesBox} ref={scrollToBottomRef}>
           {messages?.map((msg, index, array) => {
-            return <CMessageBubble msg={msg} index={index} array={array} userId={userId} key={index} />
+            return <CMessageBubble msg={msg} index={index} array={array} userId={userId || ""} key={index} />
           })}
         </Box>
       </Box>
