@@ -8,7 +8,7 @@ import React from "react";
 const sections = [
   {name: "Home", link: "/", icon: House},
   {name: "Settings", link: "/login", icon: Settings},
-  {name: "Search Events", link: "/event", icon: Event},
+  {name: "Search Events", link: "/events", icon: Event},
   {name: "Tickets", link: "/tickets", icon: ConfirmationNumber },
 ];
 

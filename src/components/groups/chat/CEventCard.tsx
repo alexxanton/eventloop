@@ -48,7 +48,7 @@ export const CEventCard = ({ event, userRole }: { event: EventType; userRole: st
 
         {/* Icons */}
         <Box sx={{ display: "flex", gap: 1 }}>
-          <Link href={`/event/${event.id}`}>
+          <Link href={`/events/${event.id}`}>
             <IconButton>
               <CalendarToday />
             </IconButton>

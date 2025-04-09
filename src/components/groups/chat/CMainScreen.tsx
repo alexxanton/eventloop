@@ -59,7 +59,7 @@ export function CMainScreen() {
                 >
                   Create Group
                 </Button>
-                <Link href="/event">
+                <Link href="/events">
                   <Button
                     variant="outlined"
                     color="secondary"

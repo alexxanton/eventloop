@@ -174,7 +174,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
               eventContent={(eventInfo) => (
                 <Box sx={{ p: 0.5, overflow: "hidden" }}>
                   <Link 
-                    href={`/event/${eventInfo.event.id}`} 
+                    href={`/events/${eventInfo.event.id}`} 
                     style={{ textDecoration: "none" }}
                   >
                     <Typography 

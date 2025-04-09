@@ -1,7 +1,11 @@
 import { CEvent } from "@/components/events/CEvent";
 import { supabase } from "@/utils/supabase";
 
-export default async function Page({params}: {params: {id: string}}) {
+interface PageProps {
+  params: { id: string };
+}
+
+export default async function Page({params}: PageProps) {
   const {data: event} = await supabase
     .from("events")
     .select("*")
