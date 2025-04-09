@@ -24,11 +24,11 @@ export const CEventCard = ({ event, userRole }: { event: EventType; userRole: st
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
       }}
     >
-      {/* Colored vertical bar - fully integrated with Paper */}
       <Box
         sx={{
           width: 6,
-          backgroundColor: getEventColor(event.category),
+          backgroundColor: "rebeccapurple",
+          // backgroundColor: getEventColor(event.category),
         }}
       />
 
@@ -46,7 +46,7 @@ export const CEventCard = ({ event, userRole }: { event: EventType; userRole: st
           <Box>{userRole === "owner" ? <CEventEditForm event={event} /> : null}</Box>
         </Box>
 
-        {/* Icons (kept exactly as you had) */}
+        {/* Icons */}
         <Box sx={{ display: "flex", gap: 1 }}>
           <Link href={`/event/${event.id}`}>
             <IconButton>

@@ -80,7 +80,7 @@ export function CGroupView({groups}: CProps) {
             boxShadow: "-10px 0px 10px -5px rgba(0,0,0,0.3)",
           }}
         >
-          <Paper square sx={{
+          <Paper sx={{
             position: "sticky",
             top: 0,
             zIndex: 1000,
