@@ -86,8 +86,7 @@ export function CNewGroupButton() {
           </form>
         </Box>
       </CModal>
-      
-      </ListItem>
+    </ListItem>
   );
 }
 
