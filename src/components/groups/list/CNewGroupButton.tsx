@@ -3,7 +3,6 @@ import { CModal } from "@/components/containers/CModal";
 import { useUser } from "@/utils/hooks/useUser";
 import { supabase } from "@/utils/supabase";
 import { FormEvent, MuiStyles } from "@/utils/types/types";
-import { useStore } from "@/utils/zustand";
 import { Add } from "@mui/icons-material";
 import { Box, Button, ListItem, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";

@@ -9,7 +9,7 @@ export function CGroupSettings({members}: {members: MembersType[]}) {
       <Box>
         {members.map((member) => {
           return (
-            <Box>{member.group_id}</Box>
+            <Box key={member.group_id}>{member.user_id}</Box>
           );
         })}
       </Box>
