@@ -61,11 +61,6 @@ export function CEventForm() {
     }
   };
 
-  const EventButton = () => (
-    // onClick={handleOpen}
-      <CalendarToday />
-  );
-
   return (
     <Box display="flex">
       <CModal title="Create new event" buttonType="icon" ButtonContent={CalendarToday}>
