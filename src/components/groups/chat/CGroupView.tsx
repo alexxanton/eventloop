@@ -4,13 +4,14 @@ import { Box, Paper } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CMainScreen } from './CMainScreen';
-import { EventType, GroupType, MembersType } from '@/utils/types/types';
+import { EventType, GroupType, MembersType, MuiStyles } from '@/utils/types/types';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
 import { useUser } from '@/utils/hooks/useUser';
 import { CEventCard } from './CEventCard';
+import { CEventForm } from '@/components/events/form/CEventForm';
 
 type CProps = {
   groups: GroupType[] | null;
@@ -48,62 +49,29 @@ export function CGroupView({groups}: CProps) {
   }, [userId, currentGroup?.id]);
 
   return (
-    <Box sx={{ display: "flex", flex: 1, overflow: "auto" }}>
-      <Box sx={{ position: "sticky", top: 0 }}>
-        <Paper
-          square
-          sx={{
-            width: 300,
-            // width: currentGroup ? 0 : 300,
-            transition: "width 0.3s ease-in-out",
-            height: "100%",
-            overflow: "auto",
-            boxShadow: "10px 0px 10px -5px rgba(0, 0, 0, 0.3)"
-          }}
-        >
+    <Box sx={styles.container}>
+      <Box sx={styles.stickyBox}>
+        <Paper square sx={styles.groupsListPaper}>
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
       {currentGroup ? <CGroupChat members={members} /> : <CMainScreen />}
-      <Box sx={{ position: "sticky", top: 0 }}>
+      <Box sx={styles.stickyBox}>
         <Paper
           square
           elevation={1}
           sx={{
+            ...styles.eventsPaper,
             width: openEvents && currentGroup ? 300 : 0,
-            transition: "width 0.3s ease-in-out",
-            height: "100%",
-            overflow: "auto",
-            boxShadow: "-10px 0px 10px -5px rgba(0,0,0,0.3)",
           }}
         >
-          <Paper sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1000,
-            mb: 0.5,
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
-          }}>
+          {/* Calendar */}
+          <Paper sx={styles.calendarPaper}>
+            <CEventForm />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar
-                sx={{ width: 250, height: 230,
-                  // "& .MuiDayCalendar-weekContainer": {
-                  //   gap: "1px",
-                  // },
-                  "& .MuiPickersDay-root": {
-                    width: 25,
-                    height: 25,
-                  },
-                  "& .MuiDayCalendar-header": {
-                    justifyContent: "center",
-                    "& .MuiTypography-root": {
-                      width: 25,
-                      height: 10,
-                      fontSize: "0.55rem",
-                    },
-                  },
-                }}
-                onChange={()=>{}}
+                sx={styles.dateCalendar}
+                onChange={() => {}}
               />
             </LocalizationProvider>
           </Paper>
@@ -119,3 +87,51 @@ export function CGroupView({groups}: CProps) {
     </Box>
   );
 }
+
+const styles: MuiStyles = {
+  container: {
+    display: "flex",
+    flex: 1,
+    overflow: "auto",
+  },
+  stickyBox: {
+    position: "sticky",
+    top: 0,
+  },
+  groupsListPaper: {
+    width: 300,
+    transition: "width 0.3s ease-in-out",
+    height: "100%",
+    overflow: "auto",
+    boxShadow: "10px 0px 10px -5px rgba(0, 0, 0, 0.3)",
+  },
+  eventsPaper: {
+    transition: "width 0.3s ease-in-out",
+    height: "100%",
+    overflow: "auto",
+    boxShadow: "-10px 0px 10px -5px rgba(0,0,0,0.3)",
+  },
+  calendarPaper: {
+    position: "sticky",
+    top: 0,
+    zIndex: 1000,
+    mb: 0.5,
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+  },
+  dateCalendar: {
+    width: 250,
+    height: 230,
+    "& .MuiPickersDay-root": {
+      width: 25,
+      height: 25,
+    },
+    "& .MuiDayCalendar-header": {
+      justifyContent: "center",
+      "& .MuiTypography-root": {
+        width: 25,
+        height: 10,
+        fontSize: "0.55rem",
+      },
+    },
+  },
+};

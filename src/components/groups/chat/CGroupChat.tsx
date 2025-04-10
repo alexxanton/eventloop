@@ -1,5 +1,5 @@
 import { CEventForm } from "@/components/events/form/CEventForm";
-import { Close, Settings, Send } from "@mui/icons-material";
+import { Close, Send } from "@mui/icons-material";
 import { Box, Typography, IconButton, TextField, keyframes } from "@mui/material";
 import { CMessageBubble } from "./CMessageBubble";
 import { MembersType, MessageType, MuiStyles } from "@/utils/types/types";
@@ -8,6 +8,7 @@ import { supabase } from "@/utils/supabase";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
 import { CGroupSettings } from "../CGroupSettings";
+import { CalendarIcon } from "@mui/x-date-pickers";
 
 export function CGroupChat({members}: {members: MembersType[]}) {
   const { currentGroup, setCurrentGroup, toggleOpenEvents } = useStore();
@@ -98,11 +99,10 @@ export function CGroupChat({members}: {members: MembersType[]}) {
           <IconButton onClick={() => setCurrentGroup(null)}>
             <Close />
           </IconButton>
-          <IconButton onClick={toggleOpenEvents}>
-            <Settings />
-          </IconButton>
           <CGroupSettings members={members} />
-          <CEventForm />
+          <IconButton onClick={toggleOpenEvents}>
+            <CalendarIcon />
+          </IconButton>
         </Box>
         <Box sx={styles.messagesBox} ref={scrollToBottomRef}>
           {messages?.map((msg, index, array) => {
@@ -110,6 +110,8 @@ export function CGroupChat({members}: {members: MembersType[]}) {
           })}
         </Box>
       </Box>
+
+      {/* Message Input */}
       <footer>
         <Box sx={styles.footer}>
           <Box sx={styles.inputBox}>

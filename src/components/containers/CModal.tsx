@@ -79,7 +79,8 @@ const styles: MuiStyles = {
     flexGrow: 1,
   },
   box: {
-    width: 400,
+    width: "70%",
+    maxWidth: 700,
     borderRadius: 2,
     boxShadow: 5,
     display: "flex",

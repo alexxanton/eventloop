@@ -66,7 +66,8 @@ export function CEventForm() {
       <CModal title="Create new event" buttonType="icon" ButtonContent={CalendarToday}>
         <form onSubmit={handleSubmit}>
           <Box sx={styles.formBox}>
-            <CEventDetailsSection
+            <Box width={{ xs: "100%", sm: "50%" }}>
+              <CEventDetailsSection
               name={name}
               setName={setName}
               description={description}
@@ -75,27 +76,30 @@ export function CEventForm() {
               setCategory={setCategory}
               location={location}
               setLocation={setLocation}
-            />
-            <CDateTimeSection
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-            />
-            <CPricingSection
-              price={price}
-              setPrice={setPrice}
-              currency={currency}
-              setCurrency={setCurrency}
-            />
-            <CAdditionalInfoSection
-              dressCode={dressCode}
-              setDressCode={setDressCode}
-              maxCapacity={maxCapacity}
-              setMaxCapacity={setMaxCapacity}
-              ageLimit={ageLimit}
-              setAgeLimit={setAgeLimit}
-            />
+              />
+            </Box>
+            <Box width={{ xs: "100%", sm: "50%" }}>
+              <CDateTimeSection
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+              />
+              <CPricingSection
+                price={price}
+                setPrice={setPrice}
+                currency={currency}
+                setCurrency={setCurrency}
+              />
+              <CAdditionalInfoSection
+                dressCode={dressCode}
+                setDressCode={setDressCode}
+                maxCapacity={maxCapacity}
+                setMaxCapacity={setMaxCapacity}
+                ageLimit={ageLimit}
+                setAgeLimit={setAgeLimit}
+              />
+            </Box>
             {error && (
               <Typography color="error" sx={{ mt: 2 }}>
                 {error}
@@ -116,19 +120,19 @@ export function CEventForm() {
 const styles: MuiStyles = {
   formBox: {
     display: "flex",
-    flexDirection: "column",
     p: 2,
-    gap: 3,
+    gap: {xs: 0, sm: 5},
     overflowY: "auto",
     height: "70vh",
-    pb: 3
+    pb: 3,
+    flexDirection: { xs: "column", sm: "row" },
   },
   footer: {
     display: "flex",
     justifyContent: "flex-end",
     flex: 1,
     p: 2,
-    height: 40
+    height: 40,
   },
   button: {
     bgcolor: "primary.main",
@@ -136,6 +140,6 @@ const styles: MuiStyles = {
     position: "relative",
     top: -40,
     right: 20,
-    height: "fit-content"
+    height: "fit-content",
   },
 };
