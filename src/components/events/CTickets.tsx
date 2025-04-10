@@ -1,6 +1,7 @@
 "use client";
 import { TicketType } from "@/utils/types/types";
 import { Box, Typography } from "@mui/material";
+import  QRCode  from "qrcode.react";
 
 export function CTickets({tickets}: {tickets: TicketType[]}) {
   if (!tickets || tickets.length === 0) {
@@ -32,12 +33,13 @@ export function CTickets({tickets}: {tickets: TicketType[]}) {
             mx: "auto"
           }}
         >
-          {/* <QRCode 
+          { <QRCode 
             value={JSON.stringify(ticket)} 
             size={200}
             level="H" // Nivel de corrección de errores (High)
             includeMargin={true}
-          /> */}
+          /> }
+          
           <Box sx={{ mt: 2}}>
             <Typography>Event: {ticket.event.name}</Typography>
             <Typography>Date: {new Date(ticket.event.start_date).toLocaleString()}</Typography>
