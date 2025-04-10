@@ -2,6 +2,7 @@
 import { TicketType } from "@/utils/types/types";
 import { Box, Typography } from "@mui/material";
 import QRCode from 'react-qr-code';
+import React from 'react';
 
 export function CTickets({tickets}: {tickets: TicketType[]}) {
   if (!tickets || tickets.length === 0) {
@@ -37,7 +38,6 @@ export function CTickets({tickets}: {tickets: TicketType[]}) {
             value={JSON.stringify(ticket)} 
             size={200}
             level="H" // Nivel de corrección de errores (High)
-            includeMargin={true}
           /> }
           
           <Box sx={{ mt: 2}}>

@@ -26,14 +26,14 @@ export default async function Page() {
   console.log(user);
   
 
-  if (!user) {
-    return <div>You need to be logged in.</div>;
-  }
+  // if (!user) {
+  //   return <div>You need to be logged in.</div>;
+  // }
 
   const { data } = await supabase
     .from("tickets")
     .select("*, events!inner(*)")
-    .eq("user_id", user.id);
+    // .eq("user_id", user.id);
 
   const tickets = data?.map(({ events, ...rest }) => ({
     ...rest,
