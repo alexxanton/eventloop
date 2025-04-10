@@ -1,5 +1,5 @@
 "use client";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase/supabase";
 import { EventType, FormEvent, MuiStyles } from "@/utils/types/types";
 import { Check, Edit } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";

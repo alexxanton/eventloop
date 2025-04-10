@@ -1,7 +1,7 @@
 "use client";
 import { CAccount } from "@/components/account/CAccount";
 import { CLogin } from "@/components/account/CLogin";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase/supabase";
 import { Container, Box, CircularProgress } from "@mui/material";
 import { User } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";

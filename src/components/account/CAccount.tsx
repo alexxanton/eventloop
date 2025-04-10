@@ -2,7 +2,7 @@
 import { useState } from "react";
 // import { useRouter } from "next/router";
 import { Container, Avatar, Typography, CircularProgress, Box, IconButton } from "@mui/material";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase/supabase";
 import { User } from "@supabase/supabase-js";
 import { useStore } from "@/utils/zustand";
 import { DarkMode, LightMode } from "@mui/icons-material";

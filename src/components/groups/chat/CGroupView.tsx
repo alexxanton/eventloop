@@ -8,7 +8,7 @@ import { EventType, GroupType, MembersType, MuiStyles } from '@/utils/types/type
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/utils/supabase';
+import { supabase } from '@/utils/supabase/supabase';
 import { useUser } from '@/utils/hooks/useUser';
 import { CEventCard } from './CEventCard';
 import { CEventForm } from '@/components/events/form/CEventForm';
@@ -67,13 +67,15 @@ export function CGroupView({groups}: CProps) {
         >
           {/* Calendar */}
           <Paper sx={styles.calendarPaper}>
-            <CEventForm />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar
                 sx={styles.dateCalendar}
                 onChange={() => {}}
               />
             </LocalizationProvider>
+            <Box sx={styles.new}>
+              <CEventForm />
+            </Box>
           </Paper>
           {events.map((e, index) => {
             return (
@@ -117,6 +119,11 @@ const styles: MuiStyles = {
     zIndex: 1000,
     mb: 0.5,
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+  },
+  new: {
+    position: "absolute",
+    right: 0,
+    transform: "translateY(-40px)",
   },
   dateCalendar: {
     width: 250,

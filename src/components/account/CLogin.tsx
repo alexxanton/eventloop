@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useStore } from "@/utils/zustand";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase/supabase";
 import { FormEvent } from "@/utils/types/types";
 
 export function CLogin() {

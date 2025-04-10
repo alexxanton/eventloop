@@ -1,10 +1,9 @@
-import { CEventForm } from "@/components/events/form/CEventForm";
 import { Close, Send } from "@mui/icons-material";
 import { Box, Typography, IconButton, TextField, keyframes } from "@mui/material";
 import { CMessageBubble } from "./CMessageBubble";
 import { MembersType, MessageType, MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase/supabase";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
 import { CGroupSettings } from "../CGroupSettings";

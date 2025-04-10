@@ -1,7 +1,7 @@
 "use client";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase/supabase";
 import { FormEvent, MuiStyles } from "@/utils/types/types";
-import { Check, CalendarToday } from "@mui/icons-material";
+import { Check, Add } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import { CModal } from "../../containers/CModal";
@@ -61,9 +61,13 @@ export function CEventForm() {
     }
   };
 
+  const CreateButton = () => (
+      <Typography>aaaaa</Typography>
+    );
+
   return (
     <Box display="flex">
-      <CModal title="Create new event" buttonType="icon" ButtonContent={CalendarToday}>
+      <CModal title="Create new event" buttonType="icon" ButtonContent={Add}>
         <form onSubmit={handleSubmit}>
           <Box sx={styles.formBox}>
             <Box width={{ xs: "100%", sm: "50%" }}>
