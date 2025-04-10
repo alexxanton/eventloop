@@ -1,7 +1,7 @@
 "use client";
 import { TicketType } from "@/utils/types/types";
 import { Box, Typography } from "@mui/material";
-import  QRCode  from "qrcode.react";
+import QRCode from 'react-qr-code';
 
 export function CTickets({tickets}: {tickets: TicketType[]}) {
   if (!tickets || tickets.length === 0) {
