@@ -4,6 +4,7 @@ import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase/supabase";
 import { FormEvent } from "@/utils/types/types";
+import { login, signup } from "@/app/login/actions";
 
 export function CLogin() {
   const { setUserId } = useStore();
@@ -16,12 +17,24 @@ export function CLogin() {
     event.preventDefault();
     setError(null);
 
-    const { error } = isSignUp
-      ? await supabase.auth.signUp({ email, password })
-      : await supabase.auth.signInWithPassword({ email, password });
+    isSignUp
+      ? await (() => {
+          const formData = new FormData();
+          formData.append("email", email);
+          formData.append("password", password);
+          return signup(formData);
+        })()
+      : await (() => {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+        return login(formData);
+      })()
+      // ? await supabase.auth.signUp({ email, password })
+      // : await supabase.auth.signInWithPassword({ email, password });
     
     if (error) {
-      setError(error.message);
+      // setError(error.message);
     } else {
       alert(isSignUp ? "Sign-up successful!" : "Login successful!");
       setUserId("");
