@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import { useUser } from '@/utils/hooks/useUser';
 import { CEventCard } from './CEventCard';
-import { CEventForm } from '@/components/events/form/CEventForm';
+import { CEventFormModal } from '@/components/events/form/CEventFormModal';
 
 type CProps = {
   groups: GroupType[] | null;
@@ -74,7 +74,7 @@ export function CGroupView({groups}: CProps) {
               />
             </LocalizationProvider>
             <Box sx={styles.new}>
-              <CEventForm />
+              <CEventFormModal />
             </Box>
           </Paper>
           {events.map((e, index) => {
@@ -140,5 +140,13 @@ const styles: MuiStyles = {
         fontSize: "0.55rem",
       },
     },
-  },
+    "& .MuiYearCalendar-root": {
+      gap: "1px",
+    },
+    "& .MuiPickersYear-yearButton": {
+      width: "40px",
+      fontSize: "0.8rem",
+      borderRadius: "8px",
+    },
+  }
 };

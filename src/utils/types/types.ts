@@ -25,6 +25,7 @@ export type EventType = {
     start_date: Date;
     end_date: Date;
     price: number;
+    currency: string;
     dress_code: string;
     max_capacity: number;
     age_limit: number;

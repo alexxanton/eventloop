@@ -9,9 +9,10 @@ import { grey } from "@mui/material/colors";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function CNewGroupButton() {
+export function CNewGroupModal() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [open, setOpen] = useState(false);
   const userId = useUser()?.id;
   const router = useRouter();
 
@@ -21,9 +22,9 @@ export function CNewGroupButton() {
     const group = {
       name,
       description,
-      is_public: true
+      is_public: true,
     };
-    
+
     const { data } = await supabase.from("groups").insert([group]).select();
 
     if (data) {
@@ -33,13 +34,16 @@ export function CNewGroupButton() {
         user_id: userId,
         role: "owner",
       };
-  
+
       const { error } = await supabase.from("group_members").insert([owner]);
 
       if (error) {
-        alert(error.message)
+        alert(error.message);
       }
 
+      setOpen(false);
+      setName("");
+      setDescription("");
       router.refresh();
     }
   };
@@ -54,8 +58,15 @@ export function CNewGroupButton() {
   );
 
   return (
-    <ListItem sx={{ position: "sticky", top: 0, borderBottom: "1px solid", borderBottomColor: grey[400] }} disablePadding>
-      <CModal title="Create new group" buttonType="list" ButtonContent={CreateButton}>
+    <ListItem sx={styles.list} disablePadding>
+      <CModal
+        title="Create new group"
+        buttonType="list"
+        ButtonContent={CreateButton}
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+      >
         <Box sx={styles.box}>
           <Typography variant="body1" sx={{ mb: 2 }}>
             Enter the name of the new group and start collaborating!
@@ -90,6 +101,7 @@ export function CNewGroupButton() {
   );
 }
 
+
 const styles: MuiStyles = {
   box: {
     p: 3,
@@ -98,5 +110,13 @@ const styles: MuiStyles = {
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-  }
+  },
+  list: {
+    bgcolor: "background.paper",
+    position: "sticky",
+    top: 0,
+    borderBottom: "1px solid",
+    borderBottomColor: grey[400],
+    zIndex: 1000
+  },
 };

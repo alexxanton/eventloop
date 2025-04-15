@@ -6,7 +6,7 @@ import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase/supabase";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
-import { CGroupSettings } from "../CGroupSettings";
+import { CGroupSettingsModal } from "../CGroupSettingsModal";
 import { CalendarIcon } from "@mui/x-date-pickers";
 
 export function CGroupChat({members}: {members: MembersType[]}) {
@@ -35,7 +35,8 @@ export function CGroupChat({members}: {members: MembersType[]}) {
       const { data: messages } = await supabase
         .from("messages")
         .select("*")
-        .eq("group_id", currentGroup?.id);
+        .eq("group_id", currentGroup?.id)
+        .order("id");
 
       if (messages) {
         setMessages(messages);
@@ -98,7 +99,7 @@ export function CGroupChat({members}: {members: MembersType[]}) {
           <IconButton onClick={() => setCurrentGroup(null)}>
             <Close />
           </IconButton>
-          <CGroupSettings members={members} />
+          <CGroupSettingsModal members={members} />
           <IconButton onClick={toggleOpenEvents}>
             <CalendarIcon />
           </IconButton>

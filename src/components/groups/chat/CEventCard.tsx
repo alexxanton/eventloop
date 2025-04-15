@@ -1,8 +1,9 @@
-import { CEventEditForm } from "@/components/events/form/CEventEditForm";
 import { EventType } from "@/utils/types/types";
-import { List, CalendarToday } from "@mui/icons-material";
+import { RemoveRedEye } from "@mui/icons-material";
 import { Box, Typography, IconButton, Paper } from "@mui/material";
 import Link from "next/link";
+import { CAttendanceListModal } from "../list/CAttendanceListModal";
+import { CEventFormModal } from "@/components/events/form/CEventFormModal";
 
 // const getEventColor = (eventType: string) => {
 //   const colors: Record<string, string> = {
@@ -43,19 +44,17 @@ export const CEventCard = ({ event, userRole }: { event: EventType; userRole: st
               {new Date(event.start_date).toLocaleString().split(",")[0]} • {event.location}
             </Typography>
           </Box>
-          <Box>{userRole === "owner" ? <CEventEditForm event={event} /> : null}</Box>
+          <Box>{userRole === "owner" ? <CEventFormModal event={event} /> : null}</Box>
         </Box>
 
         {/* Icons */}
         <Box sx={{ display: "flex", gap: 1 }}>
           <Link href={`/events/${event.id}`}>
             <IconButton>
-              <CalendarToday />
+              <RemoveRedEye />
             </IconButton>
           </Link>
-          <IconButton>
-            <List />
-          </IconButton>
+          <CAttendanceListModal />
         </Box>
       </Box>
     </Paper>

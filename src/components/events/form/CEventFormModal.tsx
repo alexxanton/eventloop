@@ -1,30 +1,33 @@
 "use client";
 import { supabase } from "@/utils/supabase/supabase";
-import { FormEvent, MuiStyles } from "@/utils/types/types";
-import { Check, Add } from "@mui/icons-material";
+import { EventType, FormEvent, MuiStyles } from "@/utils/types/types";
+import { Check, Add, Edit } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import { CModal } from "../../containers/CModal";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { CAdditionalInfoSection } from "./sections/CAdditionalInfoSection";
 import { CEventDetailsSection } from "./sections/CEventDetailsSection";
 import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
+import { useStore } from "@/utils/zustand";
 
-export function CEventForm() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
-  const [location, setLocation] = useState("");
-  const [price, setPrice] = useState("");
-  const [currency, setCurrency] = useState("EUR");
-  const [category, setCategory] = useState("");
+export function CEventFormModal({event}: {event?: EventType}) {
+  const { currentGroup } = useStore();
+  const [name, setName] = useState(event?.name || "");
+  const [description, setDescription] = useState(event?.description || "");
+  const [startDate, setStartDate] = useState<Dayjs | null>(event?.start_date ? dayjs(event.start_date) : null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(event?.start_date ? dayjs(event.end_date) : null);
+  const [location, setLocation] = useState(event?.location || "");
+  const [price, setPrice] = useState(event?.price?.toString() || "");
+  const [currency, setCurrency] = useState(event?.currency || "EUR");
+  const [category, setCategory] = useState(event?.category || "");
+  const [maxCapacity, setMaxCapacity] = useState<number | null>(event?.max_capacity || null);
+  const [ageLimit, setAgeLimit] = useState<number | null>(event?.age_limit || null);
+  const [dressCode, setDressCode] = useState(event?.dress_code || "");
   const [error, setError] = useState("");
-  const [maxCapacity, setMaxCapacity] = useState<number | null>(null);
-  const [ageLimit, setAgeLimit] = useState<number | null>(null);
-  const [dressCode, setDressCode] = useState("");
+  const [open, setOpen] = useState(false);
   const isDarkMode = useDarkMode();
 
   const handleSubmit = async (event: FormEvent) => {
@@ -36,7 +39,7 @@ export function CEventForm() {
     }
 
     const newEvent = {
-      group_id: 1,
+      group_id: currentGroup?.id,
       name,
       description,
       start_date: startDate.toDate(),
@@ -52,7 +55,7 @@ export function CEventForm() {
     console.log(newEvent);
 
     try {
-      const { error } = await supabase.from("events").insert([newEvent]);
+      const { error } = await supabase.from("events").upsert([newEvent]);
       if (error) throw error;
       setError("");
     } catch (err) {
@@ -61,25 +64,28 @@ export function CEventForm() {
     }
   };
 
-  const CreateButton = () => (
-      <Typography>aaaaa</Typography>
-    );
-
   return (
     <Box display="flex">
-      <CModal title="Create new event" buttonType="icon" ButtonContent={Add}>
+      <CModal
+        title="Create new event"
+        buttonType="icon"
+        ButtonContent={event ? Edit : Add}
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+      >
         <form onSubmit={handleSubmit}>
           <Box sx={styles.formBox}>
             <Box width={{ xs: "100%", sm: "50%" }}>
               <CEventDetailsSection
-              name={name}
-              setName={setName}
-              description={description}
-              setDescription={setDescription}
-              category={category}
-              setCategory={setCategory}
-              location={location}
-              setLocation={setLocation}
+                name={name}
+                setName={setName}
+                description={description}
+                setDescription={setDescription}
+                category={category}
+                setCategory={setCategory}
+                location={location}
+                setLocation={setLocation}
               />
             </Box>
             <Box width={{ xs: "100%", sm: "50%" }}>

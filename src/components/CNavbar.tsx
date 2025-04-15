@@ -9,7 +9,7 @@ const sections = [
   {name: "Home", link: "/", icon: House},
   {name: "Settings", link: "/login", icon: Settings},
   {name: "Search Events", link: "/events", icon: Event},
-  {name: "Tickets", link: "/tickets", icon: ConfirmationNumber },
+  {name: "My Tickets", link: "/tickets", icon: ConfirmationNumber },
 ];
 
 export function CNavbar() {
