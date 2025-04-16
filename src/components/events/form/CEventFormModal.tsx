@@ -30,8 +30,8 @@ export function CEventFormModal({event}: {event?: EventType}) {
   const [open, setOpen] = useState(false);
   const isDarkMode = useDarkMode();
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
 
     if (!name || !startDate) {
       setError("Please fill out all required fields.");
@@ -39,6 +39,7 @@ export function CEventFormModal({event}: {event?: EventType}) {
     }
 
     const newEvent = {
+      id: event?.id,
       group_id: currentGroup?.id,
       name,
       description,
@@ -55,8 +56,11 @@ export function CEventFormModal({event}: {event?: EventType}) {
     console.log(newEvent);
 
     try {
-      const { error } = await supabase.from("events").upsert([newEvent]);
+      const { error } = await supabase.from("events").upsert(newEvent);
       if (error) throw error;
+      setOpen(false);
+      setName("");
+      setDescription("");
       setError("");
     } catch (err) {
       setError("Failed to create event. Please try again.");

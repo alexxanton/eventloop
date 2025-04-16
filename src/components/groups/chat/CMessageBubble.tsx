@@ -17,13 +17,24 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
   const theme = useTheme();
   const prev = index > 0 ? array[index - 1] : null;
   const isCurrentUser = msg.user_id === userId;
-  const isFirstInGroup = prev?.user_id !== msg.user_id;
+  const isSameDate = msg.sent_at.split("T")[0] === prev?.sent_at.split("T")[0];
+  const isFirstInGroup = msg.user_id !== prev?.user_id || !isSameDate;
+  
   const tailBorder = isCurrentUser ? currentUserBorderRadius : otherUserBorderRadius;
   const borderRadius = isFirstInGroup ? tailBorder : defaultBorderRadius;
   const otherUserTailColor = theme.palette.mode === "dark" ? grey[900] : "background.paper";
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box sx={styles.box}>
+      {!isSameDate && (
+        <Box display="flex" flexDirection="column">
+          <Paper sx={styles.date}>
+            <Typography variant="caption">
+              {msg.sent_at.split("T")[0]}
+            </Typography>
+          </Paper>
+        </Box>
+      )}
       <Box
         key={index}
         sx={{
@@ -59,13 +70,12 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
             color: isCurrentUser ? "white" : "",
             mt: !isFirstInGroup ? 0.35 : 1,
             borderRadius: borderRadius,
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
           }}
         >
           {isFirstInGroup && !isCurrentUser && <small>{"@" + msg.user_id}</small>}
           <Box display="flex" gap={1}>
             <Typography marginBlockEnd={1} variant="body1">{msg.message}</Typography>
-            <Box sx={styles.date}>
+            <Box sx={styles.time}>
               <Typography
                 component="small"
                 variant="caption"
@@ -84,12 +94,15 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
 const styles: MuiStyles = {
   box: {
     display: "flex",
+    flexDirection: "column"
   },
   messagePaper: {
     maxWidth: "fit-content",
     p: 1,
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
     // height: "fit-content",
-    // zIndex: 1000
+    // zIndex: 1000,
+    // "& MuiTypography-root MuiTypography-body1": {}
   },
   tail: {
     width: 0,
@@ -97,6 +110,12 @@ const styles: MuiStyles = {
     mt: 1,
   },
   date: {
+    width: "fit-content",
+    px: 1,
+    alignSelf: "center",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+  },
+  time: {
     display: "flex",
     flexDirection: "column",
     flex: 1,

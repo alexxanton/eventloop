@@ -173,6 +173,7 @@ const styles: MuiStyles = {
     flexDirection: "row",
     alignItems: "center",
     mb: 1,
+    pr: 2,
   },
   typography: {
     flexGrow: 1,
@@ -182,6 +183,7 @@ const styles: MuiStyles = {
     flexDirection: "column",
     flexGrow: 1,
     overflowY: "auto",
+    py: 2,
     mb: 1,
     wordBreak: "break-word",
   },
