@@ -16,24 +16,16 @@ export function CLogin() {
     event.preventDefault();
     setError(null);
 
-    isSignUp
-      ? await (() => {
-          const formData = new FormData();
-          formData.append("email", email);
-          formData.append("password", password);
-          return signup(formData);
-        })()
-      : await (() => {
-        const formData = new FormData();
-        formData.append("email", email);
-        formData.append("password", password);
-        return login(formData);
-      })()
-      // ? await supabase.auth.signUp({ email, password })
-      // : await supabase.auth.signInWithPassword({ email, password });
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    const error = isSignUp
+      ? (await signup(formData))
+      : (await login(formData));
     
     if (error) {
-      // setError(error.message);
+      setError(error.message);
     } else {
       alert(isSignUp ? "Sign-up successful!" : "Login successful!");
       setUserId("");
