@@ -30,7 +30,11 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
         <Box display="flex" flexDirection="column">
           <Paper sx={styles.date}>
             <Typography variant="caption">
-              {msg.sent_at.split("T")[0]}
+              {new Date(msg.sent_at).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
             </Typography>
           </Paper>
         </Box>

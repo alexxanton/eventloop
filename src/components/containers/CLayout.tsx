@@ -3,7 +3,7 @@ import { Box, CssBaseline, Toolbar } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { useStore } from "@/utils/zustand";
-import { CNavbar } from "../CNavbar";
+import { CNavbar } from "../ui/CNavbar";
 
 export function CLayout({children}: Readonly<{children: React.ReactNode}>) {
   const { theme } = useStore();
