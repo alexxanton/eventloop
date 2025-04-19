@@ -35,8 +35,11 @@ export function CGroupView({groups}: CProps) {
 
       const { data: members } = await supabase
         .from("group_members")
-        .select("*")
-        .eq("group_id", currentGroup?.id);
+        .select("*, profiles(username)")
+        .eq("group_id", currentGroup?.id)
+        .throwOnError();
+
+        console.log(members)
         
       if (events && members) {
         setEvents(events);

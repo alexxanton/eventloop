@@ -16,7 +16,7 @@ export default async function Home() {
     .select("*, group_members!inner(*)")
     .eq("group_members.user_id", user.id)
 
-  console.log(groups)
+  // console.log(groups)
 
   return <CGroupView groups={groups} />;
 }

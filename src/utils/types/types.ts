@@ -35,4 +35,9 @@ export type MembersType = {
     user_id: string;
     group_id: number;
     role: string;
+    profiles: ProfileType;
+};
+
+export type ProfileType = {
+    username: string;
 };
