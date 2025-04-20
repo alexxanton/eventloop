@@ -4,7 +4,7 @@ import { Event, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Check
 import { EventType } from "@/utils/types/types";
 import { supabase } from "@/utils/supabase/supabase";
 import { useUser } from "@/utils/hooks/useUser";
-import { createHash } from "crypto";
+import { MuiStyles } from "@/utils/types/types";
 
 export function CEvent({event}: {event: EventType | null}) {
   const theme = useTheme();
@@ -24,15 +24,9 @@ export function CEvent({event}: {event: EventType | null}) {
   // });
 
   const handleJoinEvent = async () => {
-    const ticketNumber = createHash("sha256")
-      .update(`${userId}-${event?.id}`)
-      .digest("hex")
-      .substring(0, 16);
-
     const ticket = {
       user_id: userId,
-      event_id: event?.id,
-      ticket_number: ticketNumber,
+      event_id: event?.id
     };
     
     const { error } = await supabase.from("tickets").insert([ticket]);
@@ -52,154 +46,192 @@ export function CEvent({event}: {event: EventType | null}) {
     });
   };
 
-  if (!event) {
-    return (null);
-  }
+  if (!event) return null;
 
   return (
-    <Box sx={{ overflowY: "scroll" }}>
-    <Container maxWidth="md" sx={{ py: 4, position: "relative" }}>
-      {/* Header Section */}
-      <Box sx={{ display: "flex", alignItems: "center", mb: 4, gap: 2 }}>
-        <Typography variant="h3" fontWeight="bold" sx={{ flex: 1 }}>
-          {event.name}
-        </Typography>
-        <Chip label={event.category} color="primary" sx={{ ml: 2 }} />
-      </Box>
+    <Box sx={styles.box}>
+      <Container  sx={styles.container}>
+        {/* Header */}
+        <Box sx={styles.headerBox}>
+          <Typography variant="h3" fontWeight="bold" sx={styles.eventTitle}>
+            {event.name}
+          </Typography>
+          <Chip label={event.category} color="primary" sx={styles.categoryChip} />
+        </Box>
 
-      {/* Cover Image Area */}
-      <Paper sx={{
-        height: isMobile ? 200 : 350,
-        borderRadius: 4,
-        mb: 4,
-        background: "linear-gradient(45deg, #2c3e50 30%, #3498db 90%)",
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "white"
-      }}>
-        <Typography variant="h4" component="div" sx={{ textAlign: "center" }}>
-          <Event sx={{ fontSize: 64, mb: 2 }} />
-          <Box>{event.location}</Box>
-        </Typography>
-      </Paper>
+        {/* Cover Image */}
+        <Paper sx={styles.coverPaper}>
+          <Typography variant="h4" component="div" sx={styles.coverText}>
+            <Event sx={styles.coverIcon} />
+            <Box>{event.location}</Box>
+          </Typography>
+        </Paper>
 
-      {/* Details Section */}
-      <Box sx={{
-        display: "flex",
-        flexDirection: isMobile ? "column" : "row",
-        gap: 4,
-        mb: 4
-      }}>
-        {/* Left Column */}
-        <Paper sx={{
-          p: 4,
-          borderRadius: 4,
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          gap: 3
-        }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <LocationOn color="primary" />
-            <Typography variant="h6">{event.location}</Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <CalendarToday color="primary" />
-            <Box>
+        {/* Details Section */}
+        <Box sx={styles.detailsContainer}>
+          <Paper sx={styles.detailsPaper}>
+            <Box sx={styles.detailItem}>
+              <LocationOn color="primary" />
+              <Typography variant="h6">{event.location}</Typography>
+            </Box>
+            <Box sx={styles.detailItem}>
+              <CalendarToday color="primary" />
               <Typography variant="body1">
                 {formatDate(event.start_date)}{event.end_date && ` - ${formatDate(event.end_date)}`}
               </Typography>
             </Box>
-          </Box>
+            <Box sx={styles.detailItem}>
+              <AttachMoney color="primary" />
+              <Chip 
+                label={event.price > 0 ? `$${event.price} per person` : "Free"} 
+                color="secondary" 
+                sx={styles.priceChip}
+              />
+            </Box>
+          </Paper>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <AttachMoney color="primary" />
-            <Chip 
-              label={`$${event.price} per person`} 
-              color="secondary" 
-              sx={{ fontSize: "1.1rem", px: 2 }}
-            />
-          </Box>
+          <Paper sx={styles.detailsPaper}>
+            <Box sx={styles.detailItem}>
+              <Checkroom color="primary" />
+              <Typography variant="h6">{event.dress_code || "No dress code"}</Typography>
+            </Box>
+            <Box sx={styles.detailItem}>
+              <People color="primary" />
+              <Typography variant="body1">
+                {event.max_capacity ?? "Unlimited"} spots available
+              </Typography>
+            </Box>
+            <Box sx={styles.detailItem}>
+              <ChildCare color="primary" />
+              <Typography variant="body1">
+                Minimum age: {event.age_limit ?? "None"}
+              </Typography>
+            </Box>
+          </Paper>
+        </Box>
+
+        {/* Description */}
+        <Paper sx={styles.descriptionPaper}>
+          <Typography variant="h5" gutterBottom sx={styles.descriptionTitle}>
+            Event Description
+          </Typography>
+          <Typography variant="body1" sx={styles.descriptionText}>
+            {event.description}
+          </Typography>
         </Paper>
 
-        {/* Right Column */}
-        <Paper sx={{
-          p: 4,
-          borderRadius: 4,
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          gap: 3
-        }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Checkroom color="primary" />
-            <Typography variant="h6">{event.dress_code}</Typography>
-          </Box>
+        {/* Join Button */}
+        <Box sx={styles.joinButtonContainer}>
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<Event />}
+            onClick={handleJoinEvent}
+            sx={styles.joinButton}
+          >
+            {`Join Event (${event.price ? "$" + event.price : "Free"})`}
+          </Button>
+        </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <People color="primary" />
-            <Typography variant="body1">
-              {event.max_capacity} spots available
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <ChildCare color="primary" />
-            <Typography variant="body1">
-              Minimum age: {event.age_limit}
-            </Typography>
-          </Box>
-        </Paper>
-      </Box>
-
-      {/* Description Section */}
-      <Paper sx={{ p: 4, borderRadius: 4, mb: 4 }}>
-        <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-          Event Description
-        </Typography>
-        <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
-          {event.description}
-        </Typography>
-      </Paper>
-
-      {/* Sticky Join Button */}
-      <Box sx={{
-        position: "sticky",
-        bottom: isMobile ? 16 : 32,
-        display: "flex",
-        justifyContent: "center",
-      }}>
-        <Button
-          variant="contained"
-          size="large"
-          startIcon={<Event />}
-          onClick={handleJoinEvent}
-          sx={{
-            py: 2.5,
-            borderRadius: 4,
-            fontSize: "1.2rem",
-            boxShadow: 4
-          }}
-        >
-          {`Join Event (${event.price ? "$" + event.price : "Free"})`}
-        </Button>
-      </Box>
-
-      {/* Share Button */}
-      <IconButton sx={{
-        position: "fixed",
-        bottom: 32,
-        right: 32,
-        bgcolor: "primary.main",
-        color: "white",
-        "&:hover": { bgcolor: "primary.dark" }
-      }}>
-        <Share />
-      </IconButton>
-    </Container>
+        {/* Share Button */}
+        <IconButton sx={styles.shareButton}>
+          <Share />
+        </IconButton>
+      </Container>
     </Box>
   );
+};
+
+const styles: MuiStyles = {
+  box: { 
+    overflowY: "scroll" 
+  },
+  container: { 
+    py: 4, 
+    position: "relative" 
+  },
+  headerBox: { 
+    display: "flex", 
+    alignItems: "center", 
+    mb: 4, 
+    gap: 2 
+  },
+  eventTitle: { 
+    flex: 1 
+  },
+  categoryChip: { 
+    ml: 2 
+  },
+  coverPaper: {
+    height: { xs: 200, md: 350 },
+    borderRadius: 4,
+    mb: 4,
+    background: "linear-gradient(45deg, #2c3e50 30%, #3498db 90%)",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white"
+  },
+  coverText: { 
+    textAlign: "center" 
+  },
+  coverIcon: { 
+    fontSize: 64, 
+    mb: 2 
+  },
+  detailsContainer: {
+    display: "flex",
+    flexDirection: { xs: "column", md: "row" },
+    gap: 4,
+    mb: 4
+  },
+  detailsPaper: {
+    p: 4,
+    borderRadius: 4,
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    gap: 3
+  },
+  detailItem: { 
+    display: "flex", 
+    alignItems: "center", 
+    gap: 2 
+  },
+  priceChip: { 
+    fontSize: "1.1rem", 
+    px: 2 
+  },
+  descriptionPaper: { 
+    p: 4, 
+    borderRadius: 4, 
+    mb: 4 
+  },
+  descriptionTitle: { 
+    mb: 3 
+  },
+  descriptionText: { 
+    lineHeight: 1.7 
+  },
+  joinButtonContainer: {
+    position: "sticky",
+    bottom: { xs: 16, md: 32 },
+    display: "flex",
+    justifyContent: "center",
+  },
+  joinButton: {
+    py: 2.5,
+    borderRadius: 4,
+    fontSize: "1.2rem",
+    boxShadow: 4
+  },
+  shareButton: {
+    position: "fixed",
+    bottom: 32,
+    right: 32,
+    bgcolor: "primary.main",
+    color: "white",
+    "&:hover": { bgcolor: "primary.dark" }
+  }
 };
