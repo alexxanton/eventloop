@@ -37,6 +37,7 @@ export function CGroupView({groups}: CProps) {
         .from("group_members")
         .select("*, profiles(username)")
         .eq("group_id", currentGroup?.id)
+        .order("id")
         .throwOnError();
 
         console.log(members)

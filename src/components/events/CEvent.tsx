@@ -24,15 +24,25 @@ export function CEvent({event}: {event: EventType | null}) {
   // });
 
   const handleJoinEvent = async () => {
+    const newMember = {
+      user_id: userId,
+      group_id: event?.group_id,
+      role: "member"
+    };
+
     const ticket = {
       user_id: userId,
       event_id: event?.id
     };
-    
-    const { error } = await supabase.from("tickets").insert([ticket]);
 
-    if (error) {
-      alert(error.details);
+    const { error: memberError } = await supabase
+      .from("group_members")
+      .upsert(newMember, { onConflict: "user_id,group_id" });
+      
+    const { error: ticketError } = await supabase.from("tickets").insert(ticket);
+
+    if (memberError || ticketError) {
+      alert(memberError?.message || ticketError?.message);
     }
   };
 

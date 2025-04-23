@@ -13,10 +13,10 @@ export default async function Home() {
   
   const { data: groups } = await supabase
     .from("groups")
-    .select("*, group_members!inner(*)")
+    .select("*, group_members!inner(user_id)")
     .eq("group_members.user_id", user.id)
 
-  // console.log(groups)
+  console.log(groups)
 
   return <CGroupView groups={groups} />;
 }
