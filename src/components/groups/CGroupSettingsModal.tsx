@@ -2,14 +2,54 @@ import { MembersType, MuiStyles } from "@/utils/types/types";
 import { CModal } from "../containers/CModal";
 import { Delete, Settings } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography, Select, MenuItem, FormControl } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/utils/supabase/supabase";
+import { useStore } from "@/utils/zustand";
 
-export function CGroupSettingsModal({members}: {members: MembersType[]}) {
+export function CGroupSettingsModal() {
+  const { currentGroup } = useStore();
   const [open, setOpen] = useState(false);
+  const [members, setMembers] = useState<MembersType[]>([]);
+  const [trigger, setTrigger] = useState(true);
+
+  useEffect(() => {
+    const getMembers = async () => {
+      const { data: members } = await supabase
+        .from("group_members")
+        .select("*, profiles(username)")
+        .eq("group_id", currentGroup?.id)
+        .order("id")
+        .throwOnError();
+
+        setMembers(members);
+    };
+
+    getMembers();
+  }, [currentGroup, trigger]);
 
   const MemberRow = ({member}: {member: MembersType}) => {
-    const [role, setRole] = useState(member.role);
     const isOwner = member.role === "owner";
+
+    const handleRoleChange = async (role: string) => {
+      const { error } = await supabase
+        .from("group_members")
+        .update({role: role})
+        .eq("user_id", member.user_id)
+        .eq("group_id", member.group_id);
+
+      if (error) console.log(error.details);
+      setTrigger(!trigger);
+    };
+
+    const removeMember = async () => {
+      const { error } = await supabase
+        .from("group_members")
+        .delete()
+        .eq("user_id", member.user_id)
+        .eq("group_id", member.group_id);
+
+      setTrigger(!trigger);
+    };
 
     return (
       <Box sx={styles.memberRow}>
@@ -19,9 +59,9 @@ export function CGroupSettingsModal({members}: {members: MembersType[]}) {
         <FormControl sx={styles.roleSelect}>
           <Select
             disabled={isOwner}
-            value={role}
+            value={member.role}
             onChange={(e) => {
-              setRole(e.target.value)
+              handleRoleChange(e.target.value);
             }}
             sx={styles.select}
           >
@@ -33,7 +73,7 @@ export function CGroupSettingsModal({members}: {members: MembersType[]}) {
           </Select>
         </FormControl>
         
-        <IconButton disabled={isOwner} sx={styles.deleteButton}>
+        <IconButton onClick={removeMember} disabled={isOwner} sx={styles.deleteButton}>
           <Delete fontSize="small" />
         </IconButton>
       </Box>

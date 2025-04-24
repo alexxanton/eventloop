@@ -13,14 +13,9 @@ import { useUser } from '@/utils/hooks/useUser';
 import { CEventCard } from './CEventCard';
 import { CEventFormModal } from '@/components/events/form/CEventFormModal';
 
-type CProps = {
-  groups: GroupType[] | null;
-};
-
-export function CGroupView({groups}: CProps) {
+export function CGroupView({groups}: {groups: GroupType[] | null}) {
   const { currentGroup, openEvents } = useStore();
   const [events, setEvents] = useState<EventType[]>([]);
-  const [members, setMembers] = useState<MembersType[]>([]);
   const [currentUserRole, setCurrentUserRole] = useState<string>("");
   const userId = useUser()?.id;
 
@@ -33,20 +28,18 @@ export function CGroupView({groups}: CProps) {
         .select("*")
         // .eq("group_id", currentGroup?.id);
 
-      const { data: members } = await supabase
+      const { data: role } = await supabase
         .from("group_members")
-        .select("*, profiles(username)")
+        .select("role")
+        .eq("user_id", userId)
         .eq("group_id", currentGroup?.id)
-        .order("id")
+        .single()
         .throwOnError();
 
-        console.log(members)
         
-      if (events && members) {
+      if (events) {
         setEvents(events);
-        setMembers(members);
-        const userRole = members.find(member => member.user_id === userId)?.role;
-        setCurrentUserRole(userRole);
+        setCurrentUserRole(role.role);
       }
     };
     getGroupData();
@@ -59,7 +52,7 @@ export function CGroupView({groups}: CProps) {
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
-      {currentGroup ? <CGroupChat members={members} /> : <CMainScreen />}
+      {currentGroup ? <CGroupChat /> : <CMainScreen />}
       <Box sx={styles.stickyBox}>
         <Paper
           square

@@ -7,9 +7,7 @@ import { useUser } from "@/utils/hooks/useUser";
 import { MuiStyles } from "@/utils/types/types";
 
 export function CEvent({event}: {event: EventType | null}) {
-  const theme = useTheme();
   const userId = useUser()?.id;
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   // const [event] = useState({
   //   name: "Midnight Jazz & Wine Night",
   //   description: "An elegant evening of smooth jazz performances paired with premium wine tastings in a sophisticated atmosphere.",

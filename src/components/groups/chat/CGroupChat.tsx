@@ -9,7 +9,7 @@ import { useUser } from "@/utils/hooks/useUser";
 import { CGroupSettingsModal } from "../CGroupSettingsModal";
 import { CalendarIcon } from "@mui/x-date-pickers";
 
-export function CGroupChat({members}: {members: MembersType[]}) {
+export function CGroupChat() {
   const { currentGroup, setCurrentGroup, toggleOpenEvents } = useStore();
   // const theme = useTheme();
   const [input, setInput] = useState("");
@@ -99,7 +99,7 @@ export function CGroupChat({members}: {members: MembersType[]}) {
           <IconButton onClick={() => setCurrentGroup(null)}>
             <Close />
           </IconButton>
-          <CGroupSettingsModal members={members} />
+          <CGroupSettingsModal />
           <IconButton onClick={toggleOpenEvents}>
             <CalendarIcon />
           </IconButton>
