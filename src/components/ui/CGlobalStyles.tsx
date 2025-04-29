@@ -10,11 +10,11 @@ export const CGlobalStyles = () => (
       background: "transparent",
     },
     "*::-webkit-scrollbar-thumb": {
-      backgroundColor: "black",
+      backgroundColor: "#B892F2",
       borderRadius: "4px",
     },
     "*": {
-      scrollbarColor: "black transparent", // Firefox
+      scrollbarColor: "#B892F2 transparent", // Firefox
       scrollbarWidth: "thin",
     },
   }} />
