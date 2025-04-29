@@ -52,15 +52,18 @@ export function CGroupChat() {
       };
 
       setMessages((prevMessages) => [...prevMessages, message as MessageType]);
-
       setInput("");
+
       const { data: msg, error } = await supabase
         .from("messages")
         .insert([message])
         .select()
         .single();
 
+      console.log("insert:", msg.id)
       setLastMessageId(msg.id);
+      lastMessageIdRef.current = msg.id;
+
       if (error) {
         alert(error.message);
       }
@@ -105,8 +108,11 @@ export function CGroupChat() {
         },
         (payload) => {
           const newMessage = payload.new as MessageType;
-
-          if (newMessage.id && lastMessageIdRef.current < newMessage.id) {
+          if (!newMessage.id) return;
+          console.log("last:", lastMessageIdRef.current, "new:", newMessage.id)
+          // setLastMessageId(newMessage.id);
+          // lastMessageIdRef.current = newMessage.id;
+          if (lastMessageIdRef.current < newMessage.id) {
             getMessages();
           }
         }
