@@ -4,10 +4,12 @@ export type MuiStyles = Record<string, SxProps<Theme>>;
 export type FormEvent = React.FormEvent<HTMLFormElement>;
 
 export type MessageType = {
+    id?: number;
     user_id: string;
     group_id: number;
     message: string;
     sent_at: string;
+    profiles?: ProfileType;
 };
 
 export type GroupType = null | {

@@ -1,7 +1,7 @@
 import { Close, Send } from "@mui/icons-material";
 import { Box, Typography, IconButton, TextField, keyframes } from "@mui/material";
 import { CMessageBubble } from "./CMessageBubble";
-import { MembersType, MessageType, MuiStyles } from "@/utils/types/types";
+import { MessageType, MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase/supabase";
 import { useEffect, useRef, useState } from "react";
@@ -11,9 +11,10 @@ import { CalendarIcon } from "@mui/x-date-pickers";
 
 export function CGroupChat() {
   const { currentGroup, setCurrentGroup, toggleOpenEvents } = useStore();
-  // const theme = useTheme();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const lastMessageIdRef = useRef(0);
+  const [lastMessageId, setLastMessageId] = useState(0);
   const userId = useUser()?.id;
   const scrollToBottomRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +25,48 @@ export function CGroupChat() {
     75% { transform: rotate(-45deg) translate(7px); }
   `;
 
+  const query = supabase
+    .from("messages")
+    .select("*, profiles(username)")
+    .eq("group_id", currentGroup?.id);
+
+  const getMessages = async () => {
+    if (!currentGroup?.id) return;
+  
+    const { data: messages } = await query
+      .gt("id", lastMessageId)
+      .order("id")
+      .throwOnError();
+
+    setMessages((prevMessages) => [...prevMessages, ...messages]);
+    setLastMessageId(messages[messages.length - 1].id);
+  };
+
+  const sendMessage = async () => {
+    if (input.trim() !== "") {
+      const message = {
+        user_id: userId,
+        group_id: currentGroup?.id || 0,
+        message: input,
+        sent_at: new Date().toISOString()
+      };
+
+      setMessages((prevMessages) => [...prevMessages, message as MessageType]);
+
+      setInput("");
+      const { data: msg, error } = await supabase
+        .from("messages")
+        .insert([message])
+        .select()
+        .single();
+
+      setLastMessageId(msg.id);
+      if (error) {
+        alert(error.message);
+      }
+    }
+  };
+  
   useEffect(() => {
     if (scrollToBottomRef.current) {
       scrollToBottomRef.current.scrollTop = scrollToBottomRef.current.scrollHeight;
@@ -31,19 +74,24 @@ export function CGroupChat() {
   }, [messages]);
 
   useEffect(() => {
-    const getMessages = async () => {
-      const { data: messages } = await supabase
-        .from("messages")
-        .select("*")
-        .eq("group_id", currentGroup?.id)
-        .order("id");
+    lastMessageIdRef.current = lastMessageId;
+  }, [lastMessageId]);
 
-      if (messages) {
-        setMessages(messages);
-      }
+  useEffect(() => {
+    const getFirstMessages = async () => {
+      if (!currentGroup?.id) return;
+
+      const { data } = await query
+        .order("id", { ascending: false })
+        .limit(20)
+        .throwOnError();
+
+      const messages = data.reverse();
+      setMessages(messages);
+      setLastMessageId(messages[messages.length - 1].id);
     };
 
-    getMessages();
+    getFirstMessages();
   }, [currentGroup?.id]);
 
   useEffect(() => {
@@ -57,8 +105,9 @@ export function CGroupChat() {
         },
         (payload) => {
           const newMessage = payload.new as MessageType;
-          if (newMessage.user_id !== userId) {
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+          if (newMessage.id && lastMessageIdRef.current < newMessage.id) {
+            getMessages();
           }
         }
       )
@@ -66,26 +115,6 @@ export function CGroupChat() {
 
     return () => {supabase.removeChannel(channel)}
   }, [messages, setMessages]);
-    
-  const sendMessage = async () => {
-    if (input.trim() !== "") {
-      const message: MessageType = {
-        user_id: userId || "",
-        group_id: currentGroup?.id || 0,
-        message: input,
-        sent_at: new Date().toISOString()
-      };
-
-      setMessages((prevMessages) => [...prevMessages, message]);
-
-      setInput("");
-      const { error } = await supabase.from("messages").insert([message]);
-
-      if (error) {
-        alert(error.message);
-      }
-    }
-  };
 
   return (
     <Box sx={styles.box}>

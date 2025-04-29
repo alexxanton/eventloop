@@ -76,7 +76,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
             borderRadius: borderRadius,
           }}
         >
-          {isFirstInGroup && !isCurrentUser && <small>{"@" + msg.user_id}</small>}
+          {isFirstInGroup && !isCurrentUser && <small>{"@" + msg.profiles?.username}</small>}
           <Box display="flex" gap={1}>
             <Typography marginBlockEnd={1} variant="body1">{msg.message}</Typography>
             <Box sx={styles.time}>
