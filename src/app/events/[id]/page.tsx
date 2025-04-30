@@ -1,4 +1,4 @@
-import { CEvent } from "@/components/events/CEvent";
+import { CEventPage } from "@/components/events/CEventPage";
 import { supabase } from "@/utils/supabase/supabase";
 
 export default async function Page({params}: {params: Promise<{ id: string }>}) {
@@ -9,5 +9,5 @@ export default async function Page({params}: {params: Promise<{ id: string }>}) 
     .eq("id", id)
     .single();
   
-  return <CEvent event={event} />;
+  return <CEventPage event={event} />;
 }

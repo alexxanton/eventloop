@@ -5,18 +5,23 @@ import { Container, Avatar, Typography, CircularProgress, Box, IconButton, Butto
 import { supabase } from "@/utils/supabase/supabase";
 import { User } from "@supabase/supabase-js";
 import { useStore } from "@/utils/zustand";
-import { DarkMode, LightMode } from "@mui/icons-material";
+import { Add, DarkMode, LightMode } from "@mui/icons-material";
 
-export function CAccount({loggedUser}: {loggedUser: User}) {
+export function CAccount({ loggedUser }: { loggedUser: User }) {
   const { theme, toggleTheme } = useStore();
   const router = useRouter();
   const [user, setUser] = useState<User>(loggedUser);
   const [uploading, setUploading] = useState(false);
 
+  const joinDate = new Date(user.created_at).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/login");
-    // bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text
   };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,58 +63,205 @@ export function CAccount({loggedUser}: {loggedUser: User}) {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box mt={4} textAlign="center">
-        <label htmlFor="avatar-upload">
-          <input
-            accept="image/*"
-            id="avatar-upload"
-            type="file"
-            hidden
-            onChange={handleAvatarUpload}
-          />
-          <Avatar
-            src={user.user_metadata?.avatar_url}
-            sx={{ width: 100, height: 100, cursor: "pointer" }}
-          />
-          {uploading && (
-            <CircularProgress
-              size={24}
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: "-12px",
-                marginLeft: "-12px",
-              }}
-            />
-          )}
-        </label>
+    <Container sx={{
+      position: "relative",
+      overflow: "hidden",
+      flex: 1,
+      pt: 4,
+      "&:before": {
+        content: '""',
+        position: "absolute",
+        top: -100,
+        left: -100,
+        width: "200px",
+        height: "200px",
+        bgcolor: "primary.light",
+        clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
+        opacity: 0.1,
+        zIndex: -1
+      },
+      "&:after": {
+        content: '""',
+        position: "absolute",
+        bottom: -50,
+        right: -50,
+        width: "150px",
+        height: "150px",
+        bgcolor: "secondary.light",
+        clipPath: "circle(40% at 50% 50%)",
+        opacity: 0.5,
+        zIndex: -1
+      }
+    }}>
+      {/* Background Shapes */}
+      <Box sx={{
+        position: "absolute",
+        top: "20%",
+        right: "10%",
+        width: "80px",
+        height: "80px",
+        bgcolor: "primary.light",
+        clipPath: "polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)",
+        opacity: 0.08,
+        transform: "rotate(45deg)",
+        zIndex: -1
+      }} />
 
-        <Typography variant="h5">
-          Welcome, {user.email?.split("@")[0]}!
-        </Typography>
-        <Box>
-          <IconButton
-            size="large"
-            edge="start"
-            sx={{ color: "white", mr: 2 }}
-            aria-label="menu"
-            onClick={toggleTheme}
-          >
-            {theme !== "dark" ? <DarkMode sx={{color: "#181414"}} /> : <LightMode />}
-          </IconButton>
-        </Box>
+      {/* Hero Section */}
+      <Box sx={{
+        bgcolor: "primary.main",
+        color: "primary.contrastText",
+        py: 8,
+        position: "relative",
+        clipPath: "polygon(10% 10%, 100% 0, 90% 90%, 0 100%, 10% 10%)",
+        mb: 8,
+        "&:before": {
+          content: '""',
+          position: "absolute",
+          top: "20%",
+          left: "15%",
+          width: "60px",
+          height: "60px",
+          bgcolor: "rgba(255,255,255,0.1)",
+          clipPath: "circle(50% at 50% 50%)",
+          zIndex: 1
+        }
+      }}>
+        <Container>
+          <Box sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            position: "absolute",
+            top: 16,
+            right: 16
+          }}>
+            <IconButton
+              onClick={toggleTheme}
+              color="inherit"
+              sx={{ transition: "transform 0.3s", ":hover": { transform: "scale(1.1)" } }}
+            >
+              {theme === "dark" ? <LightMode /> : <DarkMode />}
+            </IconButton>
+          </Box>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleLogout}
-          disabled={uploading}
-        >
-          Logout
-        </Button>
+          <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            position: "relative"
+          }}>
+            {/* Avatar Upload */}
+            <Box sx={{
+              position: "relative",
+              mb: 3,
+              "&:hover .avatar-overlay": {
+                opacity: 1
+              }
+            }}>
+              <label htmlFor="avatar-upload">
+                <input
+                  accept="image/*"
+                  id="avatar-upload"
+                  type="file"
+                  hidden
+                  onChange={handleAvatarUpload}
+                />
+                <Avatar
+                  src={user.user_metadata?.avatar_url}
+                  sx={{
+                    width: 120,
+                    height: 120,
+                    border: "3px solid",
+                    borderColor: "primary.contrastText",
+                    boxShadow: 4
+                  }}
+                />
+                <Box
+                  className="avatar-overlay"
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "50%",
+                    bgcolor: "rgba(0, 0, 0, 0.4)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    opacity: 0,
+                    transition: "opacity 0.3s",
+                    cursor: "pointer"
+                  }}
+                >
+                  <Add fontSize="large" sx={{ color: "white" }} />
+                </Box>
+                {uploading && (
+                  <CircularProgress
+                    size={48}
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      color: "primary.contrastText"
+                    }}
+                  />
+                )}
+              </label>
+            </Box>
+
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 1 }}>
+              {user.email?.split("@")[0]}
+            </Typography>
+            <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
+              Member since {joinDate}
+            </Typography>
+          </Box>
+        </Container>
       </Box>
+
+      {/* Logout Button Section */}
+      <Container>
+        <Box sx={{
+          maxWidth: 400,
+          mx: "auto",
+          textAlign: "center",
+          transform: "translateY(-40px)",
+          position: "relative",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            top: "50%",
+            left: "-20%",
+            width: "40px",
+            height: "40px",
+            bgcolor: "secondary.light",
+            clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
+            opacity: 0.5
+          }
+        }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleLogout}
+            disabled={uploading}
+            size="large"
+            sx={{
+              px: 6,
+              borderRadius: 50,
+              boxShadow: 3,
+              transition: "transform 0.3s",
+              ":hover": {
+                transform: "translateY(-2px)"
+              }
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
+      </Container>
     </Container>
   );
 }

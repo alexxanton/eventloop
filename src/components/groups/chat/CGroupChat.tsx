@@ -34,7 +34,7 @@ export function CGroupChat() {
     if (!currentGroup?.id) return;
   
     const { data: messages } = await query
-      .gt("id", lastMessageId)
+      .gt("id", lastMessageIdRef.current)
       .order("id")
       .throwOnError();
 
