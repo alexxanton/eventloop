@@ -8,7 +8,7 @@ import { useStore } from "@/utils/zustand";
 import { Add, DarkMode, LightMode } from "@mui/icons-material";
 
 export function CAccount({ loggedUser }: { loggedUser: User }) {
-  const { theme, toggleTheme } = useStore();
+  const { theme, toggleTheme, setUserUrl } = useStore();
   const router = useRouter();
   const [user, setUser] = useState<User>(loggedUser);
   const [uploading, setUploading] = useState(false);
@@ -21,7 +21,8 @@ export function CAccount({ loggedUser }: { loggedUser: User }) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    setUserUrl("");
+    router.push("/");
   };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

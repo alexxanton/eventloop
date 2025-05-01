@@ -54,7 +54,7 @@ export function CNavbar() {
             sx={{ color: "white"}}
             aria-label="menu"
           >
-            <Avatar src={userUrl} />
+            <Avatar src={userUrl} sx={{ outline: "2px solid white" }} />
           </IconButton>
         </Link>
       </Toolbar>
