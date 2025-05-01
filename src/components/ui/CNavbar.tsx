@@ -4,7 +4,7 @@ import { Menu, House, Settings, Event, ConfirmationNumber  } from '@mui/icons-ma
 import { useState } from "react";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import React from "react";
-import { useUser } from "@/utils/hooks/useUser";
+import { useStore } from "@/utils/zustand";
 
 const sections = [
   {name: "Home", link: "/", icon: House},
@@ -17,7 +17,7 @@ export function CNavbar() {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(hover: hover) and (pointer: fine)");
   const isDarkMode = useDarkMode();
-  const user = useUser();
+  const { userUrl } = useStore();
 
   const toggleSidebar = (open: boolean) => {
     setOpen(open);
@@ -54,7 +54,7 @@ export function CNavbar() {
             sx={{ color: "white"}}
             aria-label="menu"
           >
-            <Avatar src={user?.user_metadata?.avatar_url} />
+            <Avatar src={userUrl} />
           </IconButton>
         </Link>
       </Toolbar>

@@ -48,6 +48,7 @@ export function CGroupSettingsModal() {
         .eq("user_id", member.user_id)
         .eq("group_id", member.group_id);
 
+      if (error) console.log(error.details);
       setTrigger(!trigger);
     };
 

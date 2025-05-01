@@ -4,7 +4,7 @@ import { Box, Paper } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CMainScreen } from './CMainScreen';
-import { EventType, GroupType, MembersType, MuiStyles } from '@/utils/types/types';
+import { EventType, GroupType, MuiStyles } from '@/utils/types/types';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
