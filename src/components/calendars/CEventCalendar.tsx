@@ -26,23 +26,98 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
   });
 
   const calendarStyles = {
+    "& .fc": {
+      fontFamily: theme.typography.fontFamily,
+      "--fc-border-color": theme.palette.divider,
+    },
     "& .fc-button": {
       borderRadius: "20px !important",
-      backgroundColor: `${theme.palette.primary.main} !important`,
+      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main}) !important`,
       border: "none !important",
       margin: "0 5px !important",
+      transition: "all 0.3s !important",
       "&:hover": {
-        backgroundColor: `${theme.palette.primary.dark} !important`
+        transform: "translateY(-2px)",
+        boxShadow: `${theme.shadows[4]} !important`,
+        background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark}) !important`
       }
     },
     "& .fc-button-active": {
-      backgroundColor: `${theme.palette.primary.dark} !important`
+      boxShadow: `${theme.shadows[4]} !important`
+    },
+    "& .fc-toolbar-title": {
+      fontSize: "1.5rem",
+      fontWeight: 700,
+      color: theme.palette.text.primary,
+      textShadow: `0 2px 4px ${theme.palette.action.hover}`
+    },
+    "& .fc-daygrid-day": {
+      background: `repeating-linear-gradient(
+        45deg,
+        ${theme.palette.action.hover},
+        ${theme.palette.action.hover} 2px,
+        transparent 2px,
+        transparent 8px
+      )`,
+      "&:hover": {
+        background: theme.palette.action.hover
+      }
     },
     "& .fc-day-today": {
-      backgroundColor: `${theme.palette.secondary.light} !important`,
-      color: theme.palette.secondary.contrastText,
-      opacity: 0.9,
+      background: `${theme.palette.secondary.light} !important`,
       boxShadow: `inset 0 0 0 2px ${theme.palette.secondary.main}`,
+      "& .fc-daygrid-day-number": {
+        color: theme.palette.secondary.contrastText,
+        fontWeight: 700
+      }
+    },
+    "& .fc-event": {
+      borderRadius: "8px !important",
+      border: "none !important",
+      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main}) !important`,
+      boxShadow: theme.shadows[2],
+      transition: "all 0.3s",
+      "&:hover": {
+        boxShadow: theme.shadows[6],
+        transform: "translateY(-2px)"
+      }
+    },
+    "& .fc-view-harness": {
+      [theme.breakpoints.down("md")]: {
+        height: "auto!important",
+        minHeight: "600px"
+      }
+    },
+    "& .fc-daygrid-day-frame": {
+      [theme.breakpoints.down("md")]: {
+        minHeight: "60px!important",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    },
+    "& .fc-daygrid-day-number": {
+      [theme.breakpoints.down("md")]: {
+        fontSize: "1.2rem!important",
+        padding: "8px!important"
+      }
+    },
+    "& .fc-col-header-cell-cushion": {
+      [theme.breakpoints.down("md")]: {
+        fontSize: "0.8rem!important",
+        padding: "4px!important"
+      }
+    },
+    "& .fc-toolbar": {
+      [theme.breakpoints.down("md")]: {
+        flexDirection: "column",
+        gap: "16px"
+      }
+    },
+    "& .fc-header-toolbar": {
+      [theme.breakpoints.down("md")]: {
+        marginBottom: "8px!important"
+      }
     }
   };
 
@@ -221,7 +296,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
             </Box>
           </ClickAwayListener>
         </Box>
-
+        
         {/* Calendar Section */}
         <Box sx={{
           width: { xs: "100%", md: "70%" },
@@ -243,15 +318,16 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
           <Paper sx={{
             p: { xs: 1, md: 3 },
             borderRadius: 4,
-            ...calendarStyles,
             position: "relative",
             zIndex: 1100,
-            background: theme.palette.background.paper,
-            boxShadow: 3,
+            background: `linear-gradient(145deg, ${theme.palette.background.paper}, ${theme.palette.background.default})`,
+            boxShadow: 6,
+            border: `1px solid ${theme.palette.divider}`,
             height: { md: "calc(100vh - 110px)" },
             overflow: "hidden",
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
+            ...calendarStyles
           }}>
             <Box sx={{
               overflowY: "auto",
@@ -260,10 +336,10 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
             }}>
               <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-                initialView="dayGridMonth"
                 headerToolbar={{
-                  left: "prev,next today",
-                  center: "title",
+                  left: isMobile ? 'prev,next' : 'prev,next today',
+                  center: isMobile ? '' : 'title',
+                  right: isMobile ? 'today' : ''
                 }}
                 events={events?.map(event => ({
                   title: event.name,
@@ -271,26 +347,57 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                   id: event.id.toString(),
                 }))}
                 eventContent={(eventInfo) => (
-                  <Box sx={{ p: 0.5, overflow: "hidden" }}>
-                    <Link
-                      href={`/events/${eventInfo.event.id}`}
-                      style={{ textDecoration: "none" }}
-                    >
+                  <Box sx={{ 
+                    p: 0.5,
+                    overflow: "hidden",
+                    [theme.breakpoints.down('md')]: {
+                      display: 'flex',
+                      alignItems: 'center'
+                    }
+                  }}>
+                    <Link href={`/events/${eventInfo.event.id}`} style={{ textDecoration: "none" }}>
                       <Typography
                         variant="body2"
                         sx={{
                           color: "white",
                           textDecoration: "none",
-                          "&:hover": { textDecoration: "underline" },
-                          fontWeight: 500
+                          fontWeight: 500,
+                          [theme.breakpoints.down('md')]: {
+                            fontSize: '0.9rem',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden'
+                          }
                         }}
                       >
-                        {eventInfo.event.title}
+                        {isMobile ? (
+                          <>
+                            <Event sx={{ fontSize: 14, mr: 0.5 }} />
+                            {eventInfo.event.title}
+                          </>
+                        ) : (
+                          eventInfo.event.title
+                        )}
                       </Typography>
                     </Link>
                   </Box>
                 )}
-                height="100%"
+                height={isMobile ? "auto" : "100%"}
+                aspectRatio={isMobile ? 1.5 : 1.8}
+                dayMaxEventRows={isMobile ? 1 : 3}
+                views={{
+                  dayGridMonth: {
+                    dayHeaderFormat: isMobile ? { weekday: 'short' } : { weekday: 'long' }
+                  },
+                  listMonth: {
+                    listDayFormat: { 
+                      month: 'short', 
+                      day: 'numeric', 
+                      weekday: 'short' 
+                    }
+                  }
+                }}
               />
             </Box>
           </Paper>
@@ -300,59 +407,179 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
   );
 };
 
-const EventCard = ({event, theme}: {event: EventType, theme: Theme}) => (
-  <Paper sx={{
+const EventCard = ({ event, theme }: { event: EventType; theme: Theme }) => (
+  <Box sx={{
     p: 2,
     mb: 2,
     borderRadius: 3,
-    transition: "all 0.3s",
-    background: `linear-gradient(145deg, ${theme.palette.background.paper}, ${theme.palette.background.default})`,
-    boxShadow: 2,
+    background: `
+      linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%),
+      repeating-linear-gradient(
+        -45deg,
+        ${theme.palette.primary.main}15,
+        ${theme.palette.primary.main}15 8px,
+        transparent 8px,
+        transparent 16px
+      )
+    `,
+    boxShadow: 6,
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    position: "relative",
+    overflow: "hidden",
     "&:hover": {
-      transform: "translateY(-2px)",
-      boxShadow: 4
+      transform: "translateY(-3px)",
+      boxShadow: 8,
+    },
+    "&:before": {
+      content: "''",
+      position: "absolute",
+      top: 0,
+      left: "-50%",
+      width: "200%",
+      height: "100%",
+      background: `
+        repeating-linear-gradient(
+          -45deg,
+          ${theme.palette.primary.main}10,
+          ${theme.palette.primary.main}10 15px,
+          transparent 15px,
+          transparent 30px
+        )
+      `,
+      transition: "transform 0.6s ease",
+      zIndex: 0
     }
   }}>
-    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-      <Avatar sx={{
-        bgcolor: theme.palette.primary.main,
-        boxShadow: 2,
-        width: 40,
-        height: 40
+    {/* Content Container */}
+    <Box sx={{
+      position: "relative",
+      zIndex: 1,
+      display: "flex",
+      gap: 2,
+      alignItems: "center",
+      background: theme.palette.mode === "dark"
+        ? "rgba(0, 0, 0, 0.4)"
+        : "rgba(255, 255, 255, 0.6)",
+      borderRadius: 3,
+      p: 2,
+      backdropFilter: "blur(4px)"
+    }}>
+      {/* Avatar with Stripe Accent */}
+      <Box sx={{
+        position: "relative",
+        flexShrink: 0,
+        "&:before": {
+          content: "''",
+          position: "absolute",
+          top: -2,
+          left: -2,
+          right: -2,
+          bottom: -2,
+          background: `
+            repeating-linear-gradient(
+              45deg,
+              ${theme.palette.primary.main}30,
+              ${theme.palette.primary.main}30 4px,
+              transparent 4px,
+              transparent 8px
+            )
+          `,
+          borderRadius: "50%",
+          zIndex: -1
+        }
       }}>
-        <Event sx={{ fontSize: 20 }} />
-      </Avatar>
+        <Avatar sx={{
+          bgcolor: theme.palette.background.paper,
+          width: 40,
+          height: 40,
+          boxShadow: 2,
+          "& .MuiSvgIcon-root": {
+            color: theme.palette.primary.main
+          }
+        }}>
+          <Event />
+        </Avatar>
+      </Box>
+
+      {/* Event Details */}
       <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="subtitle1" fontWeight="bold">
+        <Typography variant="h6" fontWeight="800" sx={{
+          background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          lineHeight: 1.2,
+          mb: 0.5 // Tighter margin
+        }}>
           {event.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {new Date(event.start_date).toUTCString()} • {event.location}
-        </Typography>
+
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 0.5 // Tighter gap
+        }}>
+          <Typography variant="body2" sx={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '0.85rem',
+            color: 'text.secondary',
+            '&:before': {
+              content: '"📅"',
+              mr: 0.5 // Smaller margin
+            }
+          }}>
+            {new Date(event.start_date).toUTCString()}
+          </Typography>
+
+          <Typography variant="body2" sx={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '0.85rem',
+            color: 'text.secondary',
+            '&:before': {
+              content: '"📍"',
+              mr: 0.5
+            }
+          }}>
+            {event.location}
+          </Typography>
+        </Box>
+
         <Chip
           label={event.category}
           size="small"
           sx={{
-            mt: 1,
-            bgcolor: theme.palette.action.selected,
-            fontWeight: 500,
-            borderRadius: 20
+            mt: 1, // Reduced margin
+            fontWeight: 700,
+            background: `linear-gradient(45deg, ${theme.palette.primary.light}, ${theme.palette.secondary.light})`,
+            color: theme.palette.getContrastText(theme.palette.primary.light),
+            borderRadius: 2,
+            boxShadow: 1,
+            fontSize: '0.75rem' // Smaller text
           }}
         />
       </Box>
     </Box>
+
+    {/* Join Button */}
     <Button
       fullWidth
-      variant="outlined"
+      variant="contained"
       sx={{
         mt: 2,
-        borderRadius: 25,
-        borderWidth: 2,
-        "&:hover": { borderWidth: 2 }
+        py: 1,
+        borderRadius: 2,
+        background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+        boxShadow: 4,
+        fontSize: "0.9rem",
+        "&:hover": {
+          transform: "translateY(-2px)",
+          boxShadow: 6
+        }
       }}
-      startIcon={<DateRange />}
+      startIcon={<DateRange sx={{ fontSize: 18 }} />}
     >
-      Join Now
+      Join Event
     </Button>
-  </Paper>
+  </Box>
 );
