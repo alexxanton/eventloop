@@ -82,11 +82,8 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
         transform: "translateY(-2px)"
       }
     },
-    "& .fc-view-harness": {
-      [theme.breakpoints.down("md")]: {
-        height: "auto!important",
-        minHeight: "600px"
-      }
+    "& .fc-col-header": {
+      backgroundColor: `${theme.palette.background.paper} !important`,
     },
     "& .fc-daygrid-day-frame": {
       [theme.breakpoints.down("md")]: {
@@ -287,6 +284,23 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                         }
                       }}
                     />
+                    <Box sx={{ display: "flex", gap: 1, overflowX: "auto", pb: 1 }}>
+                      {categories.map((category) => (
+                        <Chip
+                          key={category}
+                          label={category}
+                          onClick={() => setSelectedCategory(category)}
+                          variant={selectedCategory === category ? "filled" : "outlined"}
+                          color="primary"
+                          size="small"
+                          sx={{
+                            borderRadius: 20,
+                            transition: "all 0.2s",
+                            "&:hover": { transform: "scale(1.05)" }
+                          }}
+                        />
+                      ))}
+                    </Box>
                   </Box>
                 </Paper>
                 {filteredEvents?.map((event, index) => (
@@ -323,7 +337,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
             background: `linear-gradient(145deg, ${theme.palette.background.paper}, ${theme.palette.background.default})`,
             boxShadow: 6,
             border: `1px solid ${theme.palette.divider}`,
-            height: { md: "calc(100vh - 110px)" },
+            height: { md: "calc(100vh - 110px)", xs: "calc(100vh - 330px)" },
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
@@ -339,7 +353,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                 headerToolbar={{
                   left: isMobile ? 'prev,next' : 'prev,next today',
                   center: isMobile ? '' : 'title',
-                  right: isMobile ? 'today' : ''
+                  right: isMobile ? 'today' : 'prev,next today'
                 }}
                 events={events?.map(event => ({
                   title: event.name,
@@ -388,7 +402,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                 dayMaxEventRows={isMobile ? 1 : 3}
                 views={{
                   dayGridMonth: {
-                    dayHeaderFormat: isMobile ? { weekday: 'short' } : { weekday: 'long' }
+                    dayHeaderFormat: isMobile ? { weekday: 'short' } : { weekday: 'long' },
                   },
                   listMonth: {
                     listDayFormat: { 
