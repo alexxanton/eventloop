@@ -5,8 +5,10 @@ import { EventType } from "@/utils/types/types";
 import { supabase } from "@/utils/supabase/supabase";
 import { useUser } from "@/utils/hooks/useUser";
 import { MuiStyles } from "@/utils/types/types";
+import { useState } from "react";
 
 export function CEventPage({event}: {event: EventType | null}) {
+  const [loading, setLoading] = useState(false);
   const userId = useUser()?.id;
   const theme = useTheme();
 
@@ -14,7 +16,6 @@ export function CEventPage({event}: {event: EventType | null}) {
     const newMember = {
       user_id: userId,
       group_id: event?.group_id,
-      role: "member"
     };
 
     const ticket = {
@@ -22,11 +23,14 @@ export function CEventPage({event}: {event: EventType | null}) {
       event_id: event?.id
     };
 
+    setLoading(true);
+
     const { error: memberError } = await supabase
       .from("group_members")
       .upsert(newMember, { onConflict: "user_id,group_id" });
     
     const { error: ticketError } = await supabase.from("tickets").insert(ticket);
+    setLoading(false);
 
     if (memberError || ticketError) {
       alert(memberError?.message || ticketError?.message);
@@ -205,6 +209,7 @@ export function CEventPage({event}: {event: EventType | null}) {
         {/* Join Button */}
         <Box sx={styles.joinButtonContainer}>
           <Button
+            disabled={loading}
             variant="contained"
             size="large"
             startIcon={<Event />}

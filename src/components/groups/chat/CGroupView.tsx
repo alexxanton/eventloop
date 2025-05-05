@@ -25,8 +25,8 @@ export function CGroupView({groups}: {groups: GroupType[] | null}) {
 
       const { data: events } = await supabase
         .from("events")
-        .select("*")
-        // .eq("group_id", currentGroup?.id);
+        .select("*, tickets(*, profiles(*))")
+        .eq("group_id", currentGroup?.id);
 
       const { data: role } = await supabase
         .from("group_members")

@@ -1,17 +1,15 @@
 "use client";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Container, Avatar, Typography, CircularProgress, Box, IconButton, Button } from "@mui/material";
+import { Container, Typography, Box, IconButton, Button } from "@mui/material";
 import { supabase } from "@/utils/supabase/supabase";
 import { User } from "@supabase/supabase-js";
 import { useStore } from "@/utils/zustand";
-import { Add, DarkMode, LightMode } from "@mui/icons-material";
+import { DarkMode, LightMode } from "@mui/icons-material";
+import { CAvatarUpload } from "./CAvatarUpload";
 
-export function CAccount({ loggedUser }: { loggedUser: User }) {
+export function CAccount({user}: {user: User}) {
   const { theme, toggleTheme, setUserUrl } = useStore();
   const router = useRouter();
-  const [user, setUser] = useState<User>(loggedUser);
-  const [uploading, setUploading] = useState(false);
 
   const joinDate = new Date(user.created_at).toLocaleDateString("en-US", {
     year: "numeric",
@@ -23,44 +21,6 @@ export function CAccount({ loggedUser }: { loggedUser: User }) {
     await supabase.auth.signOut();
     setUserUrl("");
     router.push("/");
-  };
-
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      setUploading(true);
-      const file = e.target.files?.[0];
-      if (!file || !user) return;
-
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-      const filePath = `avatars/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
-
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: { avatar_url: publicUrl }
-      });
-
-      if (updateError) throw updateError;
-
-      // Update local state
-      setUser((prev: User) => ({ ...prev, user_metadata: { ...prev.user_metadata, avatar_url: publicUrl } }));
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-    } finally {
-      setUploading(false);
-    }
   };
 
   return (
@@ -152,67 +112,7 @@ export function CAccount({ loggedUser }: { loggedUser: User }) {
             textAlign: "center",
             position: "relative"
           }}>
-            {/* Avatar Upload */}
-            <Box sx={{
-              position: "relative",
-              mb: 3,
-              "&:hover .avatar-overlay": {
-                opacity: 1
-              }
-            }}>
-              <label htmlFor="avatar-upload">
-                <input
-                  accept="image/*"
-                  id="avatar-upload"
-                  type="file"
-                  hidden
-                  onChange={handleAvatarUpload}
-                />
-                <Avatar
-                  src={user.user_metadata?.avatar_url}
-                  sx={{
-                    width: 120,
-                    height: 120,
-                    border: "3px solid",
-                    borderColor: "primary.contrastText",
-                    boxShadow: 4
-                  }}
-                />
-                <Box
-                  className="avatar-overlay"
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "50%",
-                    bgcolor: "rgba(0, 0, 0, 0.4)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    opacity: 0,
-                    transition: "opacity 0.3s",
-                    cursor: "pointer"
-                  }}
-                >
-                  <Add fontSize="large" sx={{ color: "white" }} />
-                </Box>
-                {uploading && (
-                  <CircularProgress
-                    size={48}
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      color: "primary.contrastText"
-                    }}
-                  />
-                )}
-              </label>
-            </Box>
-
+            <CAvatarUpload user={user} />
             <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 1 }}>
               {user.email?.split("@")[0]}
             </Typography>
@@ -247,7 +147,6 @@ export function CAccount({ loggedUser }: { loggedUser: User }) {
             variant="contained"
             color="secondary"
             onClick={handleLogout}
-            disabled={uploading}
             size="large"
             sx={{
               px: 6,

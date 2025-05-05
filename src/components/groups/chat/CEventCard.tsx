@@ -54,7 +54,7 @@ export const CEventCard = ({ event, userRole }: { event: EventType; userRole: st
               <RemoveRedEye />
             </IconButton>
           </Link>
-          <CAttendanceListModal />
+          <CAttendanceListModal tickets={event.tickets} />
         </Box>
       </Box>
     </Paper>

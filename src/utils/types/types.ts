@@ -16,6 +16,7 @@ export type GroupType = null | {
     id: number;
     name: string;
     description: string;
+    avatar: string;
 };
 
 export type EventType = {
@@ -32,6 +33,7 @@ export type EventType = {
     dress_code: string;
     max_capacity: number;
     age_limit: number;
+    tickets: TicketType[];
 };
 
 export type MembersType = {
@@ -43,4 +45,8 @@ export type MembersType = {
 
 export type ProfileType = {
     username: string;
+};
+
+export type TicketType = {
+    profiles: ProfileType;
 };
