@@ -6,7 +6,7 @@ import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase/supabase";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/utils/hooks/useUser";
-import { CGroupSettingsModal } from "../CGroupSettingsModal";
+import { CGroupSettingsModal } from "../list/CGroupSettingsModal";
 import { CalendarIcon } from "@mui/x-date-pickers";
 
 export function CGroupChat() {

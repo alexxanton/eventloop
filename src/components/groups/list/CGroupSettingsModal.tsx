@@ -1,5 +1,5 @@
 import { MembersType, MuiStyles } from "@/utils/types/types";
-import { CModal } from "../containers/CModal";
+import { CModal } from "../../containers/CModal";
 import { Delete, Settings } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography, Select, MenuItem, FormControl } from "@mui/material";
 import { useEffect, useState } from "react";

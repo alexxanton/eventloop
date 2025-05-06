@@ -1,5 +1,4 @@
 "use client";
-import { lightPurple } from "@/utils/constants/purple";
 import { GroupType } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { Groups } from "@mui/icons-material";
