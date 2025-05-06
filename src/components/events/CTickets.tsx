@@ -1,6 +1,6 @@
 "use client";
 import { TicketType } from "@/utils/types/types";
-import { Box, Typography, TextField, Button, useTheme } from "@mui/material";
+import { Box, Typography, TextField, Button, useTheme, Theme } from "@mui/material";
 import QRCode from "react-qr-code";
 import React, { useState } from "react";
 import { Search, Download } from "@mui/icons-material";
@@ -105,7 +105,7 @@ export function CTickets({ tickets }: { tickets: TicketType[] }) {
   );
 }
 
-const TicketCard = ({ ticket, theme }: { ticket: TicketType; theme: any }) => (
+const TicketCard = ({ ticket, theme }: { ticket: TicketType; theme: Theme }) => (
   <Box sx={{
     display: "flex",
     flexDirection: "column",
