@@ -36,6 +36,16 @@ export type EventType = {
     tickets: TicketType[];
 };
 
+export type TicketType = {
+    id: number;
+    user_id: string;
+    event_id: number;
+    ticket_number: string;
+    purchased_at: string;
+    validated: string;
+    event: EventType;
+};
+
 export type MembersType = {
     user_id: string;
     group_id: number;
