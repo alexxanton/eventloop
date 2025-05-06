@@ -44,6 +44,7 @@ export type TicketType = {
     purchased_at: string;
     validated: string;
     event: EventType;
+    profiles: ProfileType;
 };
 
 export type MembersType = {
@@ -55,8 +56,4 @@ export type MembersType = {
 
 export type ProfileType = {
     username: string;
-};
-
-export type TicketType = {
-    profiles: ProfileType;
 };

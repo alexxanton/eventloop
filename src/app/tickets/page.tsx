@@ -1,5 +1,5 @@
 import { CTickets } from "@/components/events/CTickets";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabase/supabase";
 
 export default async function Page() {
   const { data } = await supabase
