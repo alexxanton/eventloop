@@ -90,32 +90,10 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
         minHeight: "60px!important",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        overflow: "hidden"
       }
     },
-    "& .fc-daygrid-day-number": {
-      [theme.breakpoints.down("md")]: {
-        fontSize: "1.2rem!important",
-        padding: "8px!important"
-      }
-    },
-    "& .fc-col-header-cell-cushion": {
-      [theme.breakpoints.down("md")]: {
-        fontSize: "0.8rem!important",
-        padding: "4px!important"
-      }
-    },
-    "& .fc-toolbar": {
-      [theme.breakpoints.down("md")]: {
-        flexDirection: "column",
-        gap: "16px"
-      }
-    },
-    "& .fc-header-toolbar": {
-      [theme.breakpoints.down("md")]: {
-        marginBottom: "8px!important"
-      }
-    }
   };
 
   const handleSearchFocus = () => {
@@ -129,7 +107,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
       py: 4,
       position: "relative",
       "&:before": {
-        content: '""',
+        content: "''",
         position: "absolute",
         top: -100,
         right: 0,
@@ -153,7 +131,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
           order: { xs: 1, md: 2 },
           position: "relative",
           "&:after": {
-            content: '""',
+            content: "''",
             position: "absolute",
             bottom: -40,
             left: 0,
@@ -310,14 +288,14 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
             </Box>
           </ClickAwayListener>
         </Box>
-        
+      
         {/* Calendar Section */}
         <Box sx={{
           width: { xs: "100%", md: "70%" },
           order: { xs: 2, md: 1 },
           position: "relative",
           "&:before": {
-            content: '""',
+            content: "''",
             position: "absolute",
             top: -40,
             left: -20,
@@ -351,9 +329,9 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
               <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
                 headerToolbar={{
-                  left: isMobile ? 'prev,next' : 'prev,next today',
-                  center: isMobile ? '' : 'title',
-                  right: isMobile ? 'today' : 'prev,next today'
+                  left: isMobile ? "prev,next" : "prev,next today",
+                  center: isMobile ? "" : "title",
+                  right: isMobile ? "today" : "prev,next today"
                 }}
                 events={events?.map(event => ({
                   title: event.name,
@@ -361,12 +339,12 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                   id: event.id.toString(),
                 }))}
                 eventContent={(eventInfo) => (
-                  <Box sx={{ 
+                  <Box sx={{
                     p: 0.5,
                     overflow: "hidden",
-                    [theme.breakpoints.down('md')]: {
-                      display: 'flex',
-                      alignItems: 'center'
+                    [theme.breakpoints.down("md")]: {
+                      display: "flex",
+                      alignItems: "center"
                     }
                   }}>
                     <Link href={`/events/${eventInfo.event.id}`} style={{ textDecoration: "none" }}>
@@ -376,12 +354,12 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                           color: "white",
                           textDecoration: "none",
                           fontWeight: 500,
-                          [theme.breakpoints.down('md')]: {
-                            fontSize: '0.9rem',
-                            display: '-webkit-box',
+                          [theme.breakpoints.down("md")]: {
+                            fontSize: "0.9rem",
+                            display: "-webkit-box",
                             WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden"
                           }
                         }}
                       >
@@ -397,18 +375,19 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                     </Link>
                   </Box>
                 )}
-                height={isMobile ? "auto" : "100%"}
+                // height={isMobile ? "auto" : "100%"}
+                height="100%"
                 aspectRatio={isMobile ? 1.5 : 1.8}
                 dayMaxEventRows={isMobile ? 1 : 3}
                 views={{
                   dayGridMonth: {
-                    dayHeaderFormat: isMobile ? { weekday: 'short' } : { weekday: 'long' },
+                    dayHeaderFormat: isMobile ? { weekday: "short" } : { weekday: "long" },
                   },
                   listMonth: {
-                    listDayFormat: { 
-                      month: 'short', 
-                      day: 'numeric', 
-                      weekday: 'short' 
+                    listDayFormat: {
+                      month: "short",
+                      day: "numeric",
+                      weekday: "short"
                     }
                   }
                 }}
@@ -519,39 +498,39 @@ const EventCard = ({ event, theme }: { event: EventType; theme: Theme }) => (
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="h6" fontWeight="800" sx={{
           background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
           lineHeight: 1.2,
-          mb: 0.5 // Tighter margin
+          mb: 0.5
         }}>
           {event.name}
         </Typography>
 
         <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 0.5 // Tighter gap
+          display: "flex",
+          flexDirection: "column",
+          gap: 0.5
         }}>
           <Typography variant="body2" sx={{
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '0.85rem',
-            color: 'text.secondary',
-            '&:before': {
-              content: '"📅"',
-              mr: 0.5 // Smaller margin
+            display: "flex",
+            alignItems: "center",
+            fontSize: "0.85rem",
+            color: "text.secondary",
+            "&:before": {
+              content: "'📅'",
+              mr: 0.5
             }
           }}>
             {new Date(event.start_date).toUTCString()}
           </Typography>
 
           <Typography variant="body2" sx={{
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '0.85rem',
-            color: 'text.secondary',
-            '&:before': {
-              content: '"📍"',
+            display: "flex",
+            alignItems: "center",
+            fontSize: "0.85rem",
+            color: "text.secondary",
+            "&:before": {
+              content: "'📍'",
               mr: 0.5
             }
           }}>
@@ -563,13 +542,13 @@ const EventCard = ({ event, theme }: { event: EventType; theme: Theme }) => (
           label={event.category}
           size="small"
           sx={{
-            mt: 1, // Reduced margin
+            mt: 1,
             fontWeight: 700,
             background: `linear-gradient(45deg, ${theme.palette.primary.light}, ${theme.palette.secondary.light})`,
             color: theme.palette.getContrastText(theme.palette.primary.light),
             borderRadius: 2,
             boxShadow: 1,
-            fontSize: '0.75rem' // Smaller text
+            fontSize: "0.75rem"
           }}
         />
       </Box>
