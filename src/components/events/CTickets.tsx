@@ -8,8 +8,8 @@ import { Search, Download } from "@mui/icons-material";
 export function CTickets({ tickets }: { tickets: TicketType[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const theme = useTheme();
-  
-  const filteredTickets = tickets.filter(ticket => 
+
+  const filteredTickets = tickets.filter(ticket =>
     ticket.event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     ticket.event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
     new Date(ticket.event.start_date).toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())
@@ -17,8 +17,8 @@ export function CTickets({ tickets }: { tickets: TicketType[] }) {
 
   if (!tickets || tickets.length === 0) {
     return (
-      <Box sx={{ 
-        p: 4, 
+      <Box sx={{
+        p: 4,
         textAlign: "center",
         minHeight: "300px",
         display: "flex",
@@ -33,7 +33,7 @@ export function CTickets({ tickets }: { tickets: TicketType[] }) {
   }
 
   return (
-    <Box sx={{ 
+    <Box sx={{
       position: "relative",
       overflowY: "scroll",
       overflowX: "hidden",
@@ -63,7 +63,7 @@ export function CTickets({ tickets }: { tickets: TicketType[] }) {
       </Box>
 
       {/* Tickets Grid */}
-      <Box sx={{ 
+      <Box sx={{
         p: 3,
         gap: 3,
         display: "grid",
@@ -74,8 +74,8 @@ export function CTickets({ tickets }: { tickets: TicketType[] }) {
         ))}
 
         {filteredTickets.length === 0 && (
-          <Box sx={{ 
-            p: 4, 
+          <Box sx={{
+            p: 4,
             textAlign: "center",
             borderRadius: 4,
             bgcolor: "action.hover",
@@ -179,8 +179,8 @@ const TicketCard = ({ ticket, theme }: { ticket: TicketType; theme: any }) => (
           pointerEvents: "none"
         }
       }}>
-        <QRCode 
-          value={JSON.stringify(ticket.ticket_number)} 
+        <QRCode
+          value={JSON.stringify(ticket.ticket_number)}
           size={160}
           level="H"
           bgColor={theme.palette.background.default}
@@ -205,13 +205,13 @@ const TicketCard = ({ ticket, theme }: { ticket: TicketType; theme: any }) => (
             {ticket.event.name}
           </Typography>
           
-          <Box sx={{ 
+          <Box sx={{
             display: "flex",
             flexDirection: "column",
             gap: 1,
             mb: 2
           }}>
-            <Typography variant="body2" sx={{ 
+            <Typography variant="body2" sx={{
               display: "flex",
               alignItems: "center",
               "&:before": {
@@ -222,7 +222,7 @@ const TicketCard = ({ ticket, theme }: { ticket: TicketType; theme: any }) => (
               {new Date(ticket.event.start_date).toLocaleString()}
             </Typography>
             
-            <Typography variant="body2" sx={{ 
+            <Typography variant="body2" sx={{
               display: "flex",
               alignItems: "center",
               "&:before": {
