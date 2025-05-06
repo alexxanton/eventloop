@@ -48,7 +48,7 @@ export function CGroupView({groups}: {groups: GroupType[] | null}) {
   return (
     <Box sx={styles.container}>
       <Box sx={styles.stickyBox}>
-        <Paper square sx={styles.groupsListPaper}>
+        <Paper elevation={0} square sx={styles.groupsListPaper}>
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
