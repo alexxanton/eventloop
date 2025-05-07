@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { GroupType } from "./types/types";
+import { Group } from "./types/types";
 
 interface StoreState {
   theme: string;
@@ -9,8 +9,8 @@ interface StoreState {
   setUserId: (id: string) => void;
   userUrl: string;
   setUserUrl: (id: string) => void;
-  currentGroup: GroupType;
-  setCurrentGroup: (group: GroupType) => void;
+  currentGroup: Group;
+  setCurrentGroup: (group: Group) => void;
   openEvents: boolean;
   toggleOpenEvents: () => void;
 }
@@ -29,7 +29,7 @@ export const useStore = create<StoreState>()(
         })),
       setUserId: (id: string) => set((state) => ({ ...state, userId: id })),
       setUserUrl: (id: string) => set((state) => ({ ...state, userUrl: id })),
-      setCurrentGroup: (group: GroupType) => set((state) => ({ ...state, currentGroup: group })),
+      setCurrentGroup: (group: Group) => set((state) => ({ ...state, currentGroup: group })),
       toggleOpenEvents: () =>
         set((state) => ({
           openEvents: !state.openEvents,
