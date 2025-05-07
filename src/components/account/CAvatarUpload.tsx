@@ -1,5 +1,5 @@
 import { supabase } from "@/utils/supabase/supabase";
-import { GroupType } from "@/utils/types/types";
+import { Group } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { Add } from "@mui/icons-material";
 import { Avatar, Box, CircularProgress } from "@mui/material";
@@ -7,7 +7,7 @@ import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function CAvatarUpload({user, group}: {user?: User, group?: GroupType}) {
+export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
   const { setUserUrl } = useStore();
   const [uploading, setUploading] = useState(false);
   const router = useRouter();

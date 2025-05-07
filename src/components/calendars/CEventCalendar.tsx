@@ -5,11 +5,11 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
-import { DateRange, Event, Search } from "@mui/icons-material";
-import { EventType } from "@/utils/types/types";
+import { DateRange, Event as EventIcon, Search } from "@mui/icons-material";
+import { Event } from "@/utils/types/types";
 import Link from "next/link";
 
-export function CEventCalendar({events}: {events: EventType[] | null}) {
+export function CEventCalendar({events}: {events: Event[] | null}) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [searchQuery, setSearchQuery] = useState("");
@@ -365,7 +365,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
                       >
                         {isMobile ? (
                           <>
-                            <Event sx={{ fontSize: 14, mr: 0.5 }} />
+                            <EventIcon sx={{ fontSize: 14, mr: 0.5 }} />
                             {eventInfo.event.title}
                           </>
                         ) : (
@@ -400,7 +400,7 @@ export function CEventCalendar({events}: {events: EventType[] | null}) {
   );
 };
 
-const EventCard = ({ event, theme }: { event: EventType; theme: Theme }) => (
+const EventCard = ({ event, theme }: { event: Event; theme: Theme }) => (
   <Box sx={{
     p: 2,
     mb: 2,
@@ -490,7 +490,7 @@ const EventCard = ({ event, theme }: { event: EventType; theme: Theme }) => (
             color: theme.palette.primary.main
           }
         }}>
-          <Event />
+          <EventIcon />
         </Avatar>
       </Box>
 

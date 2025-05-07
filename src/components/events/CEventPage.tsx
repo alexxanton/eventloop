@@ -1,13 +1,13 @@
 "use client"
 import { Container, Paper, Typography, Box, Button, Chip, IconButton, useTheme } from "@mui/material";
-import { Event, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Checkroom, Share } from "@mui/icons-material";
-import { EventType } from "@/utils/types/types";
+import { Event as EventIcon, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Checkroom, Share } from "@mui/icons-material";
+import { Event } from "@/utils/types/types";
 import { supabase } from "@/utils/supabase/supabase";
 import { useUser } from "@/utils/hooks/useUser";
 import { MuiStyles } from "@/utils/types/types";
 import { useState } from "react";
 
-export function CEventPage({event}: {event: EventType | null}) {
+export function CEventPage({event}: {event: Event | null}) {
   const [loading, setLoading] = useState(false);
   const userId = useUser()?.id;
   const theme = useTheme();
@@ -114,7 +114,7 @@ export function CEventPage({event}: {event: EventType | null}) {
             zIndex: 0
           }} />
           <Typography variant="h4" component="div" sx={styles.coverText}>
-            <Event sx={{
+            <EventIcon sx={{
               ...styles.coverIcon,
               filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.3))"
             }} />
@@ -212,7 +212,7 @@ export function CEventPage({event}: {event: EventType | null}) {
             disabled={loading}
             variant="contained"
             size="large"
-            startIcon={<Event />}
+            startIcon={<EventIcon />}
             onClick={handleJoinEvent}
             sx={{
               ...styles.joinButton,

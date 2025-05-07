@@ -4,7 +4,7 @@ import { Box, Paper } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CMainScreen } from './CMainScreen';
-import { EventType, GroupType, MuiStyles } from '@/utils/types/types';
+import { Event, Group, MuiStyles } from '@/utils/types/types';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useEffect, useState } from 'react';
@@ -13,9 +13,9 @@ import { useUser } from '@/utils/hooks/useUser';
 import { CEventCard } from './CEventCard';
 import { CEventFormModal } from '@/components/events/form/CEventFormModal';
 
-export function CGroupView({groups}: {groups: GroupType[] | null}) {
+export function CGroupView({groups}: {groups: Group[] | null}) {
   const { currentGroup, openEvents } = useStore();
-  const [events, setEvents] = useState<EventType[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [currentUserRole, setCurrentUserRole] = useState<string>("");
   const userId = useUser()?.id;
 
@@ -25,7 +25,7 @@ export function CGroupView({groups}: {groups: GroupType[] | null}) {
 
       const { data: events } = await supabase
         .from("events")
-        .select("*, tickets(*, profiles(*))")
+        .select("*, tickets(*, profile:profiles(*))")
         .eq("group_id", currentGroup?.id);
 
       const { data: role } = await supabase

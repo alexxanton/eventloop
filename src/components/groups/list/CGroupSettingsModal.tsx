@@ -1,4 +1,4 @@
-import { MembersType, MuiStyles } from "@/utils/types/types";
+import { Member, MuiStyles } from "@/utils/types/types";
 import { CModal } from "../../containers/CModal";
 import { Delete, Settings } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography, Select, MenuItem, FormControl } from "@mui/material";
@@ -9,14 +9,14 @@ import { useStore } from "@/utils/zustand";
 export function CGroupSettingsModal() {
   const { currentGroup } = useStore();
   const [open, setOpen] = useState(false);
-  const [members, setMembers] = useState<MembersType[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
   const [trigger, setTrigger] = useState(true);
 
   useEffect(() => {
     const getMembers = async () => {
       const { data: members } = await supabase
         .from("group_members")
-        .select("*, profiles(username)")
+        .select("*, profile:profiles(username)")
         .eq("group_id", currentGroup?.id)
         .order("id")
         .throwOnError();
@@ -27,7 +27,7 @@ export function CGroupSettingsModal() {
     getMembers();
   }, [currentGroup, trigger]);
 
-  const MemberRow = ({member}: {member: MembersType}) => {
+  const MemberRow = ({member}: {member: Member}) => {
     const isOwner = member.role === "owner";
 
     const handleRoleChange = async (role: string) => {
@@ -55,7 +55,7 @@ export function CGroupSettingsModal() {
     return (
       <Box sx={styles.memberRow}>
         <Avatar sx={styles.avatar} />
-        <Typography sx={styles.username}>@{member.profiles.username}</Typography>
+        <Typography sx={styles.username}>@{member.profile.username}</Typography>
         
         <FormControl sx={styles.roleSelect}>
           <Select

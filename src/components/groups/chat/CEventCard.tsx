@@ -1,4 +1,4 @@
-import { EventType } from "@/utils/types/types";
+import { Event } from "@/utils/types/types";
 import { CalendarToday, LocationOn, RemoveRedEye } from "@mui/icons-material";
 import { Box, Typography, IconButton, Paper, useTheme } from "@mui/material";
 import Link from "next/link";
@@ -15,7 +15,7 @@ import { CEventFormModal } from "@/components/events/form/CEventFormModal";
 //   return colors[eventType] || colors.default;
 // };
 
-export const CEventCard = ({ event, userRole }: { event: EventType; userRole: string }) => {
+export const CEventCard = ({ event, userRole }: { event: Event; userRole: string }) => {
   const theme = useTheme();
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 import { supabase } from "@/utils/supabase/supabase";
-import { EventType, FormEvent, MuiStyles } from "@/utils/types/types";
+import { Event, FormEvent, MuiStyles } from "@/utils/types/types";
 import { Check, Add, Edit } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
@@ -13,7 +13,7 @@ import { CDateTimeSection } from "./sections/CDateTimeSection";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import { useStore } from "@/utils/zustand";
 
-export function CEventFormModal({event}: {event?: EventType}) {
+export function CEventFormModal({event}: {event?: Event}) {
   const { currentGroup } = useStore();
   const [name, setName] = useState(event?.name || "");
   const [description, setDescription] = useState(event?.description || "");

@@ -1,10 +1,10 @@
 "use client";
-import { GroupType } from "@/utils/types/types";
+import { Group } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { Groups } from "@mui/icons-material";
 import { Avatar, Box, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from "@mui/material";
 
-export function CGroupButton({ group }: { group: GroupType }) {
+export function CGroupButton({ group }: { group: Group }) {
   const { currentGroup, setCurrentGroup } = useStore();
   const theme = useTheme();
   const isSelected = group?.id === currentGroup?.id;
