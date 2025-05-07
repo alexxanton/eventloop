@@ -27,7 +27,7 @@ export function CGroupChat() {
 
   const query = supabase
     .from("messages")
-    .select("*, profile:profiles(username)")
+    .select("*, profile:profiles(username, avatar)")
     .eq("group_id", currentGroup?.id);
 
   const getMessages = async () => {

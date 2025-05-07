@@ -1,4 +1,5 @@
 "use client";
+import { CAvatarUpload } from "@/components/account/CAvatarUpload";
 import { CModal } from "@/components/containers/CModal";
 import { useUser } from "@/utils/hooks/useUser";
 import { supabase } from "@/utils/supabase/supabase";
@@ -67,34 +68,39 @@ export function CNewGroupModal() {
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
       >
-        <Box sx={styles.box}>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            Enter the name of the new group and start collaborating!
-          </Typography>
-          <form onSubmit={createGroup}>
-            <TextField
-              fullWidth
-              required
-              label="Group name"
-              variant="outlined"
-              sx={{ mb: 2 }}
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-            <TextField
-              fullWidth
-              multiline
-              maxRows={4}
-              label="Description"
-              variant="filled"
-              sx={{ mb: 2 }}
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-            />
-            <Button type="submit" fullWidth variant="contained">
-              Create
-            </Button>
-          </form>
+        <Box display="flex">
+          <Box sx={styles.box} width="25%">
+            <CAvatarUpload />
+          </Box>
+          <Box sx={styles.box}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Enter the name of the new group and start collaborating!
+            </Typography>
+            <form onSubmit={createGroup}>
+              <TextField
+                fullWidth
+                required
+                label="Group name"
+                variant="outlined"
+                sx={{ mb: 2 }}
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
+              <TextField
+                fullWidth
+                multiline
+                maxRows={4}
+                label="Description"
+                variant="filled"
+                sx={{ mb: 2 }}
+                onChange={(e) => setDescription(e.target.value)}
+                value={description}
+              />
+              <Button type="submit" fullWidth variant="contained">
+                Create
+              </Button>
+            </form>
+          </Box>
         </Box>
       </CModal>
     </ListItem>
@@ -109,7 +115,6 @@ const styles: MuiStyles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
   },
   list: {
     bgcolor: "background.paper",

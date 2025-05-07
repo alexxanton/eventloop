@@ -53,6 +53,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
             visibility: isFirstInGroup && !isCurrentUser ? "visible" : "hidden",
             mt: 1
           }}
+          src={msg.profile?.avatar}
         />
         <Box
           component="span"
