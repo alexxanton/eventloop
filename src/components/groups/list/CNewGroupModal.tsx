@@ -69,7 +69,7 @@ export function CNewGroupModal() {
         onClose={() => setOpen(false)}
       >
         <Box display="flex">
-          <Box sx={styles.box} width="25%">
+          <Box sx={styles.box} width="25%" mx={1}>
             <CAvatarUpload />
           </Box>
           <Box sx={styles.box}>
@@ -110,7 +110,7 @@ export function CNewGroupModal() {
 
 const styles: MuiStyles = {
   box: {
-    p: 3,
+    py: 3,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

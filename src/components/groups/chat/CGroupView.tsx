@@ -1,27 +1,54 @@
 "use client";
 import { useStore } from '@/utils/zustand';
-import { Box, Paper } from '@mui/material';
+import { Box, Paper, Badge } from '@mui/material';
 import { CGroupsList } from '../list/CGroupsList';
 import { CGroupChat } from './CGroupChat';
 import { CMainScreen } from './CMainScreen';
 import { Event, Group, MuiStyles } from '@/utils/types/types';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import { useUser } from '@/utils/hooks/useUser';
 import { CEventCard } from './CEventCard';
 import { CEventFormModal } from '@/components/events/form/CEventFormModal';
+import dayjs, { Dayjs } from 'dayjs';
+import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 
-export function CGroupView({groups}: {groups: Group[] | null}) {
+function ServerDay(
+  props: PickersDayProps<Dayjs> & { highlightedDays?: { [key: string]: number } }
+) {
+  const { highlightedDays = {}, day, outsideCurrentMonth, ...other } = props;
+
+  const dateKey = day.format('YYYY-MM-DD');
+  const isHighlighted = highlightedDays[dateKey] && !outsideCurrentMonth;
+
+  return (
+    <Badge
+      key={dateKey}
+      overlap="circular"
+      badgeContent={isHighlighted ? highlightedDays[dateKey] : undefined}
+      color="primary"
+    >
+      <PickersDay
+        {...other}
+        day={day}
+        outsideCurrentMonth={outsideCurrentMonth}
+      />
+    </Badge>
+  );
+}
+
+export function CGroupView({ groups }: { groups: Group[] | null }) {
   const { currentGroup, openEvents } = useStore();
   const [events, setEvents] = useState<Event[]>([]);
+  const [selectedDay, setSelectedDay] = useState<Dayjs | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<string>("");
   const userId = useUser()?.id;
 
   useEffect(() => {
     const getGroupData = async () => {
-      if (!userId) return;
+      if (!userId || !currentGroup?.id) return;
 
       const { data: events } = await supabase
         .from("events")
@@ -36,14 +63,22 @@ export function CGroupView({groups}: {groups: Group[] | null}) {
         .single()
         .throwOnError();
 
-        
       if (events) {
         setEvents(events);
-        setCurrentUserRole(role.role);
+        setCurrentUserRole(role?.role || "");
       }
     };
     getGroupData();
   }, [userId, currentGroup?.id]);
+
+  const highlightedDays = useMemo(() => {
+    const days: { [key: string]: number } = {};
+    events.forEach((event) => {
+      const dateKey = dayjs(event.start_date).format('YYYY-MM-DD');
+      days[dateKey] = (days[dateKey] || 0) + 1;
+    });
+    return days;
+  }, [events]);
 
   return (
     <Box sx={styles.container}>
@@ -62,25 +97,45 @@ export function CGroupView({groups}: {groups: Group[] | null}) {
             width: openEvents && currentGroup ? 300 : 0,
           }}
         >
-          {/* Calendar */}
           <Paper sx={styles.calendarPaper}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar
                 sx={styles.dateCalendar}
-                onChange={() => {}}
+                onChange={(date) => {
+                  const day = dayjs(date).format("YYYY-MM-DD");
+                  const prevDay = dayjs(selectedDay).format("YYYY-MM-DD");
+                  
+                  if (day === prevDay) {
+                    setSelectedDay(null);
+                  } else {
+                    setSelectedDay(date);
+                  }
+                }}
+                value={selectedDay}
+                slots={{
+                  day: ServerDay,
+                }}
+                slotProps={{
+                  day: {
+                    highlightedDays,
+                  } as any,
+                }}
               />
             </LocalizationProvider>
             <Box sx={styles.new}>
               <CEventFormModal />
             </Box>
           </Paper>
-          {events.map((e, index) => {
-            return (
+          {events
+            .filter((e) => {
+              if (!selectedDay) return true;
+              return dayjs(e.start_date).isSame(selectedDay, 'day');
+            })
+            .map((e, index) => (
               <Box key={index}>
                 <CEventCard event={e} userRole={currentUserRole} />
               </Box>
-            );
-          })}
+            ))}
         </Paper>
       </Box>
     </Box>

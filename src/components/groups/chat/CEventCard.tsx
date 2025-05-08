@@ -1,6 +1,6 @@
 import { Event } from "@/utils/types/types";
-import { CalendarToday, LocationOn, RemoveRedEye } from "@mui/icons-material";
-import { Box, Typography, IconButton, Paper, useTheme } from "@mui/material";
+import { CalendarToday, LocationOn, RemoveRedEye, Event as EventIcon } from "@mui/icons-material";
+import { Box, Typography, IconButton, Paper, useTheme, Avatar, Button, Chip } from "@mui/material";
 import Link from "next/link";
 import { CAttendanceListModal } from "../list/CAttendanceListModal";
 import { CEventFormModal } from "@/components/events/form/CEventFormModal";
@@ -19,91 +19,52 @@ export const CEventCard = ({ event, userRole }: { event: Event; userRole: string
   const theme = useTheme();
 
   return (
-    <Paper 
-      sx={{ 
-        display: "flex", 
-        overflow: "hidden",
-        mb: 0.5,
-        background: `
-          linear-gradient(145deg, ${theme.palette.background.paper}, ${theme.palette.background.default}),
-          repeating-linear-gradient(
-            -45deg,
-            ${theme.palette.primary.main}20,
-            ${theme.palette.primary.main}20 12px,
-            transparent 12px,
-            transparent 24px
-          )
-        `,
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
-        position: "relative",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        "&:hover": {
-          transform: "translateY(-2px)",
-          boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.3)",
-        },
-        "&:after": {
-          content: "''",
-          position: "absolute",
-          top: 0,
-          left: "-50%",
-          width: "200%",
-          height: "100%",
-          background: `
-            repeating-linear-gradient(
-              -45deg,
-              ${theme.palette.primary.main}10,
-              ${theme.palette.primary.main}10 15px,
-              transparent 15px,
-              transparent 30px
-            )
-          `,
-          transition: "transform 0.6s ease",
-          zIndex: 0
-        }
-      }}
-    >
-      {/* Left accent stripe */}
-      <Box sx={{
-        width: 6,
-        background: `linear-gradient(45deg, 
-          ${theme.palette.primary.main}, 
-          ${theme.palette.secondary.main})`,
-        position: "relative",
-        zIndex: 1,
-        "&:before": {
-          content: "''",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: `
-            repeating-linear-gradient(
-              45deg,
-              ${theme.palette.primary.light}40,
-              ${theme.palette.primary.light}40 4px,
-              transparent 4px,
-              transparent 8px
-            )
-          `,
-          mixBlendMode: "overlay"
-        }
-      }} />
-
+    <Box sx={{
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+      my: 1,
+      px: 3,
+      pt: 1,
+      pb: 2,
+      borderRadius: 4,
+      background: `
+        linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${theme.palette.action.hover} 100%),
+        repeating-linear-gradient(
+          45deg,
+          ${theme.palette.primary.main}15,
+          ${theme.palette.primary.main}15 10px,
+          transparent 10px,
+          transparent 20px
+        )
+      `,
+      boxShadow: 6,
+      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+      position: "relative",
+      "&:hover": {
+        transform: "translateY(-5px)",
+        boxShadow: 8
+      },
+      "&:before": {
+        content: "''",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `repeating-linear-gradient(
+          45deg,
+          ${theme.palette.primary.main}20,
+          ${theme.palette.primary.main}20 10px,
+          transparent 10px,
+          transparent 20px
+        )`,
+        opacity: 0.1,
+        zIndex: 0
+      }
+    }}>
       {/* Main Content */}
-      <Box sx={{ 
-        flexGrow: 1, 
-        px: 2, 
-        py: 1.5,
-        display: "flex", 
-        flexDirection: "column",
-        position: "relative",
-        zIndex: 1,
-        background: theme.palette.mode === "dark" 
-          ? "rgba(0, 0, 0, 0.3)" 
-          : "rgba(255, 255, 255, 0.6)",
-        backdropFilter: "blur(4px)"
-      }}>
+      <Box>
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1" fontWeight="bold" noWrap
@@ -153,6 +114,6 @@ export const CEventCard = ({ event, userRole }: { event: Event; userRole: string
           <CAttendanceListModal tickets={event.tickets} />
         </Box>
       </Box>
-    </Paper>
+    </Box>
   );
 };

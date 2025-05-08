@@ -8,6 +8,7 @@ import listPlugin from "@fullcalendar/list";
 import { DateRange, Event as EventIcon, Search } from "@mui/icons-material";
 import { Event } from "@/utils/types/types";
 import Link from "next/link";
+import { CEventResultCard } from "./CEventResultCard";
 
 export function CEventCalendar({events}: {events: Event[] | null}) {
   const theme = useTheme();
@@ -216,7 +217,7 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
                   }}>
                     <Box sx={{ p: 2, pb: 4 }}>
                       {filteredEvents.map((event, index) => (
-                        <EventCard key={index} event={event} theme={theme} />
+                        <CEventResultCard key={index} event={event} theme={theme} />
                       ))}
                     </Box>
                   </Paper>
@@ -282,7 +283,7 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
                   </Box>
                 </Paper>
                 {filteredEvents?.map((event, index) => (
-                  <EventCard key={index} event={event} theme={theme} />
+                  <CEventResultCard key={index} event={event} theme={theme} />
                 ))}
               </Box>
             </Box>
@@ -399,180 +400,3 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
     </Container>
   );
 };
-
-const EventCard = ({ event, theme }: { event: Event; theme: Theme }) => (
-  <Box sx={{
-    p: 2,
-    mb: 2,
-    borderRadius: 3,
-    background: `
-      linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%),
-      repeating-linear-gradient(
-        -45deg,
-        ${theme.palette.primary.main}15,
-        ${theme.palette.primary.main}15 8px,
-        transparent 8px,
-        transparent 16px
-      )
-    `,
-    boxShadow: 6,
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    position: "relative",
-    overflow: "hidden",
-    "&:hover": {
-      transform: "translateY(-3px)",
-      boxShadow: 8,
-    },
-    "&:before": {
-      content: "''",
-      position: "absolute",
-      top: 0,
-      left: "-50%",
-      width: "200%",
-      height: "100%",
-      background: `
-        repeating-linear-gradient(
-          -45deg,
-          ${theme.palette.primary.main}10,
-          ${theme.palette.primary.main}10 15px,
-          transparent 15px,
-          transparent 30px
-        )
-      `,
-      transition: "transform 0.6s ease",
-      zIndex: 0
-    }
-  }}>
-    {/* Content Container */}
-    <Box sx={{
-      position: "relative",
-      zIndex: 1,
-      display: "flex",
-      gap: 2,
-      alignItems: "center",
-      background: theme.palette.mode === "dark"
-        ? "rgba(0, 0, 0, 0.4)"
-        : "rgba(255, 255, 255, 0.6)",
-      borderRadius: 3,
-      p: 2,
-      backdropFilter: "blur(4px)"
-    }}>
-      {/* Avatar with Stripe Accent */}
-      <Box sx={{
-        position: "relative",
-        flexShrink: 0,
-        "&:before": {
-          content: "''",
-          position: "absolute",
-          top: -2,
-          left: -2,
-          right: -2,
-          bottom: -2,
-          background: `
-            repeating-linear-gradient(
-              45deg,
-              ${theme.palette.primary.main}30,
-              ${theme.palette.primary.main}30 4px,
-              transparent 4px,
-              transparent 8px
-            )
-          `,
-          borderRadius: "50%",
-          zIndex: -1
-        }
-      }}>
-        <Avatar sx={{
-          bgcolor: theme.palette.background.paper,
-          width: 40,
-          height: 40,
-          boxShadow: 2,
-          "& .MuiSvgIcon-root": {
-            color: theme.palette.primary.main
-          }
-        }}>
-          <EventIcon />
-        </Avatar>
-      </Box>
-
-      {/* Event Details */}
-      <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="h6" fontWeight="800" sx={{
-          background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          lineHeight: 1.2,
-          mb: 0.5
-        }}>
-          {event.name}
-        </Typography>
-
-        <Box sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 0.5
-        }}>
-          <Typography variant="body2" sx={{
-            display: "flex",
-            alignItems: "center",
-            fontSize: "0.85rem",
-            color: "text.secondary",
-            "&:before": {
-              content: "'📅'",
-              mr: 0.5
-            }
-          }}>
-            {new Date(event.start_date).toUTCString()}
-          </Typography>
-
-          <Typography variant="body2" sx={{
-            display: "flex",
-            alignItems: "center",
-            fontSize: "0.85rem",
-            color: "text.secondary",
-            "&:before": {
-              content: "'📍'",
-              mr: 0.5
-            }
-          }}>
-            {event.location}
-          </Typography>
-        </Box>
-
-        <Chip
-          label={event.category}
-          size="small"
-          sx={{
-            mt: 1,
-            fontWeight: 700,
-            background: `linear-gradient(45deg, ${theme.palette.primary.light}, ${theme.palette.secondary.light})`,
-            color: theme.palette.getContrastText(theme.palette.primary.light),
-            borderRadius: 2,
-            boxShadow: 1,
-            fontSize: "0.75rem"
-          }}
-        />
-      </Box>
-    </Box>
-
-    {/* Join Button */}
-    <Button
-      fullWidth
-      variant="contained"
-      sx={{
-        mt: 2,
-        py: 1,
-        borderRadius: 2,
-        background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-        boxShadow: 4,
-        fontSize: "0.9rem",
-        "&:hover": {
-          transform: "translateY(-2px)",
-          boxShadow: 6
-        }
-      }}
-      startIcon={<DateRange sx={{ fontSize: 18 }} />}
-    >
-      Join Event
-    </Button>
-  </Box>
-);
