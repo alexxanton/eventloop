@@ -1,11 +1,11 @@
 "use client";
 import { useState, useRef } from "react";
-import { Container, TextField, Chip, Paper, Typography, Box, Avatar, Button, useTheme, useMediaQuery, ClickAwayListener, Theme } from "@mui/material";
+import { Container, TextField, Chip, Paper, Typography, Box, useTheme, useMediaQuery, ClickAwayListener } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
-import { DateRange, Event as EventIcon, Search } from "@mui/icons-material";
+import { Event as EventIcon, Search } from "@mui/icons-material";
 import { Event } from "@/utils/types/types";
 import Link from "next/link";
 import { CEventCard } from "../groups/chat/CEventCard";

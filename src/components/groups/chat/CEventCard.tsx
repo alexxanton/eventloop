@@ -1,6 +1,6 @@
 import { Event } from "@/utils/types/types";
-import { CalendarToday, LocationOn, RemoveRedEye, Event as EventIcon } from "@mui/icons-material";
-import { Box, Typography, IconButton, Paper, useTheme, Avatar, Button, Chip } from "@mui/material";
+import { CalendarToday, LocationOn, RemoveRedEye } from "@mui/icons-material";
+import { Box, Typography, IconButton, useTheme } from "@mui/material";
 import Link from "next/link";
 import { CAttendanceListModal } from "../list/CAttendanceListModal";
 import { CEventFormModal } from "@/components/events/form/CEventFormModal";

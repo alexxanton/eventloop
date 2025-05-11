@@ -49,11 +49,24 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
         }}
       >
         <Avatar
+          src={msg.profile?.avatar}
           sx={{
             visibility: isFirstInGroup && !isCurrentUser ? "visible" : "hidden",
-            mt: 1
+            mt: 1,
+            bgcolor: "transparent",
+            background: `
+              linear-gradient(
+                45deg,
+                ${theme.palette.primary.main},
+                ${theme.palette.secondary.main}
+              )
+            `,
+            boxShadow: 2,
+            color: theme.palette.primary.contrastText,
+            "& .MuiSvgIcon-root": {
+              transition: "transform 0.3s"
+            }
           }}
-          src={msg.profile?.avatar}
         />
         <Box
           component="span"

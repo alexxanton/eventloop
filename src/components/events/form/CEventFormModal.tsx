@@ -2,7 +2,7 @@
 import { supabase } from "@/utils/supabase/supabase";
 import { Event, FormEvent, MuiStyles } from "@/utils/types/types";
 import { Check, Add, Edit, Delete } from "@mui/icons-material";
-import { Box, Button, IconButton, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { CModal } from "../../containers/CModal";
 import dayjs, { Dayjs } from "dayjs";
@@ -28,7 +28,6 @@ export function CEventFormModal({event}: {event?: Event}) {
   const [dressCode, setDressCode] = useState(event?.dress_code || "");
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
-  const isDarkMode = useDarkMode();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
