@@ -10,7 +10,6 @@ import { CAdditionalInfoSection } from "./sections/CAdditionalInfoSection";
 import { CEventDetailsSection } from "./sections/CEventDetailsSection";
 import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
-import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import { useStore } from "@/utils/zustand";
 
 export function CEventFormModal({event}: {event?: Event}) {

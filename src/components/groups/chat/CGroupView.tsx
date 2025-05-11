@@ -94,7 +94,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
                 slotProps={{
                   day: {
                     highlightedDays,
-                  } as any,
+                  } as PickersDayProps<Dayjs> & { highlightedDays?: { [key: string]: number } },
                 }}
               />
             </LocalizationProvider>
