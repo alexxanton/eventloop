@@ -15,7 +15,7 @@ import { CEventFormModal } from "@/components/events/form/CEventFormModal";
 //   return colors[eventType] || colors.default;
 // };
 
-export const CEventCard = ({ event, userRole }: { event: Event; userRole: string }) => {
+export const CEventCard = ({ event, userRole }: { event: Event; userRole?: string }) => {
   const theme = useTheme();
 
   return (
@@ -24,9 +24,8 @@ export const CEventCard = ({ event, userRole }: { event: Event; userRole: string
       flexDirection: "column",
       width: "100%",
       my: 1,
-      px: 3,
+      px: 2,
       pt: 1,
-      pb: 2,
       borderRadius: 4,
       background: `
         linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${theme.palette.action.hover} 100%),
@@ -69,8 +68,8 @@ export const CEventCard = ({ event, userRole }: { event: Event; userRole: string
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1" fontWeight="bold" noWrap
               sx={{
-                background: `linear-gradient(45deg, 
-                  ${theme.palette.primary.main}, 
+                background: `linear-gradient(45deg,
+                  ${theme.palette.primary.main},
                   ${theme.palette.secondary.main})`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent"
@@ -81,7 +80,7 @@ export const CEventCard = ({ event, userRole }: { event: Event; userRole: string
               sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <CalendarToday fontSize="small" />
               {new Date(event.start_date).toLocaleString().split(",")[0]}
-              <LocationOn fontSize="small" sx={{ ml: 1 }} />
+              <LocationOn fontSize="small" />
               {event.location}
             </Typography>
           </Box>
@@ -89,29 +88,21 @@ export const CEventCard = ({ event, userRole }: { event: Event; userRole: string
         </Box>
 
         {/* Icons */}
-        <Box sx={{ 
-          display: "flex", 
+        <Box sx={{
+          display: "flex",
           gap: 1,
           mt: 1,
-          "& .MuiIconButton-root": {
-            background: `linear-gradient(45deg, 
-              ${theme.palette.background.paper}, 
-              ${theme.palette.background.default})`,
-            borderRadius: 2,
-            boxShadow: 1,
-            transition: "all 0.2s",
-            "&:hover": {
-              transform: "translateY(-1px)",
-              boxShadow: 2
-            }
-          }
         }}>
-          <Link href={`/events/${event.id}`}>
-            <IconButton>
-              <RemoveRedEye />
-            </IconButton>
-          </Link>
-          <CAttendanceListModal tickets={event.tickets} />
+          {userRole && (
+            <>
+              <Link href={`/events/${event.id}`}>
+                <IconButton>
+                  <RemoveRedEye />
+                </IconButton>
+              </Link>
+              <CAttendanceListModal tickets={event.tickets} />
+            </>
+          )}
         </Box>
       </Box>
     </Box>

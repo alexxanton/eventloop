@@ -1,43 +1,19 @@
 "use client";
-import { useStore } from '@/utils/zustand';
-import { Box, Paper, Badge } from '@mui/material';
-import { CGroupsList } from '../list/CGroupsList';
-import { CGroupChat } from './CGroupChat';
-import { CMainScreen } from './CMainScreen';
-import { Event, Group, MuiStyles } from '@/utils/types/types';
-import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useEffect, useState, useMemo } from 'react';
-import { supabase } from '@/utils/supabase/supabase';
-import { useUser } from '@/utils/hooks/useUser';
-import { CEventCard } from './CEventCard';
-import { CEventFormModal } from '@/components/events/form/CEventFormModal';
-import dayjs, { Dayjs } from 'dayjs';
-import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-
-function ServerDay(
-  props: PickersDayProps<Dayjs> & { highlightedDays?: { [key: string]: number } }
-) {
-  const { highlightedDays = {}, day, outsideCurrentMonth, ...other } = props;
-
-  const dateKey = day.format('YYYY-MM-DD');
-  const isHighlighted = highlightedDays[dateKey] && !outsideCurrentMonth;
-
-  return (
-    <Badge
-      key={dateKey}
-      overlap="circular"
-      badgeContent={isHighlighted ? highlightedDays[dateKey] : undefined}
-      color="primary"
-    >
-      <PickersDay
-        {...other}
-        day={day}
-        outsideCurrentMonth={outsideCurrentMonth}
-      />
-    </Badge>
-  );
-}
+import { useStore } from "@/utils/zustand";
+import { Box, Paper, Badge } from "@mui/material";
+import { CGroupsList } from "../list/CGroupsList";
+import { CGroupChat } from "./CGroupChat";
+import { CMainScreen } from "./CMainScreen";
+import { Event, Group, MuiStyles } from "@/utils/types/types";
+import { LocalizationProvider, DateCalendar } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useEffect, useState, useMemo } from "react";
+import { supabase } from "@/utils/supabase/supabase";
+import { useUser } from "@/utils/hooks/useUser";
+import { CEventCard } from "./CEventCard";
+import { CEventFormModal } from "@/components/events/form/CEventFormModal";
+import dayjs, { Dayjs } from "dayjs";
+import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 
 export function CGroupView({ groups }: { groups: Group[] | null }) {
   const { currentGroup, openEvents } = useStore();
@@ -74,7 +50,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
   const highlightedDays = useMemo(() => {
     const days: { [key: string]: number } = {};
     events.forEach((event) => {
-      const dateKey = dayjs(event.start_date).format('YYYY-MM-DD');
+      const dateKey = dayjs(event.start_date).format("YYYY-MM-DD");
       days[dateKey] = (days[dateKey] || 0) + 1;
     });
     return days;
@@ -97,7 +73,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
             width: openEvents && currentGroup ? 300 : 0,
           }}
         >
-          <Paper sx={styles.calendarPaper}>
+          <Paper sx={styles.calendarPaper} elevation={3}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar
                 sx={styles.dateCalendar}
@@ -122,14 +98,12 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
                 }}
               />
             </LocalizationProvider>
-            <Box sx={styles.new}>
-              <CEventFormModal />
-            </Box>
+            {<Box sx={styles.new}><CEventFormModal /></Box>}
           </Paper>
           {events
             .filter((e) => {
               if (!selectedDay) return true;
-              return dayjs(e.start_date).isSame(selectedDay, 'day');
+              return dayjs(e.start_date).isSame(selectedDay, "day");
             })
             .map((e, index) => (
               <Box key={index}>
@@ -139,6 +113,37 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
         </Paper>
       </Box>
     </Box>
+  );
+}
+
+const ServerDay = (
+  props: PickersDayProps<Dayjs> & { highlightedDays?: { [key: string]: number } }
+) => {
+  const { highlightedDays = {}, day, outsideCurrentMonth, ...other } = props;
+  const dateKey = day.format("YYYY-MM-DD");
+  const isHighlighted = highlightedDays[dateKey] && !outsideCurrentMonth;
+
+  return (
+    <Badge
+      key={dateKey}
+      overlap="rectangular"
+      badgeContent={isHighlighted ? highlightedDays[dateKey] : undefined}
+      color="primary"
+      sx={{
+        "& .MuiBadge-badge": {
+          transform: isHighlighted ? "scale(0.6) translate(20%, -20%)": "",
+        }
+      }}
+      anchorOrigin={{
+        horizontal: "right",
+      }}
+    >
+      <PickersDay
+        {...other}
+        day={day}
+        outsideCurrentMonth={outsideCurrentMonth}
+      />
+    </Badge>
   );
 }
 
@@ -164,6 +169,9 @@ const styles: MuiStyles = {
     height: "100%",
     overflow: "auto",
     boxShadow: "-10px 0px 10px -5px rgba(0,0,0,0.3)",
+    overflowY: "scroll",
+    pl: 1,
+    pt: 1,
   },
   calendarPaper: {
     position: "sticky",
@@ -171,6 +179,7 @@ const styles: MuiStyles = {
     zIndex: 1000,
     mb: 0.5,
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+    borderRadius: 3
   },
   new: {
     position: "absolute",

@@ -8,7 +8,7 @@ import listPlugin from "@fullcalendar/list";
 import { DateRange, Event as EventIcon, Search } from "@mui/icons-material";
 import { Event } from "@/utils/types/types";
 import Link from "next/link";
-import { CEventResultCard } from "./CEventResultCard";
+import { CEventCard } from "../groups/chat/CEventCard";
 
 export function CEventCalendar({events}: {events: Event[] | null}) {
   const theme = useTheme();
@@ -123,7 +123,6 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
       <Box sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        gap: 3,
         position: "relative"
       }}>
         {/* Events Sidebar */}
@@ -133,7 +132,7 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
           position: "relative",
           "&:after": {
             content: "''",
-            position: "absolute",
+            position: "fixed",
             bottom: -40,
             left: 0,
             width: "100%",
@@ -141,7 +140,7 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
             bgcolor: "primary.light",
             opacity: 0.3,
             clipPath: "polygon(0 0, 100% 40%, 100% 100%, 0 60%)",
-            display: { xs: "none", md: "block" }
+            display: "flex",
           }
         }}>
           <ClickAwayListener onClickAway={() => setShowMobileResults(false)}>
@@ -217,7 +216,7 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
                   }}>
                     <Box sx={{ p: 2, pb: 4 }}>
                       {filteredEvents.map((event, index) => (
-                        <CEventResultCard key={index} event={event} theme={theme} />
+                        <CEventCard key={index} event={event} />
                       ))}
                     </Box>
                   </Paper>
@@ -228,10 +227,11 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
               <Box sx={{
                 overflowY: "auto",
                 display: { xs: "none", md: "block" },
-                pr: 2,
                 height: "calc(100vh - 100px)",
                 position: "sticky",
-                top: 100
+                top: 100,
+                p: 1,
+                pl: 2,
               }}>
                 <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, mb: 3 }}>
                   Upcoming Events
@@ -283,7 +283,9 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
                   </Box>
                 </Paper>
                 {filteredEvents?.map((event, index) => (
-                  <CEventResultCard key={index} event={event} theme={theme} />
+                  <Link href={`/events/${event.id}`} style={{ textDecoration: "none" }} key={index}>
+                    <CEventCard event={event} />
+                  </Link>
                 ))}
               </Box>
             </Box>
