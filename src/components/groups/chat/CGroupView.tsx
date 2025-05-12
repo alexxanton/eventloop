@@ -16,7 +16,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 
 export function CGroupView({ groups }: { groups: Group[] | null }) {
-  const { currentGroup, openEvents, menuOpen, setMenuOpen } = useStore();
+  const { currentGroup, openEvents, menuOpen } = useStore();
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedDay, setSelectedDay] = useState<Dayjs | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<string>("");
