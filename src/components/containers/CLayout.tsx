@@ -45,7 +45,7 @@ export function CLayout({children}: Readonly<{children: React.ReactNode}>) {
 
   return (
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
-      <Box sx={{ display: "flex", height: "90vh", overflowY: "hidden" }}>
+      <Box sx={{ display: "flex", height: { md: "100vh", sm: "90vh" }, overflowY: "hidden" }}>
         <CssBaseline/>
         <CNavbar/>
         <Box component="main" sx={{ display: "flex", flexDirection: "column", width: "100%" }}>

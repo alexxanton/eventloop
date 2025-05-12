@@ -1,6 +1,6 @@
 "use client";
 import { useStore } from "@/utils/zustand";
-import { Box, Paper, Badge } from "@mui/material";
+import { Box, Paper, Badge, useMediaQuery, useTheme } from "@mui/material";
 import { CGroupsList } from "../list/CGroupsList";
 import { CGroupChat } from "./CGroupChat";
 import { CMainScreen } from "./CMainScreen";
@@ -16,11 +16,13 @@ import dayjs, { Dayjs } from "dayjs";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 
 export function CGroupView({ groups }: { groups: Group[] | null }) {
-  const { currentGroup, openEvents } = useStore();
+  const { currentGroup, openEvents, menuOpen, setMenuOpen } = useStore();
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedDay, setSelectedDay] = useState<Dayjs | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<string>("");
   const userId = useUser()?.id;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     const getGroupData = async () => {
@@ -58,12 +60,17 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
 
   return (
     <Box sx={styles.container}>
-      <Box sx={styles.stickyBox}>
+      <Box
+        sx={{
+          ...styles.stickyBox,
+          display: isMobile && (currentGroup || menuOpen) ? "none" : "",
+        }}
+      >
         <Paper elevation={0} square sx={styles.groupsListPaper}>
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
-      {currentGroup ? <CGroupChat /> : <CMainScreen />}
+      {currentGroup ? <CGroupChat /> : (((isMobile && menuOpen) || !isMobile) && <CMainScreen />)}
       <Box sx={styles.stickyBox}>
         <Paper
           square
@@ -71,6 +78,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
           sx={{
             ...styles.eventsPaper,
             width: openEvents && currentGroup ? 300 : 0,
+            p: openEvents && currentGroup ? 1 : 0,
           }}
         >
           <Paper sx={styles.calendarPaper} elevation={3}>
@@ -170,8 +178,6 @@ const styles: MuiStyles = {
     overflow: "auto",
     boxShadow: "-10px 0px 10px -5px rgba(0,0,0,0.3)",
     overflowY: "scroll",
-    pl: 1,
-    pt: 1,
   },
   calendarPaper: {
     position: "sticky",
