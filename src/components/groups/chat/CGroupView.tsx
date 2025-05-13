@@ -90,14 +90,14 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
           <CGroupsList groups={groups} />
         </Paper>
       </Box>
-      {currentGroup ? <CGroupChat /> : (((isMobile && menuOpen) || !isMobile) && <CMainScreen />)}
-      <Box sx={styles.stickyBox}>
+      {currentGroup ? (((isMobile && !openEvents) || !isMobile) && <CGroupChat /> ): (((isMobile && menuOpen) || !isMobile) && <CMainScreen />)}
+      <Box sx={styles.stickyBox} width={isMobile && openEvents ? "100%" : "fit-content"}>
         <Paper
           square
           elevation={1}
           sx={{
             ...styles.eventsPaper,
-            width: openEvents && currentGroup ? 300 : 0,
+            width: openEvents && currentGroup ? isMobile ? "100%" : 300 : 0,
             p: openEvents && currentGroup ? 1 : 0,
           }}
         >
