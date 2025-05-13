@@ -1,10 +1,11 @@
 import { Member, MuiStyles } from "@/utils/types/types";
 import { CModal } from "../../containers/CModal";
-import { Delete, Settings } from "@mui/icons-material";
-import { Avatar, Box, IconButton, Typography, Select, MenuItem, FormControl } from "@mui/material";
+import { Delete, ExpandMore, Settings } from "@mui/icons-material";
+import { Avatar, Box, IconButton, Typography, Select, MenuItem, FormControl, Accordion, AccordionSummary, AccordionDetails, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { supabase } from "@/utils/supabase/supabase";
 import { useStore } from "@/utils/zustand";
+import { CAvatarUpload } from "@/components/account/CAvatarUpload";
 
 export function CGroupSettingsModal() {
   const { currentGroup } = useStore();
@@ -91,9 +92,52 @@ export function CGroupSettingsModal() {
       onClose={() => setOpen(false)}
     >
       <Box>
-        {members.map((member, index) => {
-          return <MemberRow member={member} key={index} />;
-        })}
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="panel1-content"
+          >
+            <Typography component="span">Edit group</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <form >
+              <Box sx={{ display: "flex" }}>
+                <Box>
+                  <CAvatarUpload  />
+                </Box>
+                <Box>
+                  <TextField
+                    fullWidth
+                    required
+                    label="Group name"
+                    variant="outlined"
+                    sx={{ mb: 2 }}
+                    // onChange={(e) => setName(e.target.value)}
+                    // value={name}
+                  />
+                  <TextField
+                    fullWidth
+                    multiline
+                    maxRows={4}
+                    label="Description"
+                    variant="filled"
+                    sx={{ mb: 2 }}
+                    // onChange={(e) => setDescription(e.target.value)}
+                    // value={description}
+                  />
+                  <Button type="submit" fullWidth variant="contained">
+                    OK
+                  </Button>
+                </Box>
+              </Box>
+            </form>
+          </AccordionDetails>
+        </Accordion>
+        <Box>
+          {members.map((member, index) => {
+            return <MemberRow member={member} key={index} />;
+          })}
+        </Box>
       </Box>
     </CModal>
   );
