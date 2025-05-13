@@ -51,7 +51,7 @@ export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
       } else {
         const { error: updateError } = await supabase
           .from("groups")
-          .upsert({ group_id: group?.id, avatar: publicUrl });
+          .upsert({ id: group?.id, avatar: publicUrl });
 
         if (updateError) throw updateError;
       }

@@ -24,30 +24,50 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  const getGroupData = async () => {
+    if (!userId || !currentGroup?.id) return;
+
+    const { data: events } = await supabase
+      .from("events")
+      .select("*, tickets(*, profile:profiles(*))")
+      .eq("group_id", currentGroup?.id);
+
+    const { data: role } = await supabase
+      .from("group_members")
+      .select("role")
+      .eq("user_id", userId)
+      .eq("group_id", currentGroup?.id)
+      .single()
+      .throwOnError();
+
+    if (events) {
+      setEvents(events);
+      setCurrentUserRole(role?.role || "");
+    }
+  };
+
   useEffect(() => {
-    const getGroupData = async () => {
-      if (!userId || !currentGroup?.id) return;
-
-      const { data: events } = await supabase
-        .from("events")
-        .select("*, tickets(*, profile:profiles(*))")
-        .eq("group_id", currentGroup?.id);
-
-      const { data: role } = await supabase
-        .from("group_members")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("group_id", currentGroup?.id)
-        .single()
-        .throwOnError();
-
-      if (events) {
-        setEvents(events);
-        setCurrentUserRole(role?.role || "");
-      }
-    };
     getGroupData();
   }, [userId, currentGroup?.id]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("messages")
+      .on(
+        "postgres_changes", {
+          event: "*",
+          schema: "public",
+          table: "tickets"
+        },
+        (payload) => {
+          console.log(payload);
+          getGroupData();
+        }
+      )
+      .subscribe();
+
+    return () => {supabase.removeChannel(channel)}
+  }, [events, setEvents]);
 
   const highlightedDays = useMemo(() => {
     const days: { [key: string]: number } = {};

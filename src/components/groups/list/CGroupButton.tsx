@@ -61,21 +61,24 @@ export function CGroupButton({ group }: { group: Group }) {
           width: "100%"
         }}>
           <ListItemIcon sx={{ minWidth: "40px", mr: 2 }}>
-            <Avatar sx={{
-              bgcolor: "transparent",
-              background: `
-                linear-gradient(
-                  45deg,
-                  ${theme.palette.primary.main},
-                  ${theme.palette.secondary.main}
-                )
-              `,
-              boxShadow: 2,
-              color: theme.palette.primary.contrastText,
-              "& .MuiSvgIcon-root": {
-                transition: "transform 0.3s"
-              }
-            }}>
+            <Avatar
+              src={group?.avatar}
+              sx={{
+                bgcolor: "transparent",
+                background: `
+                  linear-gradient(
+                    45deg,
+                    ${theme.palette.primary.main},
+                    ${theme.palette.secondary.main}
+                  )
+                `,
+                boxShadow: 2,
+                color: theme.palette.primary.contrastText,
+                "& .MuiSvgIcon-root": {
+                  transition: "transform 0.3s"
+                }
+              }}
+            >
               <Groups fontSize="small" />
             </Avatar>
           </ListItemIcon>
