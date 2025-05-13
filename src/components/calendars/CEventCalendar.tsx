@@ -95,6 +95,18 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
         overflow: "hidden"
       }
     },
+    "& .fc-toolbar": {
+      padding: "12px 0",
+      overflow: "visible",
+      "& .fc-button-group": {
+        position: "relative",
+        zIndex: 1
+      }
+    },
+    "& .fc-button:focus": {
+    outline: "none !important",
+    boxShadow: `${theme.shadows[6]} !important`,
+  },
   };
 
   const handleSearchFocus = () => {
@@ -136,7 +148,7 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
             bottom: -40,
             left: 0,
             width: "100%",
-            height: "60px",
+            height: "90px",
             bgcolor: "primary.light",
             opacity: 0.3,
             clipPath: "polygon(0 0, 100% 40%, 100% 100%, 0 60%)",
