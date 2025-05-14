@@ -1,3 +1,4 @@
+import { generateTicketPDF } from "@/utils/generateTicketPDF";
 import { TicketType } from "@/utils/types/types";
 import { Download } from "@mui/icons-material";
 import { Box, Typography, Button } from "@mui/material";
@@ -143,6 +144,7 @@ export const CTicketCard = ({ ticket, theme }: { ticket: TicketType; theme: any 
             variant="contained"
             color="primary"
             startIcon={<Download />}
+            onClick={() => generateTicketPDF(ticket, theme)}
             sx={{
               borderRadius: 2,
               px: 3,
