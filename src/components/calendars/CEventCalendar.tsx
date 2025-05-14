@@ -104,9 +104,9 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
       }
     },
     "& .fc-button:focus": {
-    outline: "none !important",
-    boxShadow: `${theme.shadows[6]} !important`,
-  },
+      outline: "none !important",
+      boxShadow: `${theme.shadows[6]} !important`,
+    },
   };
 
   const handleSearchFocus = () => {
