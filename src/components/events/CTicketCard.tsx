@@ -1,10 +1,10 @@
 import { generateTicketPDF } from "@/utils/generateTicketPDF";
 import { TicketType } from "@/utils/types/types";
 import { Download } from "@mui/icons-material";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Theme } from "@mui/material";
 import QRCode from "react-qr-code";
 
-export const CTicketCard = ({ ticket, theme }: { ticket: TicketType; theme: any }) => (
+export const CTicketCard = ({ ticket, theme }: { ticket: TicketType; theme: Theme }) => (
   <Box sx={{
     display: "flex",
     flexDirection: "column",

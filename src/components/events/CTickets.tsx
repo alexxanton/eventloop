@@ -1,9 +1,8 @@
 "use client";
 import { TicketType } from "@/utils/types/types";
-import { Box, Typography, TextField, Button, useTheme } from "@mui/material";
-import QRCode from "react-qr-code";
+import { Box, Typography, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
-import { Search, Download } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import { CTicketCard } from "./CTicketCard";
 
 export function CTickets({ tickets }: { tickets: TicketType[] }) {
