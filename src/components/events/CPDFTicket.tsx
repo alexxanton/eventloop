@@ -14,7 +14,7 @@ export const CPDFTicket = ({
     sx={{
       width: "100%",
       height: "100%",
-      backgroundColor: "#f4f4f9", // soft background
+      backgroundColor: "#f4f4f9", 
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -25,10 +25,10 @@ export const CPDFTicket = ({
     <Box
       sx={{
         padding: "16px",
-        border: "4px solid #e0d9f8", // decorative light lavender border
+        border: "4px solid #e0d9f8", 
         borderRadius: "24px",
-        backgroundColor: "#ffffff", // white inner background
-        boxShadow: "0 0 10px rgba(0,0,0,0.05)", // subtle shadow
+        backgroundColor: "#ffffff", 
+        boxShadow: "0 0 10px rgba(0,0,0,0.05)", 
       }}
     >
       <Box
