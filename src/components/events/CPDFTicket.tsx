@@ -159,6 +159,67 @@ export const CPDFTicket = ({
             </Typography>
           </Box>
         </Box>
+        {/* Right section - QR and code */}
+        <Box
+          sx={{
+            width: "30%",
+            background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "30px",
+            color: "white",
+            position: "relative",
+            overflow: "hidden",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              bottom: "-100px",
+              right: "-100px",
+              width: "200px",
+              height: "200px",
+              background: "rgba(255,255,255,0.1)",
+              borderRadius: "50%"
+            }
+          }}
+        >
+          <Typography variant="h6" sx={{
+            fontWeight: "bold",
+            mb: 4,
+            textAlign: "center",
+            fontSize: "1.3rem"
+          }}>
+            YOUR DIGITAL TICKET
+          </Typography>
+
+          <Box
+            sx={{
+              p: 3,
+              bgcolor: "white",
+              borderRadius: "12px",
+              mb: 4,
+              boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+              position: "relative",
+              zIndex: 1
+            }}
+          >
+            <QRCode
+              value={JSON.stringify(ticket.ticket_number)}
+              size={180}
+              level="H"
+              bgColor="#ffffff"
+              fgColor="#6a11cb"
+            />
+          </Box>
+
+          <Typography variant="subtitle1" sx={{
+            fontWeight: "bold",
+            mb: 1,
+            textAlign: "center"
+          }}>
+            {ticket.ticket_number}
+          </Typography>
 
 
 
