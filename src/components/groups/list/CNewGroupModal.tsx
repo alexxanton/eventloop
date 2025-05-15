@@ -1,8 +1,9 @@
 "use client";
+import { CAvatarUpload } from "@/components/account/CAvatarUpload";
 import { CModal } from "@/components/containers/CModal";
 import { useUser } from "@/utils/hooks/useUser";
 import { supabase } from "@/utils/supabase/supabase";
-import { FormEvent, MuiStyles } from "@/utils/types/types";
+import { FormEvent, Group, MuiStyles } from "@/utils/types/types";
 import { Add } from "@mui/icons-material";
 import { Box, Button, ListItem, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -13,24 +14,33 @@ export function CNewGroupModal() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [open, setOpen] = useState(false);
+  const [group, setGroup] = useState<Group | null>(null);
   const userId = useUser()?.id;
   const router = useRouter();
 
   const createGroup = async (event: FormEvent) => {
     event.preventDefault();
 
-    const group = {
+    if (group) {
+      setOpen(false);
+      return;
+    }
+
+    const newGroup = {
       name,
       description,
       is_public: true,
     };
 
-    const { data } = await supabase.from("groups").insert([group]).select();
+    const { data: groupData } = await supabase
+      .from("groups")
+      .insert([newGroup])
+      .select()
+      .single();
 
-    if (data) {
-      const groupId = data[0].id;
+    if (groupData) {
       const owner = {
-        group_id: groupId,
+        group_id: groupData.id,
         user_id: userId,
         role: "owner",
       };
@@ -41,9 +51,9 @@ export function CNewGroupModal() {
         alert(error.message);
       }
 
-      setOpen(false);
       setName("");
       setDescription("");
+      setGroup(groupData);
       router.refresh();
     }
   };
@@ -67,34 +77,46 @@ export function CNewGroupModal() {
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
       >
-        <Box sx={styles.box}>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            Enter the name of the new group and start collaborating!
-          </Typography>
-          <form onSubmit={createGroup}>
-            <TextField
-              fullWidth
-              required
-              label="Group name"
-              variant="outlined"
-              sx={{ mb: 2 }}
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-            <TextField
-              fullWidth
-              multiline
-              maxRows={4}
-              label="Description"
-              variant="filled"
-              sx={{ mb: 2 }}
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-            />
-            <Button type="submit" fullWidth variant="contained">
-              Create
-            </Button>
-          </form>
+        <Box display="flex">
+          <Box sx={styles.box}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              {group
+                ? "Set an amazing avatar for the group!"
+                : "Enter the name of the new group and start collaborating!"}
+            </Typography>
+            <form onSubmit={createGroup}>
+              {group ? (
+                <Box sx={styles.box} mx={1}>
+                  <CAvatarUpload group={group} />
+                </Box>
+              ) : (
+                <>
+                  <TextField
+                    fullWidth
+                    required
+                    label="Group name"
+                    variant="outlined"
+                    sx={{ mb: 2 }}
+                    onChange={(e) => setName(e.target.value)}
+                    value={name}
+                  />
+                  <TextField
+                    fullWidth
+                    multiline
+                    maxRows={4}
+                    label="Description"
+                    variant="filled"
+                    sx={{ mb: 2 }}
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
+                  />
+                </>
+              )}
+              <Button type="submit" fullWidth variant="contained">
+                {group ?  "OK" : "Create"}
+              </Button>
+            </form>
+          </Box>
         </Box>
       </CModal>
     </ListItem>
@@ -104,12 +126,12 @@ export function CNewGroupModal() {
 
 const styles: MuiStyles = {
   box: {
-    p: 3,
+    py: 3,
     display: "flex",
+    flex: 1,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
   },
   list: {
     bgcolor: "background.paper",

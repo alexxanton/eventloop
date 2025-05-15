@@ -1,5 +1,5 @@
 "use client";
-import { AppBar, Avatar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery } from "@mui/material";
+import { AppBar, Avatar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery, useTheme } from "@mui/material";
 import { Menu, House, Settings, Event, ConfirmationNumber  } from '@mui/icons-material';
 import { useState } from "react";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
@@ -18,10 +18,14 @@ export function CNavbar() {
   const isDesktop = useMediaQuery("(hover: hover) and (pointer: fine)");
   const isDarkMode = useDarkMode();
   const { userUrl } = useStore();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const toggleSidebar = (open: boolean) => {
     setOpen(open);
   };
+
+  if (isMobile) return;
 
   return (
     <AppBar component="nav" color="secondary">

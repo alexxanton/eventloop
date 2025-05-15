@@ -1,10 +1,10 @@
 "use client";
-import { GroupType } from "@/utils/types/types";
+import { Group } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { Groups } from "@mui/icons-material";
 import { Avatar, Box, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from "@mui/material";
 
-export function CGroupButton({ group }: { group: GroupType }) {
+export function CGroupButton({ group }: { group: Group }) {
   const { currentGroup, setCurrentGroup } = useStore();
   const theme = useTheme();
   const isSelected = group?.id === currentGroup?.id;
@@ -61,21 +61,24 @@ export function CGroupButton({ group }: { group: GroupType }) {
           width: "100%"
         }}>
           <ListItemIcon sx={{ minWidth: "40px", mr: 2 }}>
-            <Avatar sx={{
-              bgcolor: "transparent",
-              background: `
-                linear-gradient(
-                  45deg,
-                  ${theme.palette.primary.main},
-                  ${theme.palette.secondary.main}
-                )
-              `,
-              boxShadow: 2,
-              color: theme.palette.primary.contrastText,
-              "& .MuiSvgIcon-root": {
-                transition: "transform 0.3s"
-              }
-            }}>
+            <Avatar
+              src={group?.avatar}
+              sx={{
+                bgcolor: "transparent",
+                background: `
+                  linear-gradient(
+                    45deg,
+                    ${theme.palette.primary.main},
+                    ${theme.palette.secondary.main}
+                  )
+                `,
+                boxShadow: 2,
+                color: theme.palette.primary.contrastText,
+                "& .MuiSvgIcon-root": {
+                  transition: "transform 0.3s"
+                }
+              }}
+            >
               <Groups fontSize="small" />
             </Avatar>
           </ListItemIcon>

@@ -1,8 +1,8 @@
 "use client";
 import { supabase } from "@/utils/supabase/supabase";
-import { EventType, FormEvent, MuiStyles } from "@/utils/types/types";
-import { Check, Add, Edit } from "@mui/icons-material";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Event, FormEvent, MuiStyles } from "@/utils/types/types";
+import { Check, Add, Edit, Delete } from "@mui/icons-material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { CModal } from "../../containers/CModal";
 import dayjs, { Dayjs } from "dayjs";
@@ -10,10 +10,10 @@ import { CAdditionalInfoSection } from "./sections/CAdditionalInfoSection";
 import { CEventDetailsSection } from "./sections/CEventDetailsSection";
 import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
-import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import { useStore } from "@/utils/zustand";
+import { CImageSection } from "./sections/CImageSection";
 
-export function CEventFormModal({event}: {event?: EventType}) {
+export function CEventFormModal({event}: {event?: Event}) {
   const { currentGroup } = useStore();
   const [name, setName] = useState(event?.name || "");
   const [description, setDescription] = useState(event?.description || "");
@@ -27,8 +27,8 @@ export function CEventFormModal({event}: {event?: EventType}) {
   const [ageLimit, setAgeLimit] = useState<number | null>(event?.age_limit || null);
   const [dressCode, setDressCode] = useState(event?.dress_code || "");
   const [error, setError] = useState("");
+  const [image, setImage] = useState("");
   const [open, setOpen] = useState(false);
-  const isDarkMode = useDarkMode();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -71,7 +71,7 @@ export function CEventFormModal({event}: {event?: EventType}) {
   return (
     <Box display="flex">
       <CModal
-        title="Create new event"
+        title={event ? "Edit Event" : "Create Event"}
         buttonType="icon"
         ButtonContent={event ? Edit : Add}
         open={open}
@@ -79,52 +79,77 @@ export function CEventFormModal({event}: {event?: EventType}) {
         onClose={() => setOpen(false)}
       >
         <form onSubmit={handleSubmit}>
-          <Box sx={styles.formBox}>
-            <Box width={{ xs: "100%", sm: "50%" }}>
-              <CEventDetailsSection
-                name={name}
-                setName={setName}
-                description={description}
-                setDescription={setDescription}
-                category={category}
-                setCategory={setCategory}
-                location={location}
-                setLocation={setLocation}
-              />
+          <Box sx={styles.formContainer}>
+            {/* Left Column */}
+            <Box sx={styles.column}>
+              <Paper sx={styles.section}>
+                <CEventDetailsSection {...{
+                  name, setName,
+                  description, setDescription,
+                  category, setCategory,
+                  location, setLocation
+                }} />
+              </Paper>
+              
+              <Box sx={{ pb: 2 }}>
+                <Paper sx={styles.section}>
+                  <CDateTimeSection {...{ startDate, setStartDate, endDate, setEndDate }} />
+                </Paper>
+              </Box>
             </Box>
-            <Box width={{ xs: "100%", sm: "50%" }}>
-              <CDateTimeSection
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-              />
-              <CPricingSection
-                price={price}
-                setPrice={setPrice}
-                currency={currency}
-                setCurrency={setCurrency}
-              />
-              <CAdditionalInfoSection
-                dressCode={dressCode}
-                setDressCode={setDressCode}
-                maxCapacity={maxCapacity}
-                setMaxCapacity={setMaxCapacity}
-                ageLimit={ageLimit}
-                setAgeLimit={setAgeLimit}
-              />
+
+            {/* Right Column */}
+            <Box sx={styles.column}>
+              <Paper sx={styles.section}>
+                <CPricingSection {...{ price, setPrice, currency, setCurrency }} />
+              </Paper>
+              
+              <Paper sx={styles.section}>
+                <CAdditionalInfoSection {...{
+                  dressCode, setDressCode,
+                  maxCapacity, setMaxCapacity,
+                  ageLimit, setAgeLimit
+                }} />
+              </Paper>
+              
+              <Box sx={{ pb: 2 }}>
+                <Paper sx={styles.section}>
+                  <CImageSection {...{ image, setImage }} />
+                </Paper>
+              </Box>
             </Box>
-            {error && (
-              <Typography color="error" sx={{ mt: 2 }}>
-                {error}
-              </Typography>
+          </Box>
+
+          {/* Error Message */}
+          {error && (
+            <Typography color="error" sx={styles.error}>
+              {error}
+            </Typography>
+          )}
+          
+          {/* Action Buttons */}
+          <Stack direction="row" justifyContent="space-between" sx={styles.actions}>
+            {event && (
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<Delete />}
+                // onClick={handleDelete}
+                sx={styles.deleteButton}
+              >
+                Delete Event
+              </Button>
             )}
-          </Box>
-          <Box sx={styles.footer} bgcolor={isDarkMode ? "#383434" : "secondary.main"}>
-            <IconButton size="large" sx={styles.button} type="submit">
-              <Check />
-            </IconButton>
-          </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              startIcon={<Check />}
+              sx={styles.submitButton}
+            >
+              {event ? "Save Changes" : "Create Event"}
+            </Button>
+          </Stack>
         </form>
       </CModal>
     </Box>
@@ -132,28 +157,67 @@ export function CEventFormModal({event}: {event?: EventType}) {
 }
 
 const styles: MuiStyles = {
-  formBox: {
+  formContainer: {
     display: "flex",
-    p: 2,
-    gap: {xs: 0, sm: 5},
-    overflowY: "auto",
-    height: "70vh",
-    pb: 3,
+    gap: 3,
     flexDirection: { xs: "column", sm: "row" },
+    p: 3,
+    overflowY: "auto",
+    maxHeight: "60vh",
   },
-  footer: {
+  column: {
+    width: { xs: "100%", sm: "50%" },
     display: "flex",
-    justifyContent: "flex-end",
-    flex: 1,
-    p: 2,
-    height: 40,
+    flexDirection: "column",
+    gap: 3,
   },
-  button: {
-    bgcolor: "primary.main",
-    color: "white",
-    position: "relative",
-    top: -40,
-    right: 20,
-    height: "fit-content",
+  section: {
+    p: 3,
+    borderRadius: 4,
+    background: (theme) => `linear-gradient(145deg, ${theme.palette.background.paper}, ${theme.palette.background.default})`,
+    boxShadow: (theme) => theme.shadows[2],
+    border: (theme) => `1px solid ${theme.palette.divider}`,
+    transition: "all 0.2s ease",
+    "&:hover": {
+      boxShadow: (theme) => theme.shadows[4],
+      transform: "translateY(-2px)",
+    },
+  },
+  error: {
+    px: 3,
+    py: 1,
+    mx: 3,
+    borderRadius: 2,
+    bgcolor: "error.light",
+    textAlign: "center",
+    fontWeight: 500,
+  },
+  actions: {
+    px: 3,
+    py: 2,
+    borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+    bgcolor: "background.paper",
+  },
+  submitButton: {
+    background: (theme) => `linear-gradient(45deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+    borderRadius: 20,
+    px: 4,
+    py: 1,
+    transition: "all 0.2s ease",
+    "&:hover": {
+      transform: "translateY(-1px)",
+      boxShadow: (theme) => theme.shadows[3],
+    },
+  },
+  deleteButton: {
+    borderRadius: 20,
+    px: 4,
+    py: 1,
+    transition: "all 0.2s ease",
+    "&:hover": {
+      transform: "translateY(-1px)",
+      boxShadow: (theme) => theme.shadows[3],
+      bgcolor: "error.dark",
+    },
   },
 };

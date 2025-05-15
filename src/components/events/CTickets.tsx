@@ -1,11 +1,11 @@
 "use client";
-import { TicketType } from "@/utils/types/types";
+import { Ticket } from "@/utils/types/types";
 import { Box, Typography, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { Search } from "@mui/icons-material";
 import { CTicketCard } from "./CTicketCard";
 
-export function CTickets({ tickets }: { tickets: TicketType[] }) {
+export function CTickets({ tickets }: { tickets: Ticket[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const theme = useTheme();
 

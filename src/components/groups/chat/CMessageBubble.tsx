@@ -1,11 +1,11 @@
-import { MessageType, MuiStyles } from "@/utils/types/types";
+import { Message, MuiStyles } from "@/utils/types/types";
 import { Avatar, Box, Paper, Typography, useTheme } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 type CProps = {
-  msg: MessageType;
+  msg: Message;
   index: number;
-  array: MessageType[];
+  array: Message[];
   userId: string;
 };
 
@@ -49,9 +49,23 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
         }}
       >
         <Avatar
+          src={msg.profile?.avatar}
           sx={{
             visibility: isFirstInGroup && !isCurrentUser ? "visible" : "hidden",
-            mt: 1
+            mt: 1,
+            bgcolor: "transparent",
+            background: `
+              linear-gradient(
+                45deg,
+                ${theme.palette.primary.main},
+                ${theme.palette.secondary.main}
+              )
+            `,
+            boxShadow: 2,
+            color: theme.palette.primary.contrastText,
+            "& .MuiSvgIcon-root": {
+              transition: "transform 0.3s"
+            }
           }}
         />
         <Box
@@ -76,7 +90,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
             borderRadius: borderRadius,
           }}
         >
-          {isFirstInGroup && !isCurrentUser && <small>{"@" + msg.profiles?.username}</small>}
+          {isFirstInGroup && !isCurrentUser && <small>{"@" + msg.profile?.username}</small>}
           <Box display="flex" gap={1}>
             <Typography marginBlockEnd={1} variant="body1">{msg.message}</Typography>
             <Box sx={styles.time}>
@@ -118,6 +132,7 @@ const styles: MuiStyles = {
     px: 1,
     alignSelf: "center",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+    my: 3,
   },
   time: {
     display: "flex",

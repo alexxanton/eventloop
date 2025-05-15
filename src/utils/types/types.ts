@@ -3,23 +3,23 @@ import { SxProps, Theme } from '@mui/material';
 export type MuiStyles = Record<string, SxProps<Theme>>;
 export type FormEvent = React.FormEvent<HTMLFormElement>;
 
-export type MessageType = {
+export type Message = {
     id?: number;
     user_id: string;
     group_id: number;
     message: string;
     sent_at: string;
-    profiles?: ProfileType;
+    profile?: Profile;
 };
 
-export type GroupType = null | {
+export type Group = null | {
     id: number;
     name: string;
     description: string;
     avatar: string;
 };
 
-export type EventType = {
+export type Event = {
     id: number;
     group_id: number;
     name: string;
@@ -33,27 +33,29 @@ export type EventType = {
     dress_code: string;
     max_capacity: number;
     age_limit: number;
-    tickets: TicketType[];
+    tickets: Ticket[];
+    image: string;
 };
 
-export type TicketType = {
+export type Ticket = {
     id: number;
     user_id: string;
     event_id: number;
     ticket_number: string;
     purchased_at: string;
     validated: string;
-    event: EventType;
-    profiles: ProfileType;
+    event: Event;
+    profile: Profile;
 };
 
-export type MembersType = {
+export type Member = {
     user_id: string;
     group_id: number;
     role: string;
-    profiles: ProfileType;
+    profile: Profile;
 };
 
-export type ProfileType = {
+export type Profile = {
     username: string;
+    avatar: string;
 };

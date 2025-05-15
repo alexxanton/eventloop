@@ -1,17 +1,18 @@
 import { CModal } from "@/components/containers/CModal";
-import { MuiStyles, TicketType } from "@/utils/types/types";
-import { List } from "@mui/icons-material";
+import { MuiStyles, Ticket } from "@/utils/types/types";
+import { Check, List } from "@mui/icons-material";
 import { Avatar, Box, Typography } from "@mui/material";
 import { useState } from "react";
 
-export function CAttendanceListModal({tickets}: {tickets: TicketType[]}) {
+export function CAttendanceListModal({tickets}: {tickets: Ticket[]}) {
   const [open, setOpen] = useState(false);
 
-  const AttendeeRow = ({ticket}: {ticket: TicketType}) => {
+  const AttendeeRow = ({ticket}: {ticket: Ticket}) => {
     return (
       <Box sx={styles.memberRow}>
         <Avatar sx={styles.avatar} />
-        <Typography sx={styles.username}>@{ticket.profiles.username}</Typography>
+        <Typography sx={styles.username}>@{ticket.profile.username}</Typography>
+        <Check sx={{ color: (theme) => ticket.validated ? theme.palette.success.light : theme.palette.grey[300] }} />
       </Box>
     );
   };

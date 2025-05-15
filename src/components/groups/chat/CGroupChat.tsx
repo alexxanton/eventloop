@@ -1,7 +1,7 @@
 import { Close, Send } from "@mui/icons-material";
 import { Box, Typography, IconButton, TextField, keyframes } from "@mui/material";
 import { CMessageBubble } from "./CMessageBubble";
-import { MessageType, MuiStyles } from "@/utils/types/types";
+import { Message, MuiStyles } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { supabase } from "@/utils/supabase/supabase";
 import { useEffect, useRef, useState } from "react";
@@ -12,7 +12,7 @@ import { CalendarIcon } from "@mui/x-date-pickers";
 export function CGroupChat() {
   const { currentGroup, setCurrentGroup, toggleOpenEvents } = useStore();
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const lastMessageIdRef = useRef(0);
   const [lastMessageId, setLastMessageId] = useState(0);
   const userId = useUser()?.id;
@@ -27,7 +27,7 @@ export function CGroupChat() {
 
   const query = supabase
     .from("messages")
-    .select("*, profiles(username)")
+    .select("*, profile:profiles(username, avatar)")
     .eq("group_id", currentGroup?.id);
 
   const getMessages = async () => {
@@ -51,7 +51,7 @@ export function CGroupChat() {
         sent_at: new Date().toISOString()
       };
 
-      setMessages((prevMessages) => [...prevMessages, message as MessageType]);
+      setMessages((prevMessages) => [...prevMessages, message as Message]);
       setInput("");
 
       const { data: msg, error } = await supabase
@@ -107,7 +107,7 @@ export function CGroupChat() {
           table: "messages"
         },
         (payload) => {
-          const newMessage = payload.new as MessageType;
+          const newMessage = payload.new as Message;
           if (!newMessage.id) return;
           console.log("last:", lastMessageIdRef.current, "new:", newMessage.id)
           // setLastMessageId(newMessage.id);

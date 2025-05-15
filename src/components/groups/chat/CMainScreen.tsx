@@ -1,8 +1,11 @@
+import { useStore } from "@/utils/zustand";
 import { Groups, AccountCircle, Event } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import Link from "next/link";
 
 export function CMainScreen() {  
+  const { setMenuOpen } = useStore();
+  
   return (
     <Box>
       <Box sx={{
@@ -54,7 +57,7 @@ export function CMainScreen() {
                   color="secondary"
                   size="large"
                   startIcon={<Groups />}
-                  // onClick={handleActionClick}
+                  onClick={() => setMenuOpen(false)}
                   sx={{ px: 4, py: 1.5 }}
                 >
                   Create Group
@@ -65,7 +68,6 @@ export function CMainScreen() {
                     color="secondary"
                     size="large"
                     startIcon={<Event />}
-                    // onClick={handleActionClick}
                     sx={{ px: 4, py: 1.5, color: "white" }}
                   >
                     Join Event

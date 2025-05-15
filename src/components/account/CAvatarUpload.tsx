@@ -1,5 +1,5 @@
 import { supabase } from "@/utils/supabase/supabase";
-import { GroupType } from "@/utils/types/types";
+import { Group } from "@/utils/types/types";
 import { useStore } from "@/utils/zustand";
 import { Add } from "@mui/icons-material";
 import { Avatar, Box, CircularProgress } from "@mui/material";
@@ -7,7 +7,7 @@ import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function CAvatarUpload({user, group}: {user?: User, group?: GroupType}) {
+export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
   const { setUserUrl } = useStore();
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
@@ -51,7 +51,7 @@ export function CAvatarUpload({user, group}: {user?: User, group?: GroupType}) {
       } else {
         const { error: updateError } = await supabase
           .from("groups")
-          .upsert({ group_id: group?.id, avatar: publicUrl });
+          .upsert({ id: group?.id, avatar: publicUrl });
 
         if (updateError) throw updateError;
       }
@@ -68,9 +68,6 @@ export function CAvatarUpload({user, group}: {user?: User, group?: GroupType}) {
      <Box sx={{
       position: "relative",
       mb: 3,
-      "&:hover .avatar-overlay": {
-        opacity: 1
-      }
     }}>
       <label htmlFor="avatar-upload">
         <input
@@ -90,26 +87,27 @@ export function CAvatarUpload({user, group}: {user?: User, group?: GroupType}) {
             boxShadow: 4
           }}
         />
-        <Box
-          className="avatar-overlay"
+        <Avatar
           sx={{
             position: "absolute",
             top: 0,
             left: 0,
             width: "100%",
             height: "100%",
-            borderRadius: "50%",
             bgcolor: "rgba(0, 0, 0, 0.4)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             opacity: 0,
             transition: "opacity 0.3s",
-            cursor: "pointer"
+            cursor: "pointer",
+            "&:hover": {
+              opacity: 1
+            }
           }}
         >
           <Add fontSize="large" sx={{ color: "white" }} />
-        </Box>
+        </Avatar>
         {uploading && (
           <CircularProgress
             size={48}

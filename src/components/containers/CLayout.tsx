@@ -1,6 +1,6 @@
 "use client";
-import { Box, CssBaseline, Toolbar } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Box, CssBaseline, Toolbar, useMediaQuery } from "@mui/material";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { useStore } from "@/utils/zustand";
 import { CNavbar } from "../ui/CNavbar";
@@ -8,6 +8,8 @@ import { CNavbar } from "../ui/CNavbar";
 export function CLayout({children}: Readonly<{children: React.ReactNode}>) {
   const { theme } = useStore();
   const [isHydrated, setIsHydrated] = useState(false);
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   useEffect(() => {
     setIsHydrated(true);
@@ -43,11 +45,11 @@ export function CLayout({children}: Readonly<{children: React.ReactNode}>) {
 
   return (
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
-      <Box sx={{ display: "flex", height: "100vh", overflowY: "hidden" }}>
+      <Box sx={{ display: "flex", height: { md: "100vh", xs: "90vh" }, overflowY: "hidden" }}>
         <CssBaseline/>
         <CNavbar/>
         <Box component="main" sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-          <Toolbar/>
+          {!isMobile && <Toolbar />}
           {children}
         </Box>
       </Box>
