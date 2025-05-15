@@ -1,7 +1,6 @@
 import { Add, CameraAlt, Cancel, Image } from "@mui/icons-material";
 import { Box, Avatar, IconButton } from "@mui/material";
 import { CFormSection } from "../CFormSection";
-import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
 interface CProps {
   image: string;
@@ -9,7 +8,6 @@ interface CProps {
 }
 
 export function CImageSection({ image, setImage }: CProps) {
-  const isDarkMode = useDarkMode();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
