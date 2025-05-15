@@ -31,4 +31,26 @@ export const CPDFTicket = ({
         boxShadow: "0 0 10px rgba(0,0,0,0.05)", // subtle shadow
       }}
     >
+<Box
+        sx={{
+          width: "1000px",
+          height: "500px",
+          backgroundColor: "#f8f9ff",
+          display: "flex",
+          flexDirection: "row",
+          borderRadius: "16px",
+          overflow: "hidden",
+          boxShadow: "0 8px 30px rgba(103, 58, 183, 0.3)",
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "120px",
+            height: "120px",
+            background: "radial-gradient(circle, rgba(106,17,203,0.2) 0%, rgba(106,17,203,0) 70%)",
+          }
+        }}
+      >
 
