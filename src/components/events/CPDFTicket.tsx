@@ -53,4 +53,15 @@ export const CPDFTicket = ({
           }
         }}
       >
+        {/* Left section - Main content */}
+        <Box
+          sx={{
+            width: "70%",
+            padding: "40px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            background: "white",
+          }}
+        >
 
