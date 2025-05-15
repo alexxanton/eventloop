@@ -22,4 +22,13 @@ export const CPDFTicket = ({
       boxSizing: "border-box",
     }}
   >
-    
+ <Box
+      sx={{
+        padding: "16px",
+        border: "4px solid #e0d9f8", // decorative light lavender border
+        borderRadius: "24px",
+        backgroundColor: "#ffffff", // white inner background
+        boxShadow: "0 0 10px rgba(0,0,0,0.05)", // subtle shadow
+      }}
+    >
+
