@@ -221,5 +221,17 @@ export const CPDFTicket = ({
             {ticket.ticket_number}
           </Typography>
 
+          <Typography variant="caption" sx={{
+            textAlign: "center",
+            opacity: 0.8,
+            fontSize: "0.8rem"
+          }}>
+            Scan this QR code to validate your ticket
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
+  </Box>
+);
 
 
