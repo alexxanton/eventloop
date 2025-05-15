@@ -22,7 +22,7 @@ export const CPDFTicket = ({
       boxSizing: "border-box",
     }}
   >
- <Box
+    <Box
       sx={{
         padding: "16px",
         border: "4px solid #e0d9f8", // decorative light lavender border
@@ -31,7 +31,7 @@ export const CPDFTicket = ({
         boxShadow: "0 0 10px rgba(0,0,0,0.05)", // subtle shadow
       }}
     >
-<Box
+      <Box
         sx={{
           width: "1000px",
           height: "500px",
@@ -64,7 +64,7 @@ export const CPDFTicket = ({
             background: "white",
           }}
         >
-   {/* Header */}
+          {/* Header */}
           <Box>
             <Typography
               variant="h3"
@@ -108,6 +108,7 @@ export const CPDFTicket = ({
               </Box>
             </Box>
           </Box>
+
           {/* Event details */}
           <Box sx={{
             display: "grid",
@@ -144,7 +145,9 @@ export const CPDFTicket = ({
               icon="📍"
             />
           </Box>
-<Box sx={{
+
+          {/* Important notes */}
+          <Box sx={{
             backgroundColor: "#f8f5ff",
             padding: "20px",
             borderRadius: "12px",
@@ -159,6 +162,7 @@ export const CPDFTicket = ({
             </Typography>
           </Box>
         </Box>
+
         {/* Right section - QR and code */}
         <Box
           sx={{
@@ -231,6 +235,28 @@ export const CPDFTicket = ({
         </Box>
       </Box>
     </Box>
+  </Box>
+);
+
+// Auxiliary component for details
+const DetailItem = ({ title, value, icon }: { title: string; value: string; icon?: string }) => (
+  <Box sx={{ mb: 2 }}>
+    <Typography variant="subtitle2" sx={{
+      color: "#666",
+      fontWeight: "bold",
+      mb: 1,
+      display: "flex",
+      alignItems: "center",
+      gap: "8px"
+    }}>
+      {icon} {title}
+    </Typography>
+    <Typography variant="body1" sx={{
+      color: "#333",
+      fontWeight: "500"
+    }}>
+      {value}
+    </Typography>
   </Box>
 );
 
