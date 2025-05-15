@@ -34,6 +34,7 @@ export type Event = {
     max_capacity: number;
     age_limit: number;
     tickets: Ticket[];
+    image: string;
 };
 
 export type Ticket = {

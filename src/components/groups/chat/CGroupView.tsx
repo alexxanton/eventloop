@@ -132,15 +132,17 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
             {<Box sx={styles.new}><CEventFormModal /></Box>}
           </Paper>
           {events
-            .filter((e) => {
+            .filter((event) => {
               if (!selectedDay) return true;
-              return dayjs(e.start_date).isSame(selectedDay, "day");
+              return dayjs(event.start_date).isSame(selectedDay, "day");
             })
-            .map((e, index) => (
-              <Box key={index}>
-                <CEventCard event={e} userRole={currentUserRole} />
-              </Box>
-            ))}
+            .map((event) => {
+              return (
+                <Box key={event.id}>
+                  <CEventCard event={event} userRole={currentUserRole} />
+                </Box>
+              );
+            })}
         </Paper>
       </Box>
     </Box>

@@ -11,6 +11,7 @@ import { CEventDetailsSection } from "./sections/CEventDetailsSection";
 import { CPricingSection } from "./sections/CPricingSection";
 import { CDateTimeSection } from "./sections/CDateTimeSection";
 import { useStore } from "@/utils/zustand";
+import { CImageSection } from "./sections/CImageSection";
 
 export function CEventFormModal({event}: {event?: Event}) {
   const { currentGroup } = useStore();
@@ -26,6 +27,7 @@ export function CEventFormModal({event}: {event?: Event}) {
   const [ageLimit, setAgeLimit] = useState<number | null>(event?.age_limit || null);
   const [dressCode, setDressCode] = useState(event?.dress_code || "");
   const [error, setError] = useState("");
+  const [image, setImage] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -89,7 +91,7 @@ export function CEventFormModal({event}: {event?: Event}) {
                 }} />
               </Paper>
               
-              <Box sx={{ flex: 1,  pb: 2 }}>
+              <Box sx={{ pb: 2 }}>
                 <Paper sx={styles.section}>
                   <CDateTimeSection {...{ startDate, setStartDate, endDate, setEndDate }} />
                 </Paper>
@@ -109,6 +111,12 @@ export function CEventFormModal({event}: {event?: Event}) {
                   ageLimit, setAgeLimit
                 }} />
               </Paper>
+              
+              <Box sx={{ pb: 2 }}>
+                <Paper sx={styles.section}>
+                  <CImageSection {...{ image, setImage }} />
+                </Paper>
+              </Box>
             </Box>
           </Box>
 

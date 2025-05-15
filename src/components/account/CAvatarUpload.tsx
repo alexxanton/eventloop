@@ -68,9 +68,6 @@ export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
      <Box sx={{
       position: "relative",
       mb: 3,
-      "&:hover .avatar-overlay": {
-        opacity: 1
-      }
     }}>
       <label htmlFor="avatar-upload">
         <input
@@ -90,26 +87,27 @@ export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
             boxShadow: 4
           }}
         />
-        <Box
-          className="avatar-overlay"
+        <Avatar
           sx={{
             position: "absolute",
             top: 0,
             left: 0,
             width: "100%",
             height: "100%",
-            borderRadius: "50%",
             bgcolor: "rgba(0, 0, 0, 0.4)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             opacity: 0,
             transition: "opacity 0.3s",
-            cursor: "pointer"
+            cursor: "pointer",
+            "&:hover": {
+              opacity: 1
+            }
           }}
         >
           <Add fontSize="large" sx={{ color: "white" }} />
-        </Box>
+        </Avatar>
         {uploading && (
           <CircularProgress
             size={48}
