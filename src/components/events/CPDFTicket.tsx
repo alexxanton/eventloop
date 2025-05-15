@@ -144,5 +144,21 @@ export const CPDFTicket = ({
               icon="📍"
             />
           </Box>
+<Box sx={{
+            backgroundColor: "#f8f5ff",
+            padding: "20px",
+            borderRadius: "12px",
+            borderLeft: "4px solid #6a11cb"
+          }}>
+            <Typography variant="body1" sx={{ fontWeight: "bold", color: "#6a11cb", mb: 1 }}>
+              🎉 Important!
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#555" }}>
+              Show this ticket at the event entrance. You can present it on your mobile device or in printed form.
+              The ticket is only valid for the specified date and time.
+            </Typography>
+          </Box>
+        </Box>
+
 
 
