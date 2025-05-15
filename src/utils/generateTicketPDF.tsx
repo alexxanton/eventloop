@@ -27,7 +27,7 @@ export const generateTicketPDF = async (ticket: TicketType, theme: Theme) => {
       backgroundColor: null,
     });
 
-    const pdf = new jsPDF("ll", "mm", "a4");
+    const pdf = new jsPDF("l", "mm", "a4");
     const imgData = canvas.toDataURL("image/png");
     
     const pdfWidth = pdf.internal.pageSize.getWidth();
