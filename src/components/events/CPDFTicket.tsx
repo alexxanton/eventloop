@@ -1,8 +1,8 @@
-import { TicketType } from "@/utils/types/types";
+import { Ticket } from "@/utils/types/types";
 import { Box, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 
-export const CPDFTicket = ({ticket}: {ticket: TicketType}) => (
+export const CPDFTicket = ({ticket}: {ticket: Ticket}) => (
   <Box
     id="pdf-content"
     sx={{

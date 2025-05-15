@@ -1,9 +1,9 @@
 import { createRef } from "react";
 import { createRoot } from "react-dom/client";
 import { CPDFTicket } from "@/components/events/CPDFTicket";
-import { TicketType } from "./types/types";
+import { Ticket } from "./types/types";
 
-export const generateTicketPDF = async (ticket: TicketType) => {
+export const generateTicketPDF = async (ticket: Ticket) => {
   const container = document.createElement("div");
   container.style.position = "absolute";
   container.style.left = "-9999px";
