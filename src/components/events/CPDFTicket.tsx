@@ -64,4 +64,49 @@ export const CPDFTicket = ({
             background: "white",
           }}
         >
+   {/* Header */}
+          <Box>
+            <Typography
+              variant="h3"
+              sx={{
+                color: "#6a11cb",
+                fontWeight: "bold",
+                mb: 2,
+                fontSize: "2.5rem",
+                lineHeight: 1.2
+              }}
+            >
+              {ticket.event.name}
+            </Typography>
+
+            <Box sx={{
+              display: "flex",
+              gap: 2,
+              mb: 4
+            }}>
+              <Box sx={{
+                backgroundColor: "#f0e6ff",
+                color: "#6a11cb",
+                px: 2,
+                py: 1,
+                borderRadius: "20px",
+                fontWeight: "bold",
+                fontSize: "0.9rem"
+              }}>
+                GENERAL ADMISSION
+              </Box>
+              <Box sx={{
+                backgroundColor: "#e6f0ff",
+                color: "#2575fc",
+                px: 2,
+                py: 1,
+                borderRadius: "20px",
+                fontWeight: "bold",
+                fontSize: "0.9rem"
+              }}>
+                VALID FOR 1 PERSON
+              </Box>
+            </Box>
+          </Box>
+
 
