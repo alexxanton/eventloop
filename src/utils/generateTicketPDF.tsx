@@ -14,7 +14,7 @@ export const generateTicketPDF = async (ticket: TicketType, theme: Theme) => {
   const root = createRoot(container);
   root.render(
     <div ref={ticketRef}>
-      <CPDFTicket ticket={ticket} theme={theme} />
+      <CPDFTicket ticket={ticket} />
     </div>
   );
 

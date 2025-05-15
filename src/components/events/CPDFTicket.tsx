@@ -1,14 +1,8 @@
 import { TicketType } from "@/utils/types/types";
-import { Box, Theme, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 
-export const CPDFTicket = ({
-  ticket,
-  theme,
-}: {
-  ticket: TicketType;
-  theme: Theme;
-}) => (
+export const CPDFTicket = ({ticket}: {ticket: TicketType}) => (
   <Box
     id="pdf-content"
     sx={{
@@ -238,7 +232,6 @@ export const CPDFTicket = ({
   </Box>
 );
 
-// Auxiliary component for details
 const DetailItem = ({ title, value, icon }: { title: string; value: string; icon?: string }) => (
   <Box sx={{ mb: 2 }}>
     <Typography variant="subtitle2" sx={{
@@ -259,5 +252,3 @@ const DetailItem = ({ title, value, icon }: { title: string; value: string; icon
     </Typography>
   </Box>
 );
-
-
