@@ -108,5 +108,41 @@ export const CPDFTicket = ({
               </Box>
             </Box>
           </Box>
+          {/* Event details */}
+          <Box sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "20px",
+            mb: 4
+          }}>
+            <DetailItem
+              title="Event Date"
+              value={new Date(ticket.event.start_date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+              icon="📅"
+            />
+            <DetailItem
+              title="Time"
+              value={new Date(ticket.event.start_date).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+              icon="⏰"
+            />
+            <DetailItem
+              title="Ticket Number"
+              value={ticket.ticket_number}
+              icon="🎫"
+            />
+            <DetailItem
+              title="Location"
+              value={ticket.event.location || "To be confirmed"}
+              icon="📍"
+            />
+          </Box>
 
 
