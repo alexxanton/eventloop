@@ -144,7 +144,7 @@ export const CTicketCard = ({ ticket, theme }: { ticket: TicketType; theme: Them
             variant="contained"
             color="primary"
             startIcon={<Download />}
-            onClick={() => generateTicketPDF(ticket, theme)}
+            onClick={() => generateTicketPDF(ticket)}
             sx={{
               borderRadius: 2,
               px: 3,
