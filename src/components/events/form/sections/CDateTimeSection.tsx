@@ -39,6 +39,7 @@ export function CDateTimeSection({ startDate, setStartDate, endDate, setEndDate 
           <Box sx={styles.date}>
             <MobileDatePicker
               value={startDate}
+              disablePast
               onChange={(value) => setStartDate(value)}
               slotProps={datePickerSlotProps}
             />
@@ -54,6 +55,7 @@ export function CDateTimeSection({ startDate, setStartDate, endDate, setEndDate 
           <Box sx={styles.date}>
             <MobileDatePicker
               value={endDate}
+              disablePast
               onChange={(value) => setEndDate(value)}
               slotProps={datePickerSlotProps}
             />

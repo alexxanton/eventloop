@@ -13,6 +13,20 @@ export function CEventPage({event}: {event: Event | null}) {
   const theme = useTheme();
 
   const handleJoinEvent = async () => {
+    const eventId = event?.id;
+    const price = event?.price;
+
+    const res = await fetch("/api/pay", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, eventId, price }),
+    });
+
+    const { url, error } = await res.json();
+    if (error) throw new Error(error);
+
+    window.location.href = url;
+
     const newMember = {
       user_id: userId,
       group_id: event?.group_id,
