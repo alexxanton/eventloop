@@ -1,7 +1,7 @@
 "use client";
 import { Ticket } from "@/utils/types/types";
 import { Box, Typography, TextField, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Search } from "@mui/icons-material";
 import { CTicketCard } from "./CTicketCard";
 
@@ -9,11 +9,32 @@ export function CTickets({ tickets }: { tickets: Ticket[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const theme = useTheme();
 
-  const filteredTickets = tickets.filter(ticket =>
-    ticket.event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    ticket.event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    new Date(ticket.event.start_date).toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Group tickets by event ID
+  const groupedTickets = useMemo(() => {
+    const groups: Record<string, Ticket[]> = {};
+    
+    tickets.forEach(ticket => {
+      const eventId = ticket.event.id;
+      if (!groups[eventId]) {
+        groups[eventId] = [];
+      }
+      groups[eventId].push(ticket);
+    });
+    
+    return Object.values(groups);
+  }, [tickets]);
+
+  // Filter grouped tickets based on search query
+  const filteredGroups = useMemo(() => {
+    return groupedTickets.filter(group => {
+      const event = group[0].event; // All tickets in group share same event
+      return (
+        event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        new Date(event.start_date).toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+  }, [groupedTickets, searchQuery]);
 
   if (!tickets || tickets.length === 0) {
     return (
@@ -69,11 +90,15 @@ export function CTickets({ tickets }: { tickets: Ticket[] }) {
         display: "grid",
         gridTemplateColumns: { xs: "1fr", md: "repeat(auto-fit, minmax(400px, 1fr))" }
       }}>
-        {filteredTickets.map((ticket, index) => (
-          <CTicketCard ticket={ticket} theme={theme} key={index} />
+        {filteredGroups.map((ticketGroup, index) => (
+          <CTicketCard
+            key={ticketGroup[0].event.id}
+            tickets={ticketGroup}
+            theme={theme}
+          />
         ))}
 
-        {filteredTickets.length === 0 && (
+        {filteredGroups.length === 0 && (
           <Box sx={{
             p: 4,
             textAlign: "center",

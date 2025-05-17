@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
   try {
-    const { userId, eventId, price } = await req.json();
+    const { userId, eventId, groupId, price } = await req.json();
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -28,6 +28,7 @@ export async function POST(req) {
       metadata: {
         userId,
         eventId,
+        groupId
       },
       success_url: `http://localhost:3000/events/${eventId}`,
       cancel_url: `http://localhost:3000/events/${eventId}`,

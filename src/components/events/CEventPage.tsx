@@ -19,36 +19,19 @@ export function CEventPage({event}: {event: Event | null}) {
     const res = await fetch("/api/pay", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, eventId, price }),
+      body: JSON.stringify({
+        userId,
+        eventId,
+        groupId:
+        event?.group_id,
+        price
+      }),
     });
 
     const { url, error } = await res.json();
     if (error) throw new Error(error);
 
     window.location.href = url;
-
-    const newMember = {
-      user_id: userId,
-      group_id: event?.group_id,
-    };
-
-    const ticket = {
-      user_id: userId,
-      event_id: event?.id
-    };
-
-    setLoading(true);
-
-    const { error: memberError } = await supabase
-      .from("group_members")
-      .upsert(newMember, { onConflict: "user_id,group_id" });
-    
-    const { error: ticketError } = await supabase.from("tickets").insert(ticket);
-    setLoading(false);
-
-    if (memberError || ticketError) {
-      alert(memberError?.message || ticketError?.message);
-    }
   };
 
   const formatDate = (date: Date) => {
