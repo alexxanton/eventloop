@@ -8,7 +8,7 @@ export const CPDFTicket = ({ticket}: {ticket: Ticket}) => (
     sx={{
       width: "100%",
       height: "100%",
-      backgroundColor: "#f4f4f9", 
+      backgroundColor: "#f4f4f9",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -19,10 +19,10 @@ export const CPDFTicket = ({ticket}: {ticket: Ticket}) => (
     <Box
       sx={{
         padding: "16px",
-        border: "4px solid #e0d9f8", 
+        border: "4px solid #e0d9f8",
         borderRadius: "24px",
-        backgroundColor: "#ffffff", 
-        boxShadow: "0 0 10px rgba(0,0,0,0.05)", 
+        backgroundColor: "#ffffff",
+        boxShadow: "0 0 10px rgba(0,0,0,0.05)",
       }}
     >
       <Box

@@ -1,17 +1,44 @@
 import { generateTicketPDF } from "@/utils/generateTicketPDF";
+import { supabase } from "@/utils/supabase/supabase";
 import { Ticket } from "@/utils/types/types";
 import { CalendarToday, Delete, Download, KeyboardArrowLeft, KeyboardArrowRight, LocationOn } from "@mui/icons-material";
 import { Box, Typography, Button, IconButton, Theme, useTheme } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 
 export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Theme }) => {
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [progress, setProgress] = useState<number | null>(null);
+  const router = useRouter();
+
   const currentTicket = tickets[currentTicketIndex];
   const { palette } = useTheme();
 
   const handleNext = () => setCurrentTicketIndex(prev => (prev + 1) % tickets.length);
   const handlePrev = () => setCurrentTicketIndex(prev => (prev - 1 + tickets.length) % tickets.length);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setProgress(0);
+  
+    await generateTicketPDF(tickets, (i) => setProgress(i + 1));
+  
+    setSaving(false);
+    setProgress(null);
+  };
+
+  const handleDelete = async (id: number) => {
+    const { error } = await supabase
+      .from("tickets")
+      .delete()
+      .eq("id", id);
+
+    if (error) console.log(error);
+
+    router.refresh();
+  };
 
   return (
     <Box sx={{
@@ -34,9 +61,9 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
       boxShadow: 6,
       position: "relative",
       overflow: "hidden",
-      transition: 'all 0.2s ease',
-      '&:hover': {
-        transform: 'translateY(-5px)',
+      transition: "all 0.2s ease",
+      "&:hover": {
+        transform: "translateY(-5px)",
         boxShadow: 8
       },
       "&:before": {
@@ -121,11 +148,10 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                     <IconButton
                       onClick={handlePrev}
                       sx={{
-                        bgcolor: 'background.paper',
-                        p: 1,
-                        '&:hover': {
-                          transform: 'translateY(-1px)',
-                          bgcolor: 'background.default'
+                        bgcolor: "background.paper",
+                        "&:hover": {
+                          transform: "translateY(-1px)",
+                          bgcolor: "background.default"
                         }
                       }}
                     >
@@ -134,11 +160,11 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                     <IconButton
                       onClick={handleNext}
                       sx={{
-                        bgcolor: 'background.paper',
-                        p: 1,
-                        '&:hover': {
-                          transform: 'translateY(-1px)',
-                          bgcolor: 'background.default'
+                        ml: 1,
+                        bgcolor: "background.paper",
+                        "&:hover": {
+                          transform: "translateY(-1px)",
+                          bgcolor: "background.default"
                         }
                       }}
                     >
@@ -159,14 +185,14 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
               <Button
                 variant="contained"
                 startIcon={<Delete />}
-                onClick={() => console.log('Delete ticket', currentTicket.id)}
+                onClick={() => handleDelete(currentTicket.id)}
                 sx={{
                   borderRadius: 2,
                   px: 3,
                   background: `linear-gradient(45deg, ${palette.error.main}, ${palette.error.dark})`,
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    transform: "translateY(-2px)",
                     boxShadow: 4
                   }
                 }}
@@ -177,20 +203,24 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
               <Button
                 variant="contained"
                 startIcon={<Download />}
-                // onClick={() => generateTicketPDF(tickets)}
+                onClick={handleSave}
+                disabled={saving}
                 sx={{
                   borderRadius: 2,
                   px: 3,
                   background: `linear-gradient(45deg, ${palette.primary.main}, ${palette.secondary.main})`,
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    transform: 'translateY(-3px)',
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    transform: "translateY(-3px)",
                     boxShadow: 6
                   }
                 }}
               >
-                Save ({tickets.length})
+                {saving
+                  ? `Saving (${progress}/${tickets.length})`
+                  : `Save (${tickets.length})`}
               </Button>
+
             </Box>
           </Box>
         </Box>
