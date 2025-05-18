@@ -3,6 +3,7 @@ import { supabase } from "@/utils/supabase/supabase";
 import { Ticket } from "@/utils/types/types";
 import { CalendarToday, Delete, Download, KeyboardArrowLeft, KeyboardArrowRight, LocationOn } from "@mui/icons-material";
 import { Box, Typography, Button, IconButton, Theme, useTheme } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import QRCode from "react-qr-code";
@@ -44,7 +45,8 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
     <Box sx={{
       display: "flex",
       flexDirection: "column",
-      width: "100%",
+      maxWidth: "50vw",
+      minWidth: "fit-content",
       p: 3,
       pt: 1,
       borderRadius: 4,
@@ -111,13 +113,20 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <Box display="flex" width="100%">
               <Box>
-                <Typography variant="h6" fontWeight="800" gutterBottom sx={{
-                  background: `linear-gradient(45deg, ${palette.primary.main}, ${palette.secondary.main})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent"
-                }}>
-                  {currentTicket.event.name}
-                </Typography>
+                <Link 
+                  href={`/events/${tickets[0].event.id}`} 
+                  style={{ textDecoration: "none" }} 
+                  onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"} 
+                  onMouseLeave={(e) => e.currentTarget.style.textDecoration = "none"}
+                >
+                  <Typography variant="h6" fontWeight="800" gutterBottom sx={{
+                    background: `linear-gradient(45deg, ${palette.primary.main}, ${palette.secondary.main})`,
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  }}>
+                    {currentTicket.event.name}
+                  </Typography>
+                </Link>
               
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mb: 2 }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

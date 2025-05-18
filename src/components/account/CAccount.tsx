@@ -93,7 +93,7 @@ export function CAccount({user}: {user: User}) {
             justifyContent: "flex-end",
             position: "absolute",
             top: 16,
-            right: 16
+            right: 50
           }}>
             <IconButton
               onClick={toggleTheme}

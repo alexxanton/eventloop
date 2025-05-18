@@ -19,7 +19,7 @@ export function CGroupSettingsModal() {
     const getMembers = async () => {
       const { data: members } = await supabase
         .from("group_members")
-        .select("*, profile:profiles(username)")
+        .select("*, profile:profiles(*)")
         .eq("group_id", currentGroup?.id)
         .order("id")
         .throwOnError();
@@ -54,10 +54,11 @@ export function CGroupSettingsModal() {
       if (error) console.log(error.details);
       setTrigger(!trigger);
     };
+    console.log(member.profile.avatar)
 
     return (
       <Box sx={styles.memberRow}>
-        <Avatar sx={styles.avatar} />
+        <Avatar sx={styles.avatar} src={member.profile.avatar} />
         <Typography sx={styles.username}>@{member.profile.username}</Typography>
         
         <FormControl sx={styles.roleSelect}>

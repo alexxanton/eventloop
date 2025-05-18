@@ -15,6 +15,7 @@ export default async function Home() {
     .from("groups")
     .select("*, group_members!inner(user_id)")
     .eq("group_members.user_id", user.id)
+    .order("id", { ascending: true });
 
   return <CGroupView groups={groups} />;
 }
