@@ -12,6 +12,8 @@ export function CGroupSettingsModal() {
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
   const [trigger, setTrigger] = useState(true);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     const getMembers = async () => {
@@ -101,9 +103,9 @@ export function CGroupSettingsModal() {
           </AccordionSummary>
           <AccordionDetails>
             <form >
-              <Box sx={{ display: "flex" }}>
-                <Box>
-                  <CAvatarUpload  />
+              <Box sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+                <Box height="fit-content">
+                  <CAvatarUpload group={currentGroup} />
                 </Box>
                 <Box>
                   <TextField
@@ -112,8 +114,8 @@ export function CGroupSettingsModal() {
                     label="Group name"
                     variant="outlined"
                     sx={{ mb: 2 }}
-                    // onChange={(e) => setName(e.target.value)}
-                    // value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    value={name}
                   />
                   <TextField
                     fullWidth
@@ -122,8 +124,8 @@ export function CGroupSettingsModal() {
                     label="Description"
                     variant="filled"
                     sx={{ mb: 2 }}
-                    // onChange={(e) => setDescription(e.target.value)}
-                    // value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
                   />
                   <Button type="submit" fullWidth variant="contained">
                     OK

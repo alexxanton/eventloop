@@ -82,16 +82,21 @@ export function CGroupChat() {
 
   useEffect(() => {
     const getFirstMessages = async () => {
-      if (!currentGroup?.id) return;
+      if (!currentGroup) return;
 
-      const { data } = await query
+      const { error, data } = await query
         .order("id", { ascending: false })
         .limit(20)
         .throwOnError();
 
+      if (error) console.log(error)
+
       const messages = data.reverse();
       setMessages(messages);
-      setLastMessageId(messages[messages.length - 1].id);
+      
+      if (messages.length > 0) {
+        setLastMessageId(messages[messages.length - 1].id);
+      }
     };
 
     getFirstMessages();

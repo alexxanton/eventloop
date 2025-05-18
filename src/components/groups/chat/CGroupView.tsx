@@ -1,6 +1,6 @@
 "use client";
 import { useStore } from "@/utils/zustand";
-import { Box, Paper, Badge, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Paper, Badge, useMediaQuery, useTheme, IconButton } from "@mui/material";
 import { CGroupsList } from "../list/CGroupsList";
 import { CGroupChat } from "./CGroupChat";
 import { CMainScreen } from "./CMainScreen";
@@ -14,9 +14,10 @@ import { CEventCard } from "./CEventCard";
 import { CEventFormModal } from "@/components/events/form/CEventFormModal";
 import dayjs, { Dayjs } from "dayjs";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
+import { Remove } from "@mui/icons-material";
 
 export function CGroupView({ groups }: { groups: Group[] | null }) {
-  const { currentGroup, openEvents, menuOpen } = useStore();
+  const { currentGroup, openEvents, menuOpen, toggleOpenEvents } = useStore();
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedDay, setSelectedDay] = useState<Dayjs | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<string>("");
@@ -129,7 +130,16 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
                 }}
               />
             </LocalizationProvider>
-            {<Box sx={styles.new}><CEventFormModal /></Box>}
+            <Box sx={{...styles.absolute, top: 0, transform: "translateY(-5px)"}}>
+            {isMobile && (
+              <IconButton onClick={toggleOpenEvents}>
+                <Remove />
+              </IconButton>
+            )}
+            </Box>
+            <Box sx={{...styles.absolute, right: 0, transform: "translateY(-40px)"}}>
+              <CEventFormModal refetchEvents={getGroupData} />
+            </Box>
           </Paper>
           {events
             .filter((event) => {
@@ -212,10 +222,9 @@ const styles: MuiStyles = {
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
     borderRadius: 3
   },
-  new: {
+  absolute: {
     position: "absolute",
-    right: 0,
-    transform: "translateY(-40px)",
+    
   },
   dateCalendar: {
     width: 250,

@@ -10,6 +10,7 @@ import { useState } from "react";
 export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
   const { setUserUrl } = useStore();
   const [uploading, setUploading] = useState(false);
+  const [groupUrl, setGroupUrl] = useState(group?.avatar);
   const router = useRouter();
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,9 +50,14 @@ export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
   
         if (updateError || profileError) throw updateError || profileError;
       } else {
-        const { error: updateError } = await supabase
+        const { data: avatar, error: updateError } = await supabase
           .from("groups")
-          .upsert({ id: group?.id, avatar: publicUrl });
+          .update({ avatar: publicUrl })
+          .eq("id", group?.id)
+          .select("avatar")
+          .single();
+
+        setGroupUrl(avatar?.avatar || undefined);
 
         if (updateError) throw updateError;
       }
@@ -78,7 +84,7 @@ export function CAvatarUpload({user, group}: {user?: User, group?: Group}) {
           onChange={handleAvatarUpload}
         />
         <Avatar
-          src={user ? user.user_metadata?.avatar_url : group?.avatar}
+          src={user ? user.user_metadata?.avatar_url : groupUrl}
           sx={{
             width: 120,
             height: 120,

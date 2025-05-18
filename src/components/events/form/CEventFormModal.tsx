@@ -13,7 +13,7 @@ import { CDateTimeSection } from "./sections/CDateTimeSection";
 import { useStore } from "@/utils/zustand";
 import { CImageSection } from "./sections/CImageSection";
 
-export function CEventFormModal({event}: {event?: Event}) {
+export function CEventFormModal({event, refetchEvents}: {event?: Event, refetchEvents: () => void}) {
   const { currentGroup } = useStore();
   const [name, setName] = useState(event?.name || "");
   const [description, setDescription] = useState(event?.description || "");
@@ -62,6 +62,7 @@ export function CEventFormModal({event}: {event?: Event}) {
       setName("");
       setDescription("");
       setError("");
+      refetchEvents();
     } catch (err) {
       setError("Failed to create event. Please try again.");
       console.error(err);
