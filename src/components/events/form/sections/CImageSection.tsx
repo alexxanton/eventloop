@@ -4,8 +4,8 @@ import { CFormSection } from "../CFormSection";
 import { Dispatch, SetStateAction, useEffect } from "react";
 
 export interface CProps {
-  image: string;
-  setImage: Dispatch<SetStateAction<string>>;
+  image: string | undefined;
+  setImage: Dispatch<SetStateAction<string | undefined>>;
   setImageFile: Dispatch<SetStateAction<File | null>>;
 }
 
