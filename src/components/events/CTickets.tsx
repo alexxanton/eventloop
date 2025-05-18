@@ -90,7 +90,7 @@ export function CTickets({ tickets }: { tickets: Ticket[] }) {
         display: "grid",
         gridTemplateColumns: { xs: "1fr", md: "repeat(auto-fit, minmax(400px, 1fr))" }
       }}>
-        {filteredGroups.map((ticketGroup, index) => (
+        {filteredGroups.map((ticketGroup) => (
           <CTicketCard
             key={ticketGroup[0].event.id}
             tickets={ticketGroup}

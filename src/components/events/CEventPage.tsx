@@ -2,13 +2,10 @@
 import { Container, Paper, Typography, Box, Button, Chip, IconButton, useTheme } from "@mui/material";
 import { Event as EventIcon, LocationOn, CalendarToday, AttachMoney, People, ChildCare, Checkroom, Share } from "@mui/icons-material";
 import { Event } from "@/utils/types/types";
-import { supabase } from "@/utils/supabase/supabase";
 import { useUser } from "@/utils/hooks/useUser";
 import { MuiStyles } from "@/utils/types/types";
-import { useState } from "react";
 
 export function CEventPage({event}: {event: Event | null}) {
-  const [loading, setLoading] = useState(false);
   const userId = useUser()?.id;
   const theme = useTheme();
 
@@ -206,7 +203,6 @@ export function CEventPage({event}: {event: Event | null}) {
         {/* Join Button */}
         <Box sx={styles.joinButtonContainer}>
           <Button
-            disabled={loading}
             variant="contained"
             size="large"
             startIcon={<EventIcon />}

@@ -99,7 +99,7 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
             }
           }}>
             <QRCode
-              value={JSON.stringify(currentTicket.ticket_number)}
+              value={currentTicket.ticket_number}
               size={160}
               level="H"
               bgColor={theme.palette.background.default}

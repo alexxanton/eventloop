@@ -203,7 +203,7 @@ export const CPDFTicket = ({ticket}: {ticket: Ticket}) => (
             }}
           >
             <QRCode
-              value={JSON.stringify(ticket.ticket_number)}
+              value={ticket.ticket_number}
               size={180}
               level="H"
               bgColor="#ffffff"
