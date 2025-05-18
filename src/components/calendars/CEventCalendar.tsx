@@ -27,7 +27,6 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [showMobileResults, setShowMobileResults] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [dateRange, setDateRange] = useState<[string, string]>(["", ""]);
@@ -420,6 +419,7 @@ const SearchFilter = ({
   isMobile: boolean;
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onFilterChange: (filter: string, value: any) => void;
   priceRange: [number, number];
   dateRange: [string, string];
