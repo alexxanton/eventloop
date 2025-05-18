@@ -1,14 +1,27 @@
 "use client";
-import { useState, useRef } from "react";
-import { Container, TextField, Chip, Paper, Typography, Box, useTheme, useMediaQuery, ClickAwayListener } from "@mui/material";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { Container, TextField, Chip, Paper, Typography, Box, useTheme, useMediaQuery, ClickAwayListener, DialogContent, Dialog, DialogTitle, Divider, IconButton, InputAdornment, Slider } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
-import { Event as EventIcon, Search } from "@mui/icons-material";
+import { Event as EventIcon, FilterList, Search } from "@mui/icons-material";
 import { Event } from "@/utils/types/types";
 import Link from "next/link";
 import { CEventCard } from "../groups/chat/CEventCard";
+
+const categories = [
+  "Social & Entertainment",
+  "Business & Networking",
+  "Educational",
+  "Sports & Fitness",
+  "Community & Cultural",
+  "Arts & Performance",
+  "Tech & Innovation",
+  "Food & Drink",
+  "Outdoor & Adventure",
+  "Virtual & Hybrid"
+];
 
 export function CEventCalendar({events}: {events: Event[] | null}) {
   const theme = useTheme();
@@ -16,14 +29,43 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showMobileResults, setShowMobileResults] = useState(false);
-  const searchContainerRef = useRef(null);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+  const [dateRange, setDateRange] = useState<[string, string]>(['', '']);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const searchContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const categories = ["All", "Environment", "Business", "Wellness", "Social", "Tech"];
+  const handleFilterChange = useCallback((filter: string, value: any) => {
+    switch (filter) {
+      case 'category':
+        setSelectedCategories(prev => 
+          prev.includes(value) 
+            ? prev.filter(c => c !== value) 
+            : [...prev, value]
+        );
+        break;
+      case 'price':
+        setPriceRange(value as [number, number]);
+        break;
+      case 'dateStart':
+        setDateRange([value, dateRange[1]]);
+        break;
+      case 'dateEnd':
+        setDateRange([dateRange[0], value]);
+        break;
+    }
+  }, [dateRange]);
 
   const filteredEvents = events?.filter(event => {
     const matchesSearch = event.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || event.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(event.category);
+    const matchesPrice = event.price >= priceRange[0] && event.price <= priceRange[1];
+    
+    const eventDate = new Date(event.start_date).getTime();
+    const startDate = dateRange[0] ? new Date(dateRange[0]).getTime() : -Infinity;
+    const endDate = dateRange[1] ? new Date(dateRange[1]).getTime() : Infinity;
+    const matchesDate = eventDate >= startDate && eventDate <= endDate;
+
+    return matchesSearch && matchesCategory && matchesPrice && matchesDate;
   });
 
   const calendarStyles = {
@@ -109,11 +151,13 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
     },
   };
 
-  const handleSearchFocus = () => {
+  const handleSearchFocus = useCallback(() => {
     if (isMobile) {
       setShowMobileResults(true);
     }
-  };
+  }, [isMobile]);
+
+  
 
   return (
     <Container maxWidth="xl" sx={{
@@ -173,49 +217,23 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
                   background: `linear-gradient(145deg, ${theme.palette.background.default}, ${theme.palette.background.paper})`,
                   boxShadow: 3
                 }}>
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      placeholder="Search events..."
-                      InputProps={{
-                        startAdornment: <Search sx={{ mr: 1, color: "action.active" }} />,
-                      }}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onFocus={handleSearchFocus}
-                      onClick={handleSearchFocus}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: 25,
-                          background: theme.palette.background.paper
-                        }
-                      }}
-                    />
-                    <Box sx={{ display: "flex", gap: 1, overflowX: "auto", pb: 1 }}>
-                      {categories.map((category) => (
-                        <Chip
-                          key={category}
-                          label={category}
-                          onClick={() => setSelectedCategory(category)}
-                          variant={selectedCategory === category ? "filled" : "outlined"}
-                          color="primary"
-                          size="small"
-                          sx={{
-                            borderRadius: 20,
-                            transition: "all 0.2s",
-                            "&:hover": { transform: "scale(1.05)" }
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
+                  <SearchFilter
+                    isMobile={isMobile}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    onFilterChange={handleFilterChange}
+                    priceRange={priceRange}
+                    dateRange={dateRange}
+                    selectedCategories={selectedCategories}
+                    onFocus={handleSearchFocus}
+                    onClick={handleSearchFocus}
+                  />
                 </Paper>
 
                 {isMobile && showMobileResults && filteredEvents && filteredEvents.length > 0 && (
                   <Paper sx={{
                     position: "fixed",
-                    top: 300,
+                    top: 160,
                     left: 16,
                     right: 16,
                     bottom: 16,
@@ -223,8 +241,6 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
                     boxShadow: 3,
                     zIndex: 1300,
                     borderRadius: 3,
-                    borderTopLeftRadius: 0,
-                    borderTopRightRadius: 0
                   }}>
                     <Box sx={{ p: 2, pb: 4 }}>
                       {filteredEvents.map((event, index) => (
@@ -258,41 +274,15 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
                   background: `linear-gradient(145deg, ${theme.palette.background.default}, ${theme.palette.background.paper})`,
                   boxShadow: 3
                 }}>
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      placeholder="Search events..."
-                      InputProps={{
-                        startAdornment: <Search sx={{ mr: 1, color: "action.active" }} />,
-                      }}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: 25,
-                          background: theme.palette.background.paper
-                        }
-                      }}
-                    />
-                    <Box sx={{ display: "flex", gap: 1, overflowX: "auto", pb: 1 }}>
-                      {categories.map((category) => (
-                        <Chip
-                          key={category}
-                          label={category}
-                          onClick={() => setSelectedCategory(category)}
-                          variant={selectedCategory === category ? "filled" : "outlined"}
-                          color="primary"
-                          size="small"
-                          sx={{
-                            borderRadius: 20,
-                            transition: "all 0.2s",
-                            "&:hover": { transform: "scale(1.05)" }
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
+                  <SearchFilter
+                    isMobile={isMobile}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    onFilterChange={handleFilterChange}
+                    priceRange={priceRange}
+                    dateRange={dateRange}
+                    selectedCategories={selectedCategories}
+                  />
                 </Paper>
                 {filteredEvents?.map((event, index) => (
                   <Link href={`/events/${event.id}`} style={{ textDecoration: "none" }} key={index}>
@@ -412,5 +402,157 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
         </Box>
       </Box>
     </Container>
+  );
+};
+
+const SearchFilter = ({
+  isMobile,
+  searchQuery,
+  onSearchChange,
+  onFilterChange,
+  priceRange,
+  dateRange,
+  selectedCategories ,
+  onFocus,
+  onClick
+}: {
+  isMobile: boolean;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  onFilterChange: (filter: string, value: any) => void;
+  priceRange: [number, number];
+  dateRange: [string, string];
+  selectedCategories: string[];
+  onFocus?: () => void;
+  onClick?: () => void;
+}) => {
+  const theme = useTheme();
+  const [showFilters, setShowFilters] = useState(false);
+
+  const toggleFilters = () => setShowFilters(!showFilters);
+
+  return (
+    <Box sx={{ position: "relative", width: "100%" }}>
+      <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Search events..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          onFocus={onFocus}
+          onClick={onClick}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search sx={{ color: "action.active" }} />
+              </InputAdornment>
+            ),
+            sx: {
+              borderRadius: 25,
+              background: theme.palette.background.paper,
+              }
+            }}
+        />
+        <IconButton
+          onClick={toggleFilters}
+          sx={{
+            bgcolor: showFilters ? 'primary.main' : 'background.paper',
+            color: showFilters ? 'primary.contrastText' : 'text.primary',
+            borderRadius: 25,
+            p: 1.5,
+            boxShadow: theme.shadows[2],
+            '&:hover': {
+              bgcolor: 'primary.dark',
+              color: 'primary.contrastText'
+            }
+          }}
+        >
+          <FilterList />
+        </IconButton>
+      </Box>
+
+      <Dialog
+        open={showFilters}
+        onClose={() => setShowFilters(false)}
+        fullScreen={isMobile}
+        PaperProps={{
+          sx: {
+            position: isMobile ? 'fixed' : 'absolute',
+            top: isMobile ? undefined : '60px',
+            right: isMobile ? undefined : '0',
+            m: 2,
+            borderRadius: 3,
+            minWidth: isMobile ? undefined : '400px'
+          }
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 700 }}>Filter Events</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>
+                Date Range
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <TextField
+                  type="date"
+                  label="Start Date"
+                  value={dateRange[0]}
+                  onChange={(e) => onFilterChange('dateStart', e.target.value)}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                />
+                <TextField
+                  type="date"
+                  label="End Date"
+                  value={dateRange[1]}
+                  onChange={(e) => onFilterChange('dateEnd', e.target.value)}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Box>
+            </Box>
+
+            <Divider />
+
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>
+                Price Range (${priceRange[0]} - ${priceRange[1]})
+              </Typography>
+              <Slider
+                value={priceRange}
+                onChange={(_, value) => onFilterChange('price', value)}
+                valueLabelDisplay="auto"
+                min={0}
+                max={500}
+                sx={{ color: 'primary.main' }}
+              />
+            </Box>
+
+            <Divider />
+
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>
+                Categories
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {categories.map((category) => (
+                  <Chip
+                    key={category}
+                    label={category}
+                    onClick={() => onFilterChange('category', category)}
+                    variant={selectedCategories.includes(category) ? 'filled' : 'outlined'}
+                    color="primary"
+                    size="small"
+                    sx={{ borderRadius: 20 }}
+                  />
+                ))}
+              </Box>
+            </Box>
+          </Box>
+        </DialogContent>
+      </Dialog>
+    </Box>
   );
 };

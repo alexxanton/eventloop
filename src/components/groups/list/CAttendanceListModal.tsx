@@ -10,9 +10,9 @@ export function CAttendanceListModal({tickets}: {tickets: Ticket[]}) {
   const AttendeeRow = ({ticket}: {ticket: Ticket}) => {
     return (
       <Box sx={styles.memberRow}>
-        <Avatar sx={styles.avatar} />
+        <Avatar sx={styles.avatar} src={ticket.profile.avatar} />
         <Typography sx={styles.username}>@{ticket.profile.username}</Typography>
-        <Check sx={{ color: (theme) => ticket.validated ? theme.palette.success.light : theme.palette.grey[300] }} />
+        {ticket.validated && <Check sx={{ color: (theme) => theme.palette.success.light }} />}
       </Box>
     );
   };
@@ -26,7 +26,7 @@ export function CAttendanceListModal({tickets}: {tickets: Ticket[]}) {
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
     >
-      <Box>
+      <Box sx={{ overflowY: "scroll", maxHeight: 500 }}>
         {tickets.map((ticket, index) => {
           return <AttendeeRow ticket={ticket} key={index} />
         })}

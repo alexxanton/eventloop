@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase/supabase";
 import { User } from "@supabase/supabase-js";
+import { useStore } from "../zustand";
 
 export const useUser = () => {
+  const { setUserUrl } = useStore();
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
@@ -15,6 +17,7 @@ export const useUser = () => {
 
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user);
+      setUserUrl(session?.user.user_metadata.avatar_url);
     });
 
     return () => {
