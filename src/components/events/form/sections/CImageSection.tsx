@@ -1,13 +1,34 @@
 import { Add, CameraAlt, Cancel, Image } from "@mui/icons-material";
 import { Box, Avatar, IconButton } from "@mui/material";
 import { CFormSection } from "../CFormSection";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
-interface CProps {
+export interface CProps {
   image: string;
-  setImage: (value: string) => void;
+  setImage: Dispatch<SetStateAction<string>>;
+  setImageFile: Dispatch<SetStateAction<File | null>>;
 }
 
-export function CImageSection({ image, setImage }: CProps) {
+export function CImageSection({ image, setImage, setImageFile }: CProps) {
+  useEffect(() => {
+    if (image && image.startsWith("https://")) {
+      const fetchImage = async () => {
+        try {
+          const res = await fetch(image);
+          const blob = await res.blob();
+  
+          const filename = image.split("/").pop() || "image.jpg";
+          const file = new File([blob], filename, { type: blob.type });
+  
+          setImageFile(file);
+        } catch (err) {
+          console.error("Failed to fetch and convert image to file", err);
+        }
+      };
+  
+      fetchImage();
+    }
+  }, [image]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -15,6 +36,7 @@ export function CImageSection({ image, setImage }: CProps) {
       const reader = new FileReader();
       reader.onload = () => {
         setImage(reader.result as string);
+        setImageFile(file);
         console.log(image)
       };
       reader.readAsDataURL(file);
@@ -101,7 +123,6 @@ export function CImageSection({ image, setImage }: CProps) {
                   backgroundColor: 'white',
                   borderRadius: '50%',
                 },
-                // Soft red overlay on hover
                 '&:hover': {
                   backgroundColor: 'rgba(255, 0, 0, 0.3)',
                 }

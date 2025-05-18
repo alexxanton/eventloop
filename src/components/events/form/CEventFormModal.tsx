@@ -27,17 +27,43 @@ export function CEventFormModal({event, refetchEvents}: {event?: Event, refetchE
   const [ageLimit, setAgeLimit] = useState<number | null>(event?.age_limit || null);
   const [dressCode, setDressCode] = useState(event?.dress_code || "");
   const [error, setError] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(event?.image);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+  
     if (!name || !startDate) {
       setError("Please fill out all required fields.");
       return;
     }
-
+  
+    let imageUrl: string | null = null;
+  
+    if (imageFile) {
+      const fileExt = imageFile.name.split(".").pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `images/${fileName}`;
+  
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(filePath, imageFile);
+  
+      if (uploadError) {
+        setError("Image upload failed.");
+        console.error(uploadError);
+        return;
+      }
+  
+      const { data: urlData } = supabase
+        .storage
+        .from("avatars")
+        .getPublicUrl(filePath);
+  
+      imageUrl = urlData?.publicUrl || null;
+    }
+  
     const newEvent = {
       id: event?.id,
       group_id: currentGroup?.id,
@@ -51,23 +77,25 @@ export function CEventFormModal({event, refetchEvents}: {event?: Event, refetchE
       max_capacity: maxCapacity,
       age_limit: ageLimit,
       dress_code: dressCode,
+      image: imageUrl,
     };
-
-    console.log(newEvent);
-
+  
     try {
       const { error } = await supabase.from("events").upsert(newEvent);
       if (error) throw error;
+  
       setOpen(false);
       setName("");
       setDescription("");
       setError("");
+      setImageFile(null);
       if (refetchEvents) refetchEvents();
     } catch (err) {
       setError("Failed to create event. Please try again.");
       console.error(err);
     }
   };
+  
 
   return (
     <Box display="flex">
@@ -115,7 +143,7 @@ export function CEventFormModal({event, refetchEvents}: {event?: Event, refetchE
               
               <Box sx={{ pb: 2 }}>
                 <Paper sx={styles.section}>
-                  <CImageSection {...{ image, setImage }} />
+                  <CImageSection {...{ image, setImage, setImageFile }} />
                 </Paper>
               </Box>
             </Box>

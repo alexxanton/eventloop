@@ -85,6 +85,8 @@ export function CEventPage({event}: {event: Event | null}) {
         <Paper sx={{
           ...styles.coverPaper,
           overflow: "hidden",
+          backgroundImage: `url("${event.image}")`,
+          backgroundSize: "cover",
           "&:before": {
             content: '""',
             position: "absolute",
