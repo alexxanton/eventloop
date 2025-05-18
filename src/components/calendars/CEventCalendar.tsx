@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Container, TextField, Chip, Paper, Typography, Box, useTheme, useMediaQuery, ClickAwayListener, DialogContent, Dialog, DialogTitle, Divider, IconButton, InputAdornment, Slider } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -30,26 +30,27 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showMobileResults, setShowMobileResults] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
-  const [dateRange, setDateRange] = useState<[string, string]>(['', '']);
+  const [dateRange, setDateRange] = useState<[string, string]>(["", ""]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFilterChange = useCallback((filter: string, value: any) => {
     switch (filter) {
-      case 'category':
+      case "category":
         setSelectedCategories(prev => 
           prev.includes(value) 
             ? prev.filter(c => c !== value) 
             : [...prev, value]
         );
         break;
-      case 'price':
+      case "price":
         setPriceRange(value as [number, number]);
         break;
-      case 'dateStart':
+      case "dateStart":
         setDateRange([value, dateRange[1]]);
         break;
-      case 'dateEnd':
+      case "dateEnd":
         setDateRange([dateRange[0], value]);
         break;
     }
@@ -457,14 +458,14 @@ const SearchFilter = ({
         <IconButton
           onClick={toggleFilters}
           sx={{
-            bgcolor: showFilters ? 'primary.main' : 'background.paper',
-            color: showFilters ? 'primary.contrastText' : 'text.primary',
+            bgcolor: showFilters ? "primary.main" : "background.paper",
+            color: showFilters ? "primary.contrastText" : "text.primary",
             borderRadius: 25,
             p: 1.5,
             boxShadow: theme.shadows[2],
-            '&:hover': {
-              bgcolor: 'primary.dark',
-              color: 'primary.contrastText'
+            "&:hover": {
+              bgcolor: "primary.dark",
+              color: "primary.contrastText"
             }
           }}
         >
@@ -478,28 +479,28 @@ const SearchFilter = ({
         fullScreen={isMobile}
         PaperProps={{
           sx: {
-            position: isMobile ? 'fixed' : 'absolute',
-            top: isMobile ? undefined : '60px',
-            right: isMobile ? undefined : '0',
+            position: isMobile ? "fixed" : "absolute",
+            top: isMobile ? undefined : "60px",
+            right: isMobile ? undefined : "0",
             m: 2,
             borderRadius: 3,
-            minWidth: isMobile ? undefined : '400px'
+            minWidth: isMobile ? undefined : "400px"
           }
         }}
       >
         <DialogTitle sx={{ fontWeight: 700 }}>Filter Events</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <Box>
               <Typography variant="subtitle1" gutterBottom>
                 Date Range
               </Typography>
-              <Box sx={{ display: 'flex', gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 2 }}>
                 <TextField
                   type="date"
                   label="Start Date"
                   value={dateRange[0]}
-                  onChange={(e) => onFilterChange('dateStart', e.target.value)}
+                  onChange={(e) => onFilterChange("dateStart", e.target.value)}
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                 />
@@ -507,7 +508,7 @@ const SearchFilter = ({
                   type="date"
                   label="End Date"
                   value={dateRange[1]}
-                  onChange={(e) => onFilterChange('dateEnd', e.target.value)}
+                  onChange={(e) => onFilterChange("dateEnd", e.target.value)}
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                 />
@@ -522,11 +523,11 @@ const SearchFilter = ({
               </Typography>
               <Slider
                 value={priceRange}
-                onChange={(_, value) => onFilterChange('price', value)}
+                onChange={(_, value) => onFilterChange("price", value)}
                 valueLabelDisplay="auto"
                 min={0}
                 max={500}
-                sx={{ color: 'primary.main' }}
+                sx={{ color: "primary.main" }}
               />
             </Box>
 
@@ -536,13 +537,13 @@ const SearchFilter = ({
               <Typography variant="subtitle1" gutterBottom>
                 Categories
               </Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                 {categories.map((category) => (
                   <Chip
                     key={category}
                     label={category}
-                    onClick={() => onFilterChange('category', category)}
-                    variant={selectedCategories.includes(category) ? 'filled' : 'outlined'}
+                    onClick={() => onFilterChange("category", category)}
+                    variant={selectedCategories.includes(category) ? "filled" : "outlined"}
                     color="primary"
                     size="small"
                     sx={{ borderRadius: 20 }}
