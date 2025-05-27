@@ -3,7 +3,7 @@ import { AccessTime } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import { LocalizationProvider, MobileDatePicker, MobileDatePickerSlotProps, MobileTimePicker, MobileTimePickerSlotProps, TimeView } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { CFormSection } from "../CFormSection";
 import { useDarkMode } from "@/utils/hooks/useDarkMode";
 
@@ -53,19 +53,16 @@ export function CDateTimeSection({ startDate, setStartDate, endDate, setEndDate 
         <Box>
           <Typography variant="subtitle2">End date and time (optional)</Typography>
           <Box sx={styles.date}>
-            <MobileTimePicker
-              label="Start Date"
-              value={startDate ? dayjs(startDate) : null}
-              onChange={(newValue) => {
-                setStartDate(newValue ? dayjs(newValue) : null);
-              }}
+            <MobileDatePicker
+              value={endDate}
+              disablePast
+              onChange={(value) => setEndDate(value)}
+              slotProps={datePickerSlotProps}
             />
             <MobileTimePicker
-              label="Start Date"
-              value={startDate ? dayjs(startDate) : null}
-              onChange={(newValue) => {
-                setStartDate(newValue ? dayjs(newValue) : null);
-              }}
+              value={endDate}
+              onChange={(value) => setEndDate(value)}
+              slotProps={timePickerSlotProps}
             />
           </Box>
         </Box>

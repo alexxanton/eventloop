@@ -38,7 +38,7 @@ export function CNavbar() {
     return (
       <Box sx={{
         position: "absolute",
-        left: 20,
+        right: 10,
         bottom: "20vh",
         zIndex: 9999,
       }}>

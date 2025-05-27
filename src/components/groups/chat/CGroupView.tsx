@@ -86,6 +86,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
         sx={{
           ...styles.stickyBox,
           display: isMobile && (currentGroup || menuOpen) ? "none" : "",
+          overflowX: "hidden"
         }}
       >
         <Paper elevation={0} square sx={styles.groupsListPaper}>

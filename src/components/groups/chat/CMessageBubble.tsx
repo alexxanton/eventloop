@@ -19,6 +19,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
   const isCurrentUser = msg.user_id === userId;
   const isSameDate = msg.sent_at.split("T")[0] === prev?.sent_at.split("T")[0];
   const isFirstInGroup = msg.user_id !== prev?.user_id || !isSameDate;
+  const isMobile = theme.breakpoints.down("sm");
   
   const tailBorder = isCurrentUser ? currentUserBorderRadius : otherUserBorderRadius;
   const borderRadius = isFirstInGroup ? tailBorder : defaultBorderRadius;
@@ -48,7 +49,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
           maxWidth: "70%",
         }}
       >
-        <Avatar
+        {!isMobile || !isCurrentUser && <Avatar
           src={msg.profile?.avatar}
           sx={{
             visibility: isFirstInGroup && !isCurrentUser ? "visible" : "hidden",
@@ -67,7 +68,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
               transition: "transform 0.3s"
             }
           }}
-        />
+        />}
         <Box
           component="span"
           sx={{
