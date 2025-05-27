@@ -31,7 +31,8 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
     const { data: events } = await supabase
       .from("events")
       .select("*, tickets(*, profile:profiles(*))")
-      .eq("group_id", currentGroup?.id);
+      .eq("group_id", currentGroup?.id)
+      .order("id", { ascending: true });
 
     const { data: role } = await supabase
       .from("group_members")
@@ -149,7 +150,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
             .map((event) => {
               return (
                 <Box key={event.id}>
-                  <CEventCard event={event} userRole={currentUserRole} />
+                  <CEventCard event={event} userRole={currentUserRole} refetchEvents={getGroupData} />
                 </Box>
               );
             })}

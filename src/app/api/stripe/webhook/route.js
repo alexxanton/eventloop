@@ -31,6 +31,12 @@ export async function POST(req) {
     const eventId = session.metadata.eventId;
     const groupId = session.metadata.groupId;
 
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+      expand: ['data.price.product'],
+    });
+  
+    const quantity = lineItems.data[0]?.quantity ?? 1;
+
     if (!userId || !eventId) {
       console.error("Missing userId or eventId in metadata");
       return NextResponse.json({ error: "Missing metadata" }, { status: 400 });
@@ -38,7 +44,7 @@ export async function POST(req) {
 
     const newMember = {user_id: userId, group_id: groupId};
     const ticket = {user_id: userId, event_id: eventId};
-    const tickets = Array.from({ length: 10 }, () => ({ ...ticket }));
+    const tickets = Array.from({ length: quantity }, () => ({ ...ticket }));
 
     const { error: memberError } = await supabase
       .from("group_members")

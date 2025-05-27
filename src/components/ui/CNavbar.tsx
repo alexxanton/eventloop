@@ -1,5 +1,5 @@
 "use client";
-import { AppBar, Avatar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Toolbar, useMediaQuery, useTheme } from "@mui/material";
+import { AppBar, Avatar, Box, Divider, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Theme, Toolbar, useMediaQuery, useTheme } from "@mui/material";
 import { Menu, House, Settings, Event, ConfirmationNumber, DarkMode, LightMode } from "@mui/icons-material";
 import { useState } from "react";
 import { useStore } from "@/utils/zustand";
@@ -26,16 +26,36 @@ const rotate = keyframes`
 
 export function CNavbar() {
   const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery("(hover: hover) and (pointer: fine)");
   const { userUrl, theme, toggleTheme } = useStore();
-  const themeMui = useTheme();
-  const isMobile = useMediaQuery(themeMui.breakpoints.down("sm"));
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   const toggleSidebar = (open: boolean) => {
     setOpen(open);
   };
 
-  if (isMobile) return null;
+  if (isMobile) {
+    return (
+      <Box sx={{
+        position: "absolute",
+        left: 20,
+        bottom: "20vh",
+        zIndex: 9999,
+      }}>
+        <IconButton sx={{bgcolor: "secondary.main"}} onClick={() => toggleSidebar(true)}>
+          <Menu />
+        </IconButton>
+        <Drawer
+          open={open}
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          theme={theme}
+          muiTheme={muiTheme}
+          toggleTheme={toggleTheme}
+        />
+      </Box>
+    );
+  }
 
   return (
     <AppBar component="nav" color="secondary">
@@ -72,133 +92,162 @@ export function CNavbar() {
           </IconButton>
         </Link>
       </Toolbar>
-      <SwipeableDrawer
+      <Drawer
         open={open}
-        disableSwipeToOpen={isDesktop}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
-        PaperProps={{
-          sx: {
-            background: theme === "dark"
-              ? "linear-gradient(195deg, #1a1a1a 30%, #2a2a2a 90%)"
-              : "linear-gradient(195deg, #f8f9fa 30%, #ffffff 90%)",
-            "&:before": {
-              content: "''",
-              position: "absolute",
-              top: -50,
-              left: -20,
-              width: "120px",
-              height: "120px",
-              background: themeMui.palette.primary.light,
-              clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
-              opacity: 0.1,
-              animation: `${rotate} 20s linear infinite`
-            },
-          }
-        }}
-      >
-        <Box sx={{
-          width: 250,
-          position: "relative",
-          overflow: "hidden",
+        theme={theme}
+        muiTheme={muiTheme}
+        toggleTheme={toggleTheme}
+      />
+    </AppBar>
+  );
+}
+
+const Drawer = ({
+  open,
+  onClose,
+  onOpen,
+  theme,
+  muiTheme,
+  toggleTheme
+}: {
+  open: boolean;
+  onClose: () => void;
+  onOpen: () => void;
+  theme: string;
+  muiTheme: Theme;
+  toggleTheme: () => void;
+}) => {
+  const isDesktop = useMediaQuery("(hover: hover) and (pointer: fine)");
+
+  return (
+    <SwipeableDrawer
+      open={open}
+      disableSwipeToOpen={isDesktop}
+      onClose={onClose}
+      onOpen={onOpen}
+      PaperProps={{
+        sx: {
+          background: theme === "dark"
+            ? "linear-gradient(195deg, #1a1a1a 30%, #2a2a2a 90%)"
+            : "linear-gradient(195deg, #f8f9fa 30%, #ffffff 90%)",
           "&:before": {
             content: "''",
             position: "absolute",
-            top: "20%",
-            left: "60%",
-            width: "80px",
-            height: "80px",
-            background: themeMui.palette.primary.main,
-            clipPath: "polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)",
-            opacity: 0.08,
-            transform: "rotate(45deg)",
-            zIndex: 0
-          },
-          "&:after": {
-            content: "''",
-            position: "absolute",
-            bottom: "10%",
-            left: "10%",
-            width: "60px",
-            height: "60px",
-            background: themeMui.palette.secondary.main,
-            clipPath: "circle(40% at 50% 50%)",
+            top: -50,
+            left: -20,
+            width: "120px",
+            height: "120px",
+            background: muiTheme.palette.primary.light,
+            clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
             opacity: 0.1,
-            animation: `${floating} 6s ease-in-out infinite`
-          }
-        }}>
-          <List sx={{ position: "relative", zIndex: 1 }}>
-            {sections.map((section, index) => (
-              <ListItem disablePadding key={index}>
-                <Link component="a" href={section.link} sx={{
-                  width: "100%",
-                  textDecoration: "none",
-                  color: theme === "dark" ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    background: theme === "dark"
-                      ? "rgba(255,255,255,0.05)"
-                      : "rgba(0,0,0,0.05)"
-                  }
-                }}>
-                  <ListItemButton>
-                    <ListItemIcon sx={{
-                      color: theme === "dark" ? "primary.light" : "primary.main",
-                      minWidth: "40px !important"
-                    }}>
-                      {React.createElement(section.icon)}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={section.name}
-                      sx={{
-                        "& .MuiTypography-root": {
-                          fontWeight: 500,
-                          letterSpacing: "0.5px"
-                        }
-                      }}
-                    />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
-            ))}
-
-            {/* Theme Toggle Button */}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={toggleTheme}
-                sx={{
-                  background: `linear-gradient(45deg,
-                    ${themeMui.palette.primary.main} 20%,
-                    ${themeMui.palette.secondary.main} 100%)`,
-                  color: "white !important",
-                  mt: 2,
-                  mx: 2,
-                  borderRadius: "12px",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: theme === "dark"
-                      ? "0 4px 15px rgba(0,0,0,0.3)"
-                      : "0 4px 15px rgba(0,0,0,0.2)"
-                  },
-                }}
-              >
-                <ListItemIcon sx={{ color: "inherit !important", minWidth: "40px !important" }}>
-                  {theme === "dark" ? <LightMode /> : <DarkMode />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={theme === "dark" ? "Light Mode" : "Dark Mode"}
-                  sx={{ "& .MuiTypography-root": { fontWeight: 600 } }}
-                />
-              </ListItemButton>
+            animation: `${rotate} 20s linear infinite`
+          },
+        }
+      }}
+    >
+      <Box sx={{
+        width: 250,
+        position: "relative",
+        overflow: "hidden",
+        "&:before": {
+          content: "''",
+          position: "absolute",
+          top: "20%",
+          left: "60%",
+          width: "80px",
+          height: "80px",
+          background: muiTheme.palette.primary.main,
+          clipPath: "polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)",
+          opacity: 0.08,
+          transform: "rotate(45deg)",
+          zIndex: 0
+        },
+        "&:after": {
+          content: "''",
+          position: "absolute",
+          bottom: "10%",
+          left: "10%",
+          width: "60px",
+          height: "60px",
+          background: muiTheme.palette.secondary.main,
+          clipPath: "circle(40% at 50% 50%)",
+          opacity: 0.1,
+          animation: `${floating} 6s ease-in-out infinite`
+        }
+      }}>
+        <List sx={{ position: "relative", zIndex: 1 }}>
+          {sections.map((section, index) => (
+            <ListItem disablePadding key={index}>
+              <Link component="a" href={section.link} sx={{
+                width: "100%",
+                textDecoration: "none",
+                color: theme === "dark" ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  background: theme === "dark"
+                    ? "rgba(255,255,255,0.05)"
+                    : "rgba(0,0,0,0.05)"
+                }
+              }}>
+                <ListItemButton>
+                  <ListItemIcon sx={{
+                    color: theme === "dark" ? "primary.light" : "primary.main",
+                    minWidth: "40px !important"
+                  }}>
+                    {React.createElement(section.icon)}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={section.name}
+                    sx={{
+                      "& .MuiTypography-root": {
+                        fontWeight: 500,
+                        letterSpacing: "0.5px"
+                      }
+                    }}
+                  />
+                </ListItemButton>
+              </Link>
             </ListItem>
-          </List>
-          <Divider sx={{
-            borderColor: theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
-            mx: 2
-          }}/>
-        </Box>
-      </SwipeableDrawer>
-    </AppBar>
+          ))}
+
+          {/* Theme Toggle Button */}
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={toggleTheme}
+              sx={{
+                background: `linear-gradient(45deg,
+                  ${muiTheme.palette.primary.main} 20%,
+                  ${muiTheme.palette.secondary.main} 100%)`,
+                color: "white !important",
+                mt: 2,
+                mx: 2,
+                borderRadius: "12px",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: theme === "dark"
+                    ? "0 4px 15px rgba(0,0,0,0.3)"
+                    : "0 4px 15px rgba(0,0,0,0.2)"
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "inherit !important", minWidth: "40px !important" }}>
+                {theme === "dark" ? <LightMode /> : <DarkMode />}
+              </ListItemIcon>
+              <ListItemText
+                primary={theme === "dark" ? "Light Mode" : "Dark Mode"}
+                sx={{ "& .MuiTypography-root": { fontWeight: 600 } }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider sx={{
+          borderColor: theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
+          mx: 2
+        }}/>
+      </Box>
+    </SwipeableDrawer>
   );
 }

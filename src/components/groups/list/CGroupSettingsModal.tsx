@@ -1,4 +1,4 @@
-import { Member, MuiStyles } from "@/utils/types/types";
+import { FormEvent, Member, MuiStyles } from "@/utils/types/types";
 import { CModal } from "../../containers/CModal";
 import { Delete, ExpandMore, Settings } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography, Select, MenuItem, FormControl, Accordion, AccordionSummary, AccordionDetails, Button, TextField } from "@mui/material";
@@ -6,14 +6,16 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/utils/supabase/supabase";
 import { useStore } from "@/utils/zustand";
 import { CAvatarUpload } from "@/components/account/CAvatarUpload";
+import { useRouter } from "next/navigation";
 
 export function CGroupSettingsModal() {
   const { currentGroup } = useStore();
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
   const [trigger, setTrigger] = useState(true);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(currentGroup?.name);
+  const [description, setDescription] = useState(currentGroup?.description);
+  const router = useRouter();
 
   useEffect(() => {
     const getMembers = async () => {
@@ -27,8 +29,23 @@ export function CGroupSettingsModal() {
         setMembers(members);
     };
 
+    setName(currentGroup?.name);
+    setDescription(currentGroup?.description);
     getMembers();
-  }, [currentGroup, trigger]);
+  }, [currentGroup?.id, trigger]);
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    const { error } = await supabase
+      .from("groups")
+      .update({ name, description })
+      .eq("id", currentGroup?.id);
+
+    if (error) console.log(error);
+
+    router.refresh();
+  };
 
   const MemberRow = ({member}: {member: Member}) => {
     const isOwner = member.role === "owner";
@@ -54,7 +71,6 @@ export function CGroupSettingsModal() {
       if (error) console.log(error.details);
       setTrigger(!trigger);
     };
-    console.log(member.profile.avatar)
 
     return (
       <Box sx={styles.memberRow}>
@@ -103,7 +119,7 @@ export function CGroupSettingsModal() {
             <Typography component="span">Edit group</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <form >
+            <form onSubmit={handleSubmit}>
               <Box sx={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
                 <Box height="fit-content">
                   <CAvatarUpload group={currentGroup} />

@@ -15,7 +15,7 @@ import { CEventFormModal } from "@/components/events/form/CEventFormModal";
 //   return colors[eventType] || colors.default;
 // };
 
-export const CEventCard = ({ event, userRole }: { event: Event; userRole?: string }) => {
+export const CEventCard = ({ event, userRole, refetchEvents }: { event: Event; userRole?: string; refetchEvents: () => void }) => {
   const theme = useTheme();
 
   return (
@@ -84,7 +84,7 @@ export const CEventCard = ({ event, userRole }: { event: Event; userRole?: strin
               {event.location}
             </Typography>
           </Box>
-          <Box>{userRole === "owner" ? <CEventFormModal event={event} /> : null}</Box>
+          <Box>{userRole === "owner" ? <CEventFormModal refetchEvents={refetchEvents} event={event} /> : null}</Box>
         </Box>
 
         {/* Icons */}
