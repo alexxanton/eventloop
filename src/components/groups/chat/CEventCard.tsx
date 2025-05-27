@@ -5,17 +5,7 @@ import Link from "next/link";
 import { CAttendanceListModal } from "../list/CAttendanceListModal";
 import { CEventFormModal } from "@/components/events/form/CEventFormModal";
 
-// const getEventColor = (eventType: string) => {
-//   const colors: Record<string, string> = {
-//     conference: "#FF5733",
-//     meetup: "#33FF57",
-//     workshop: "#3357FF",
-//     default: "#888",
-//   };
-//   return colors[eventType] || colors.default;
-// };
-
-export const CEventCard = ({ event, userRole, refetchEvents }: { event: Event; userRole?: string; refetchEvents: () => void }) => {
+export const CEventCard = ({event, userRole, refetchEvents}: {event: Event; userRole?: string; refetchEvents?: () => void}) => {
   const theme = useTheme();
 
   return (
@@ -84,7 +74,7 @@ export const CEventCard = ({ event, userRole, refetchEvents }: { event: Event; u
               {event.location}
             </Typography>
           </Box>
-          <Box>{userRole === "owner" ? <CEventFormModal refetchEvents={refetchEvents} event={event} /> : null}</Box>
+          <Box>{userRole === "owner" ? <CEventFormModal refetchEvents={refetchEvents || (() => {})} event={event} /> : null}</Box>
         </Box>
 
         {/* Icons */}
