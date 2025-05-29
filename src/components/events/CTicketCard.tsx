@@ -23,9 +23,9 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
   const handleSave = async () => {
     setSaving(true);
     setProgress(0);
-  
+
     await generateTicketPDF(tickets, (i) => setProgress(i + 1));
-  
+
     setSaving(false);
     setProgress(null);
   };
@@ -45,7 +45,7 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
     <Box sx={{
       display: "flex",
       flexDirection: "column",
-      maxWidth: "50vw",
+      maxWidth: { xs: "90vw", sm: "50vw" },
       minWidth: "fit-content",
       p: 3,
       pt: 1,
@@ -79,15 +79,52 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
         pointerEvents: "none"
       }
     }}>
-      {/* Card Content */}
       <Box sx={{ position: "relative", zIndex: 1 }}>
-        <Box sx={{ display: "flex", flexDirection: "row" , gap: 3 }}>
-          {/* QR Code Section */}
+        {/* Mobile: QR code on top */}
+        <Box sx={{
+          display: { xs: "flex", sm: "none" },
+          justifyContent: "center",
+          mb: 3
+        }}>
           <Box sx={{
             p: 2,
             bgcolor: theme.palette.background.default,
             borderRadius: 3,
             position: "relative",
+            "&:after": {
+              content: "''",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "92%",
+              height: "92%",
+              border: `2px solid ${palette.primary.main}30`,
+              borderRadius: 2,
+            }
+          }}>
+            <QRCode
+              value={currentTicket.ticket_number}
+              size={140}
+              level="H"
+              bgColor={theme.palette.background.default}
+              fgColor={theme.palette.text.primary}
+            />
+          </Box>
+        </Box>
+
+        <Box sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: 3
+        }}>
+          {/* Desktop QR Code - Hidden on mobile */}
+          <Box sx={{
+            p: 2,
+            bgcolor: theme.palette.background.default,
+            borderRadius: 3,
+            position: "relative",
+            display: { xs: "none", sm: "block" },
             "&:after": {
               content: "''",
               position: "absolute",
@@ -110,13 +147,18 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
           </Box>
 
           {/* Ticket Details */}
-          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <Box display="flex" width="100%">
-              <Box>
-                <Link 
-                  href={`/events/${tickets[0].event.id}`} 
-                  style={{ textDecoration: "none" }} 
-                  onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"} 
+          <Box sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between"
+          }}>
+            <Box display="flex" width="100%" flexDirection={{ xs: "column", sm: "row" }}>
+              <Box sx={{ flex: 1 }}>
+                <Link
+                  href={`/events/${tickets[0].event.id}`}
+                  style={{ textDecoration: "none" }}
+                  onMouseEnter={(e) => e.currentTarget.style.textDecoration = "underline"}
                   onMouseLeave={(e) => e.currentTarget.style.textDecoration = "none"}
                 >
                   <Typography variant="h6" fontWeight="800" gutterBottom sx={{
@@ -127,7 +169,7 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                     {currentTicket.event.name}
                   </Typography>
                 </Link>
-              
+            
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mb: 2 }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <CalendarToday fontSize="small" />
@@ -135,7 +177,7 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                       {new Date(currentTicket.event.start_date).toLocaleString()}
                     </Typography>
                   </Box>
-                
+              
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <LocationOn fontSize="small" />
                     <Typography variant="body2">
@@ -144,41 +186,44 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                   </Box>
                 </Box>
               </Box>
-              {/* Navigation Arrows - Fixed click area */}
+            
+              {/* Navigation Arrows */}
               {tickets.length > 1 && (
                 <Box sx={{
                   display: "flex",
-                  flex: 1,
-                  gap: 1,
-                  justifyContent: "flex-end",
+                  justifyContent: { xs: "center", sm: "flex-end" },
+                  mb: { xs: 2, sm: 0 },
                   minWidth: "fit-content",
                 }}>
-                  <Box>
-                    <IconButton
-                      onClick={handlePrev}
-                      sx={{
-                        bgcolor: "background.paper",
-                        "&:hover": {
-                          transform: "translateY(-1px)",
-                          bgcolor: "background.default"
-                        }
-                      }}
-                    >
-                      <KeyboardArrowLeft  />
-                    </IconButton>
-                    <IconButton
-                      onClick={handleNext}
-                      sx={{
-                        ml: 1,
-                        bgcolor: "background.paper",
-                        "&:hover": {
-                          transform: "translateY(-1px)",
-                          bgcolor: "background.default"
-                        }
-                      }}
-                    >
-                      <KeyboardArrowRight  />
-                    </IconButton>
+                  <Box display="flex" gap={1}>
+                    <Box>
+                      <IconButton
+                        onClick={handlePrev}
+                        sx={{
+                          bgcolor: "background.paper",
+                          "&:hover": {
+                            transform: "translateY(-1px)",
+                            bgcolor: "background.default"
+                          }
+                        }}
+                      >
+                        <KeyboardArrowLeft  />
+                      </IconButton>
+                    </Box>
+                    <Box>
+                      <IconButton
+                        onClick={handleNext}
+                        sx={{
+                          bgcolor: "background.paper",
+                          "&:hover": {
+                            transform: "translateY(-1px)",
+                            bgcolor: "background.default"
+                          }
+                        }}
+                      >
+                        <KeyboardArrowRight  />
+                      </IconButton>
+                    </Box>
                   </Box>
                 </Box>
               )}
@@ -187,9 +232,11 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
             {/* Action Buttons */}
             <Box sx={{
               display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
               justifyContent: "space-between",
               alignItems: "center",
-              gap: 2
+              gap: 2,
+              mt: { xs: 1, sm: 0 }
             }}>
               <Button
                 variant="contained"
@@ -198,6 +245,7 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                 sx={{
                   borderRadius: 2,
                   px: 3,
+                  width: { xs: "100%", sm: "auto" },
                   background: `linear-gradient(45deg, ${palette.error.main}, ${palette.error.dark})`,
                   transition: "all 0.2s ease",
                   "&:hover": {
@@ -208,7 +256,7 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
               >
                 Delete
               </Button>
-            
+          
               <Button
                 variant="contained"
                 startIcon={<Download />}
@@ -217,6 +265,7 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                 sx={{
                   borderRadius: 2,
                   px: 3,
+                  width: { xs: "100%", sm: "auto" },
                   background: `linear-gradient(45deg, ${palette.primary.main}, ${palette.secondary.main})`,
                   transition: "all 0.2s ease",
                   "&:hover": {
@@ -229,7 +278,6 @@ export const CTicketCard = ({ tickets, theme }: { tickets: Ticket[]; theme: Them
                   ? `Saving (${progress}/${tickets.length})`
                   : `Save (${tickets.length})`}
               </Button>
-
             </Box>
           </Box>
         </Box>

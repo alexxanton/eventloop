@@ -39,7 +39,7 @@ export function CNavbar() {
       <Box sx={{
         position: "absolute",
         right: 10,
-        bottom: "20vh",
+        bottom: "10vh",
         zIndex: 9999,
       }}>
         <IconButton sx={{bgcolor: "secondary.main"}} onClick={() => toggleSidebar(true)}>
