@@ -30,12 +30,11 @@ export function CGroupChat() {
     .select("*, profile:profiles(username, avatar)")
     .eq("group_id", currentGroup?.id);
 
-  const getMessages = async () => {
+  const getMessage = async (id: number) => {
     if (!currentGroup?.id) return;
   
     const { data: messages } = await query
-      .gt("id", lastMessageIdRef.current)
-      .order("id")
+      .eq("id", id)
       .throwOnError();
 
     setMessages((prevMessages) => [...prevMessages, ...messages]);
@@ -96,6 +95,7 @@ export function CGroupChat() {
       
       if (messages.length > 0) {
         setLastMessageId(messages[messages.length - 1].id);
+        console.log(lastMessageId)
       }
     };
 
@@ -120,14 +120,14 @@ export function CGroupChat() {
 
           // Temporary fix
           if (newMessage.user_id !== userId) {
-            getMessages();
+            getMessage(newMessage.id);
           }
         }
       )
       .subscribe();
 
     return () => {supabase.removeChannel(channel)}
-  }, [messages, setMessages]);
+  }, [lastMessageId]);
 
   return (
     <Box sx={styles.box}>
