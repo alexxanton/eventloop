@@ -158,7 +158,6 @@ export function CEventCalendar({events}: {events: Event[] | null}) {
   }, [isMobile]);
 
   
-
   return (
     <Container maxWidth="xl" sx={{
       py: 4,
@@ -476,7 +475,6 @@ const SearchFilter = ({
       <Dialog
         open={showFilters}
         onClose={() => setShowFilters(false)}
-        fullScreen={isMobile}
         PaperProps={{
           sx: {
             position: isMobile ? "fixed" : "absolute",

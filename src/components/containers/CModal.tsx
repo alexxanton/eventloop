@@ -1,7 +1,6 @@
-import { useDarkMode } from "@/utils/hooks/useDarkMode";
 import { MuiStyles } from "@/utils/types/types";
 import { Close } from "@mui/icons-material";
-import { Box, Button, IconButton, ListItemButton, Modal, Paper, Typography, Zoom } from "@mui/material";
+import { Box, Button, IconButton, ListItemButton, Modal, Paper, Typography, useTheme, Zoom } from "@mui/material";
 
 type CProps = {
   children: React.ReactElement;
@@ -14,7 +13,9 @@ type CProps = {
 };
 
 export function CModal({ children, title, buttonType, ButtonContent, open, onOpen, onClose }: CProps) {
-  const isDarkMode = useDarkMode();
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
+  const isMobile = theme.breakpoints.down("sm");
 
   const buttonMap = {
     normal: Button,
@@ -42,7 +43,7 @@ export function CModal({ children, title, buttonType, ButtonContent, open, onOpe
         }}
       >
         <Zoom in={open}>
-          <Paper sx={styles.box}>
+          <Paper sx={{...styles.box, width: isMobile ? "100%" : "70%"}}>
             <Box sx={styles.header} bgcolor={isDarkMode ? "#383434" : "secondary.main"}>
               <Typography sx={styles.title} component="h5" variant="h5" color="#f8f4fc">
                 {title}
@@ -61,7 +62,6 @@ export function CModal({ children, title, buttonType, ButtonContent, open, onOpe
   );
 }
 
-
 const styles: MuiStyles = {
   header: {
     px: 2,
@@ -74,7 +74,6 @@ const styles: MuiStyles = {
     flexGrow: 1,
   },
   box: {
-    width: "70%",
     maxWidth: 700,
     borderRadius: 2,
     boxShadow: 5,

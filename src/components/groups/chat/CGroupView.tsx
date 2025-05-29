@@ -86,7 +86,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
         sx={{
           ...styles.stickyBox,
           display: isMobile && (currentGroup || menuOpen) ? "none" : "",
-          overflowX: "hidden"
+          
         }}
       >
         <Paper elevation={0} square sx={styles.groupsListPaper}>
@@ -105,6 +105,7 @@ export function CGroupView({ groups }: { groups: Group[] | null }) {
             ...styles.eventsPaper,
             width: openEvents && currentGroup ? isMobile ? "100%" : 300 : 0,
             p: openEvents && currentGroup ? 1 : 0,
+            overflowX: "hidden"
           }}
         >
           <Paper sx={styles.calendarPaper} elevation={3}>

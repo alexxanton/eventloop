@@ -26,7 +26,7 @@ export function CMessageBubble({msg, index, array, userId}: CProps) {
   const otherUserTailColor = theme.palette.mode === "dark" ? grey[900] : "background.paper";
 
   return (
-    <Box sx={styles.box}>
+    <Box sx={styles.box} pr={isCurrentUser && isMobile ? 1 : 0}>
       {!isSameDate && (
         <Box display="flex" flexDirection="column">
           <Paper sx={styles.date}>

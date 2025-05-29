@@ -117,7 +117,9 @@ export function CGroupChat() {
           console.log("last:", lastMessageIdRef.current, "new:", newMessage.id)
           // setLastMessageId(newMessage.id);
           // lastMessageIdRef.current = newMessage.id;
-          if (lastMessageIdRef.current < newMessage.id) {
+
+          // Temporary fix
+          if (newMessage.user_id !== userId) {
             getMessages();
           }
         }
